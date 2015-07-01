@@ -11,4 +11,10 @@ package logParsers;
  */
 public class LogSIAParser {
     
+    
+    
+    public static void main(String[] args) {
+        // TODO code application logic here
+    }
+    
 }
