@@ -8,16 +8,11 @@ package logParsers;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,19 +21,12 @@ import java.util.logging.Logger;
  *Parser per i log degli atm di tipo F.A.R.O (Funzionamento ATM Rilevato Online)
  * @author Simone De Luca CRE0260
  */
-public class LogFaroParser {
+public class LogFaroParser extends LogParser{
     
-    private Connection connection=null;
-    private PreparedStatement statement=null;
-    private ResultSet  resultSet=null;
+    
     private static final String INSERT_RECORD_OK_TABLE="INSERT into atm.atm_faro_log VALUES"
             + "(?,?,?,?,?,?,?,?,?)";
     private static final String INSERT_RECORD_SCARTI="INSERT into atm.atm_faro_log_scarti VALUES (?,?,?)";
-    private static final String DB_RESOURCE_PATH="logParsers.database";
- 
-    
-    
-    private static final String LOG_FOLDER_PATH="C:\\Users\\cre0260\\Desktop\\ATM\\"; //percorso assoluto della cartella contenente i file di log
     private static final String FILE__LOG="LOGSIA.FARONCH.BTD.V6000.txt";//****DA ELIMINARE****
     
     /*
@@ -58,9 +46,6 @@ public class LogFaroParser {
     private static final int LENGTH_CAB_ATM=5;
     private static final int LENGTH_A94=30;
     
-    private static final String DATETIME_FORMAT="yyyy-MM-dd hh:mm:ss";
-    
-    
     private String codAbi;
     private String abiCA;
     private String msg;
@@ -75,7 +60,7 @@ public class LogFaroParser {
     private String st;
     private int numMSG;
     private String dataOraMSG;
-    private static final String COD_ABI_PATTERN="\\d\\d\\d\\d\\d"; //tutti i caratteri del codice ABI devono essere numerici
+    private static final String COD_ABI_PATTERN="\\d{5}"; //tutti i caratteri del codice ABI devono essere numerici
     private static final String WRONG_CODABI="00000";
     private static final String MIN_DATE="2004-01-02 00:00:00";
     private static final String A94_STRING="A94";
@@ -197,26 +182,7 @@ public class LogFaroParser {
           return statement.executeUpdate();
     }
    
-    //crea connessione con il database
-    private void connectDB() throws ClassNotFoundException, SQLException{
-        ResourceBundle resourceBundle=ResourceBundle.getBundle(DB_RESOURCE_PATH); 
-        Class.forName(resourceBundle.getString("driver"));
-        connection=DriverManager.getConnection(resourceBundle.getString("url"),resourceBundle.getString("user"),resourceBundle.getString("password"));
-    }
-    private void disconnectDB(){
-        if(statement!=null) try {
-            statement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(LogFaroParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(connection!=null){
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(LogFaroParser.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+
         
     public static void main(String[] args) throws FileNotFoundException, ParseException {
         LogFaroParser logFaroParser = new LogFaroParser();

@@ -7,6 +7,8 @@ package logParsers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,9 +21,9 @@ import java.util.logging.Logger;
  * 
  * @author CRE0260
  */
-public class LogNCHParser {
+public class LogNCHParser extends LogParser{
     
-    private static final String LOG_FOLDER_PATH="C:\\Users\\cre0260\\Desktop\\ATM\\"; //percorso assoluto della cartella contenente i file di log
+    
     private static final String FILE__LOG="LOGATM.20150701.020052.NCH.txt";//****DA ELIMINARE****
 
     //variabili per la lunghezza dei campi di ogni record del log
@@ -39,18 +41,15 @@ public class LogNCHParser {
     private final static int LENGTH_OPENUM=5;  // lunghezza campo num
     private final static int LENGTH_OPEDATE=6; //Lunghezza campo data(DDMMYY)
 
-    public static void main(String[] args) {
+    public LogNCHParser(){
         File fileLog=new File(LOG_FOLDER_PATH+FILE__LOG);
-        try (Scanner input = new Scanner(fileLog)) {
-            //inizia la scansione del log
-            int i=0;
-            while(i<10){
-                i++;
-                System.out.println(input.nextLine());
-                   }//termine scansione del file
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(LogNCHParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        
     }
 
 
