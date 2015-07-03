@@ -6,14 +6,11 @@
 package logParsers;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,29 +63,13 @@ public class LogFaroParser extends LogParser{
     private static final String A94_STRING="A94";
  
     
-    public LogFaroParser() {
-        File fileLog=new File(LOG_FOLDER_PATH+FILE__LOG);
-        try {
-            connectDB();
-        } catch (ClassNotFoundException | SQLException ex) {
-             Logger.getLogger(LogFaroParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try (Scanner input = new Scanner(fileLog)) {
-            //inizia la scansione del log
-            while(input.hasNext()){
-                scanRecord(input.nextLine());
-                   }//termine scansione del file
-        } catch (FileNotFoundException | ParseException ex) {
-            Logger.getLogger(LogFaroParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            disconnectDB();
-            System.out.println("Connection close! BYE ^^");
-        }
-        
+    public LogFaroParser(String fileLogName) {
+                super(fileLogName);
     }
     
-    private void scanRecord(String record) throws ParseException{
+
+    @Override
+    void scanRecord(String record) throws ParseException{
                 int index=0;
                 int error;
                 codAbi=record.substring(index, index+=LENGTH_CODABI);
@@ -172,7 +153,6 @@ public class LogFaroParser extends LogParser{
         statement.setInt(8, numMSG);
         statement.setString(9, A94);
         return statement.executeUpdate();
-        
     }
     private int saveScarti(String filename,String line, int error_code) throws SQLException{
         statement=connection.prepareStatement(INSERT_RECORD_SCARTI);
@@ -183,8 +163,4 @@ public class LogFaroParser extends LogParser{
     }
    
 
-        
-    public static void main(String[] args) throws FileNotFoundException, ParseException {
-        LogFaroParser logFaroParser = new LogFaroParser();
-    }
 }
