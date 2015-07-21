@@ -22,7 +22,9 @@ public class LogFaroParser extends LogParser{
     
     
     private static final String INSERT_RECORD_OK_TABLE="INSERT into atm.atm_faro_log VALUES"
-            + "(?,?,?,?,?,?,?,?,?)";
+            + "(?,?,?,?,?,?,?,?,?,?)";
+    private static final String GET_ALL_RECORD="SELECT * FROM atm.atm_faro_log_view order by codice_atm,autoinc;";
+    
     private static final String INSERT_RECORD_SCARTI="INSERT into atm.atm_faro_log_scarti VALUES (?,?,?)";
     private static final String FILE__LOG="LOGSIA.FARONCH.BTD.V6000.txt";//****DA ELIMINARE****
     
@@ -103,7 +105,7 @@ public class LogFaroParser extends LogParser{
                             }
                             try {
                                 int stateUpdate=saveRecord();
-                                
+                                indexOK++;
                             } 
                             catch(MySQLIntegrityConstraintViolationException ex){
                                 
@@ -143,17 +145,20 @@ public class LogFaroParser extends LogParser{
     //salva il record nel database 
     private int saveRecord() throws SQLException,MySQLIntegrityConstraintViolationException {
         statement=connection.prepareStatement(INSERT_RECORD_OK_TABLE);
-        statement.setString(1, date);
-        statement.setString(2, dataOraMSG);
-        statement.setString(3, codAbi);
-        statement.setString(4, codAtm);
-        statement.setString(5, msg);
-        statement.setString(6, pr);
-        statement.setString(7, st);
-        statement.setInt(8, numMSG);
-        statement.setString(9, A94);
+        statement.setDouble(1, indexOK);
+        statement.setString(2, date);
+        statement.setString(3, dataOraMSG);
+        statement.setString(4, codAbi);
+        statement.setString(5, codAtm);
+        statement.setString(6, msg);
+        statement.setString(7, pr);
+        statement.setString(8, st);
+        statement.setInt(9, numMSG);
+        statement.setString(10, A94);
+        dataOraMSG="";
         return statement.executeUpdate();
     }
+    //salva i record salvati in una apposita tabella
     private int saveScarti(String filename,String line, int error_code) throws SQLException{
         statement=connection.prepareStatement(INSERT_RECORD_SCARTI);
         statement.setString(1, filename);
