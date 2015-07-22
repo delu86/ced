@@ -4,7 +4,7 @@
 var i=0;
 var offset=0;
 var wind=15;
-var system="SIES";
+var system=$( "button[autofocus='true']" ).val();
 var limit='10';
 var table = $('#dataTables-top10').DataTable( {
 	        paging: false,

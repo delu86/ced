@@ -76,7 +76,7 @@ public class DatabaseManager {
 	private final static String SELECT_DISTINCT_SYSTEM="SELECT DISTINCT SYSTEM FROM smfacc.r113_2_hour";
 	private final static String SELECT_DISTINCT_SYSTEM_MQ="SELECT DISTINCT(SYSTEM) FROM  mtrnd.mqmdayh where system<>'FSYC' and system<>'CSY3'";
     private final static String SELECT_BATCH_INTERVAL="SELECT SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
-	                                                       ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM smfacc.epv030_5_jobterm_t10_rm where DATET10=? and SYSTEM=?";
+	                                                       ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM "+TABLE_PARAMETER_STRING+" where DATET10=? and SYSTEM=?";
 	private final static String SELECT_STC_INTERVAL="SELECT SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
             ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM smfacc.epv030_23_intrvl_t10_rm_STC where DATET10=? and SYSTEM=?";
     private final static String SELECT_CPU_MF_BY_DAY_DATATABLES=
@@ -85,7 +85,7 @@ public class DatabaseManager {
     private final static String SELECT_CPU_MF_BY_DAY_DATATABLES_REALE=
     		"SELECT SYSTEM,aaaammgg,CPU,CLASS,`sum(INTSEC)` as DURATION,MIPS,CPI,L1MP,RNI,L2P,L3P,L4LP,L4RP,MEMP,PRB_STATE,AVG_UTIL"+
             " FROM smfacc.r113_resume_ctrl WHERE aaaammgg=? and (SYSTEM='SIES' or SYSTEM='SIGE') ORDER BY SYSTEM,CPU";
-	private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
+    private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
             " and datediff(?,date(DATA_INT10))<=(?-1) and datediff(?,date(DATA_INT10))>-1  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
 	private final static String SELECT_VOLUMES_TIMES_INFORMATION="SELECT DATE(START_005),SUM(CPUTIME),COUNT(*) from CR00515.EPV110_1_TRXACCT"+
 								" where SYSTEM=? and TRAN_001 = ?" +
@@ -98,20 +98,22 @@ public class DatabaseManager {
             "where SYSTEM=? and SM113CPT=? and aaaammgg<=?"+
             " group by SYSTEM,aaaammgg,SM113CPT order by aaaammgg DESC LIMIT ?) sub "+
             " order by aaaammgg ASC";
-    private static final String SELECT_ABEND="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089 FROM smfacc.epv110_1_trxacct_t10_rm where ABCODEC_114<>\"\""+ 
-                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
-    private static final String SELECT_ABEND_WINDOWS_TIME="SELECT date(START_010),sum(TOT),truncate(sum(CPUTIME), 3)  FROM smfacc.epv110_1_trxacct_t10_rm where"+
-                                             " SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>\"\""+
-    		                                 " group by date(START_010) order by date(START_010)";
-    private static final String SELECT_YESTERDAY_MIPS="SELECT SERIAL,SYSTEM,EPVDATE,EPVHOUR,MIPS,cast(MIPLPAR as UNSIGNED) as MIPLPAR FROM support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) and EPVHOUR=(SELECT EPVHOUR from support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) group by EPVHOUR order by SUM(MIPLPAR) DESC LIMIT 1) order by SERIAL";
+
+        private static final String SELECT_YESTERDAY_MIPS="SELECT SERIAL,SYSTEM,EPVDATE,EPVHOUR,MIPS,cast(MIPLPAR as UNSIGNED) as MIPLPAR FROM support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) and EPVHOUR=(SELECT EPVHOUR from support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) group by EPVHOUR order by SUM(MIPLPAR) DESC LIMIT 1) order by SERIAL";
 	private static final String SELECT_YESTERDAY_CPI="SELECT SYSTEM,(SUM(B0)/(SUM(B1)))  as CPI FROM smfacc.r113_2_hour"+
             " where SM113CPT='Standard CP' and aaaammgg=? group by SYSTEM,aaaammgg,SM113CPT";
-    private static final String SELECT_SYSTEM_HOURLY_REPORT = "SELECT h as ora,SUM(B0)/SUM(B1) as CPI,SUM(B1)/1000000/3600 as MIPS,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SYSTEM=? and SM113CPT=? group by SM113CPT,h";
+        private static final String SELECT_SYSTEM_HOURLY_REPORT = "SELECT h as ora,SUM(B0)/SUM(B1) as CPI,SUM(B1)/1000000/3600 as MIPS,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SYSTEM=? and SM113CPT=? group by SM113CPT,h";
 	private static final String SELECT_CPU_NUMBER_YESTERDAY="SELECT SYSTEM,aaaammgg,h,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SM113CPT='Standard CP' group by SYSTEM,h order by SYSTEM,h";
-	private static final String SELECT_BATCH_ABEND_WINDOWS_TIME = "SELECT date(DATET10),sum(TOT),truncate(sum(CPUTIME), 3)  FROM smfacc.epv030_5_jobterm_t10_rm where "
+	private static final String SELECT_BATCH_ABEND_WINDOWS_TIME = "SELECT date(DATET10),sum(TOT),truncate(sum(CPUTIME), 3)  FROM "+TABLE_PARAMETER_STRING+" where "
                 +"SYSTEM=? and datediff(current_date, date(DATET10) )<=? and datediff(current_date, date(DATET10) )>? and CONDCODE>=8 group by date(DATET10) order by date(DATET10)";
-	private static final String SELECT_BATCH_ABEND = "SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM smfacc.epv030_5_jobterm_t10_rm where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc";
-    private static final String SELECT_VIRTUAL_TAPE_MOUNT_TIME="SELECT EPVDATE , CASE "
+	private static final String SELECT_BATCH_ABEND = "SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc";
+        private static final String SELECT_TRANSACTION_ABEND="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
+                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
+         private static final String SELECT_TRANSACTION_ABEND_WINDOWS_TIME="SELECT date(START_010),sum(TOT),truncate(sum(CPUTIME), 3)  FROM "+TABLE_PARAMETER_STRING+" where"+
+                                             " SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>\"\""+
+    		                                 " group by date(START_010) order by date(START_010)";
+        
+        private static final String SELECT_VIRTUAL_TAPE_MOUNT_TIME="SELECT EPVDATE , CASE "
     		+ " WHEN VTCS13VMT='mount sl scratch VTV' or VTCS13VMT='mount existing VTV as scratch' then 'SCRATCH'"
     		+ " WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted after a recall' then 'EXISTING-N'"
     		+ " WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted without a recall' then 'EXISTING-Y' end as TYPE"
@@ -144,6 +146,7 @@ public class DatabaseManager {
 
 	public static final HashMap<String, String> mapSystemTransactionTableHashMap=initializeMapSystemTransactionTable();
 	public static final HashMap<String, String> mapSystemWorloadTableHashMap=initializeMapSystemWorloadTable();
+        public static final HashMap<String, String> mapSystemBatchTableHashMap=initializeMapBatchTable();
 
 	private static final String SELECT_STEP_BY_JESNUM = "SELECT SMF30JBN , JESNUM , SMF30STM , SMF30STN , SMF30RUD , READTIME , ENDTIME ,"+
 			" ROUND(CPUTIME, 2) AS CPUTIME, ZIPTM , ELAPSED , DISKIO , DISKIOTM , CONDCODE ,SMF30CL8 as class, SMF30PGM  "+
@@ -335,18 +338,33 @@ public class DatabaseManager {
 		disconnect();
 		return coll;
 			}
+        
+    private static HashMap<String, String> initializeMapBatchTable() {
+       
+                HashMap<String, String> map=new HashMap<String, String>();
+		map.put("SIES", "smfacc.epv030_5_jobterm_t10_rm");
+		map.put("SIGE", "smfacc.epv030_5_jobterm_t10_rm");
+                map.put("ASDN", "smfacc.epv030_5_jobterm_t10_carige");
+		map.put("ASSV", "smfacc.epv030_5_jobterm_t10_carige");
+		return map;
+        
+    }
+	
 	private static HashMap<String, String> initializeMapSystemTransactionTable() {
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "smfacc.epv110_1_trxacct_t10_rm");
 		map.put("SIGE", "smfacc.epv110_1_trxacct_t10_rm");
+                map.put("ASDN", "smfacc.epv110_1_trxacct_t10_carige");
+		map.put("ASSV", "smfacc.epv110_1_trxacct_t10_carige");
 		map.put("GSY7", "smfacc.epv110_1_trxacct_t10_sy7");
 		return map;
 	}
 	private static HashMap<String, String> initializeMapSystemWorloadTable() {
-		// TODO Auto-generated method stub
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "smfacc.workload_view");
 		map.put("SIGE", "smfacc.workload_view");
+                map.put("ASSV", "smfacc.workload_view_carige");
+		map.put("ASDN", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
 		map.put("ZSY5", "smfacc.workload_view_sy5");
 		map.put("CSY3", "smfacc.workload_view_sy5");
@@ -357,8 +375,8 @@ public class DatabaseManager {
 		connection(EPV_DB_PROPERTIES,SELECT_WLC_BY_MONTH);
 		String monthStart=String.format("%02d", month);
 		String yearStart=String.valueOf(year);
-        String monthEnd;
-        String yearEnd;
+                String monthEnd;
+                String yearEnd;
 		if(month!=12)
 			{
 			monthEnd=String.format("%02d", month+1);
@@ -455,7 +473,7 @@ public class DatabaseManager {
 		
 	}
 	public Collection<TransactionReport> getTransactionInAbendInWindowTime(String system, int minDate,int maxDate) throws ClassNotFoundException, SQLException{
-		connection(SELECT_ABEND_WINDOWS_TIME);
+		connection(SELECT_TRANSACTION_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system)));
 		st.setString(1, system);
 		st.setInt(2, minDate);
 		st.setInt(3, maxDate);
@@ -472,10 +490,11 @@ public class DatabaseManager {
 		return collection;
 	}
 	public Collection<TransactionReport> getTransactionInAbend(String system, String date, int limit) throws ClassNotFoundException, SQLException{
-		if(limit!=0)
-			connection(SELECT_ABEND+" LIMIT "+String.valueOf(limit));
+		
+            if(limit!=0)
+			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 		else
-			connection(SELECT_ABEND);
+			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system)));
 		st.setString(1, system);
 		st.setString(2, date);
 		rs=st.executeQuery();
@@ -517,7 +536,7 @@ public class DatabaseManager {
 		return coll;
 	}
 	public Collection<BatchReport> getBatchByDate(String date,String system) throws ClassNotFoundException, SQLException{
-		connection(SELECT_BATCH_INTERVAL);
+		connection(SELECT_BATCH_INTERVAL.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
 		st.setString(2, system);
 		st.setString(1, date);
 		rs=st.executeQuery();
@@ -754,7 +773,7 @@ public class DatabaseManager {
 	}
 	public Collection<BatchReport> getBatchInAbendInWindowTime(String system,
 			int minDate, int maxDate) throws ClassNotFoundException, SQLException {
-		connection(SELECT_BATCH_ABEND_WINDOWS_TIME);
+		connection(SELECT_BATCH_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
 		st.setString(1, system);
 		st.setInt(2, minDate);
 		st.setInt(3, maxDate);
@@ -773,9 +792,9 @@ public class DatabaseManager {
 	public Collection<BatchReport> getBatchInAbend(String system, String date,
 			int limit)throws ClassNotFoundException, SQLException{
 				if(limit!=0)
-					connection(SELECT_BATCH_ABEND+" LIMIT "+String.valueOf(limit));
+					connection(SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 				else
-					connection(SELECT_BATCH_ABEND);
+					connection(SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
 				st.setString(1, system);
 				st.setString(2, date);
 				rs=st.executeQuery();
@@ -909,6 +928,6 @@ public class DatabaseManager {
 	public static void main(String[] args) {
 		 System.out.println("07-2015".substring(3, 7));
 		 }
-	
+
 	
 }

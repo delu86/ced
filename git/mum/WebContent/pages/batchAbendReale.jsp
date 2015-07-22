@@ -190,7 +190,7 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
     
-    <script src="../js/charts/batchAbendReale.js" charset="utf-8"></script>
+    <script src="../js/charts/batchAbend.js" charset="utf-8"></script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 </body>

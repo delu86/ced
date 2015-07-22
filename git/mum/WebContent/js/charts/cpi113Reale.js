@@ -3,7 +3,7 @@
  */
 var offset=0; 
 var limit=7;
-var system='SIES';
+var system=$( "button[autofocus='true']" ).val();
 var cpiData=[];
 var optionsChart={
 	    chart: {

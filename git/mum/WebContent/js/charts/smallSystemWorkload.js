@@ -7,7 +7,7 @@ var dataDrillDownCharts=[];
 var limit=7;
 var offset=-1;
 var chart;
-var system='SIES';
+var system=$( "button[autofocus='true']" ).val();
 var drillCount=0;
 var 	optionsPlotline={
 		zIndex: 5,

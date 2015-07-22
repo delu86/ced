@@ -244,7 +244,7 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
-    <script src="../js/charts/realeWorkload.js" charset="utf-8"></script>
+    <script src="../js/charts/smallSystemWorkload.js" charset="utf-8"></script>
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
