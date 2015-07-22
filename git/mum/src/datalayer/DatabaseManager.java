@@ -78,7 +78,7 @@ public class DatabaseManager {
     private final static String SELECT_BATCH_INTERVAL="SELECT SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
 	                                                       ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM "+TABLE_PARAMETER_STRING+" where DATET10=? and SYSTEM=?";
 	private final static String SELECT_STC_INTERVAL="SELECT SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
-            ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM smfacc.epv030_23_intrvl_t10_rm_STC where DATET10=? and SYSTEM=?";
+            ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM "+TABLE_PARAMETER_STRING+" where DATET10=? and SYSTEM=?";
     private final static String SELECT_CPU_MF_BY_DAY_DATATABLES=
     		"SELECT SYSTEM,aaaammgg,CPU,CLASS,`sum(INTSEC)` as DURATION,MIPS,CPI,L1MP,RNI,L2P,L3P,L4LP,L4RP,MEMP,PRB_STATE,AVG_UTIL"+
             " FROM smfacc.r113_resume_ctrl WHERE aaaammgg=? ORDER BY SYSTEM,CPU";
@@ -147,7 +147,8 @@ public class DatabaseManager {
 	public static final HashMap<String, String> mapSystemTransactionTableHashMap=initializeMapSystemTransactionTable();
 	public static final HashMap<String, String> mapSystemWorloadTableHashMap=initializeMapSystemWorloadTable();
         public static final HashMap<String, String> mapSystemBatchTableHashMap=initializeMapBatchTable();
-
+        public static final HashMap<String, String> mapSystemSTCTableHashMap=initializeMapSTCTable();
+        
 	private static final String SELECT_STEP_BY_JESNUM = "SELECT SMF30JBN , JESNUM , SMF30STM , SMF30STN , SMF30RUD , READTIME , ENDTIME ,"+
 			" ROUND(CPUTIME, 2) AS CPUTIME, ZIPTM , ELAPSED , DISKIO , DISKIOTM , CONDCODE ,SMF30CL8 as class, SMF30PGM  "+
 			" FROM CR00515.EPV30_4_STEP"+
@@ -338,7 +339,15 @@ public class DatabaseManager {
 		disconnect();
 		return coll;
 			}
-        
+       private  static HashMap<String, String> initializeMapSTCTable() {
+        HashMap<String, String> map=new HashMap<String, String>();
+		map.put("SIES", "smfacc.epv030_5_jobterm_t10_rm_STC");
+		map.put("SIGE", "smfacc.epv030_5_jobterm_t10_rm_STC");
+                map.put("ASDN", "smfacc.epv030_5_jobterm_t10_carige_STC");
+		map.put("ASSV", "smfacc.epv030_5_jobterm_t10_carige_STC");
+		return map;
+    }
+
     private static HashMap<String, String> initializeMapBatchTable() {
        
                 HashMap<String, String> map=new HashMap<String, String>();
@@ -360,6 +369,7 @@ public class DatabaseManager {
 		return map;
 	}
 	private static HashMap<String, String> initializeMapSystemWorloadTable() {
+		
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "smfacc.workload_view");
 		map.put("SIGE", "smfacc.workload_view");
@@ -816,7 +826,7 @@ public class DatabaseManager {
 	}
 
 	public Collection<BatchReport> getSTCByDate(String date, String system) throws ClassNotFoundException, SQLException {
-		connection(SELECT_STC_INTERVAL);
+		connection(SELECT_STC_INTERVAL.replace(TABLE_PARAMETER_STRING, mapSystemSTCTableHashMap.get(system)));
 		st.setString(2, system);
 		st.setString(1, date);
 		rs=st.executeQuery();
@@ -928,6 +938,7 @@ public class DatabaseManager {
 	public static void main(String[] args) {
 		 System.out.println("07-2015".substring(3, 7));
 		 }
+
 
 	
 }
