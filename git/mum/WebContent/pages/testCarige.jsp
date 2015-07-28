@@ -14,7 +14,7 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("REALE")){
+    	if(!profile.equals("CED")&&!profile.equals("CARIGE")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
 %>
@@ -68,9 +68,8 @@ response.setDateHeader ("Expires", 0);
                     <div class="row">
                     <div class="col-lg-10">
         <div title="Seleziona sistema" class="btn-group" role="group" aria-label="...">
-              <button type="button"autofocus="true" class="btn btn-default target" value="SIES"> SIES</button>
-              <button type="button" class="btn btn-default target" value="SIGE"> SIGE</button>
-              <button type="button" class="btn btn-default target" value="ALL"> ALL</button>
+              <button type="button"autofocus="true" class="btn btn-default target" value="ASDN"> ASDN</button>
+              <button type="button" class="btn btn-default target" value="ASSV"> ASSV</button>
         </div>
         
                     </div>

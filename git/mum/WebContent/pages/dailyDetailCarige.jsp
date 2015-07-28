@@ -14,9 +14,10 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("REALE")){
+    	if(!profile.equals("CED")&&!profile.equals("CARIGE")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
+    
 %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,10 +35,11 @@ response.setDateHeader ("Expires", 0);
 
     <!-- Custom CSS -->
     <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-    <link href="../CSS/dashboard.css" rel="stylesheet">
+
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+    <!-- JQUERY UI --> 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -57,34 +59,29 @@ response.setDateHeader ("Expires", 0);
 
         <!-- Page Content -->
         <div id="page-wrapper">
-                                        <div style="display:none" id="loading"></div>
-        
-       
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h3 class="page-header">RMF e R4H</h3>
+                        <h3 class="page-header">Estrazione dati di dettaglio: Started Task,Jobs,Transazioni</h3>
                     </div>
-                    <div class="row">
-                    <div class="col-lg-10">
-        <div title="Seleziona sistema" class="btn-group" role="group" aria-label="...">
-              <button type="button"autofocus="true" class="btn btn-default target" value="SIES"> SIES</button>
-              <button type="button" class="btn btn-default target" value="SIGE"> SIGE</button>
-              <button type="button" class="btn btn-default target" value="ALL"> ALL</button>
-        </div>
-        
-                    </div>
-                    <!-- /.col-lg-10 -->
-                    <div class="col-lg-2">
-                        <input type="number" id="baseline_value" placeholder="Baseline MSU">
-                    </div>
-                    <!-- /.col-lg-2 -->
+                    <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-                <div class="row">
+                 <div class="row">
                     <div class="col-lg-12">
-                    <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+                        <form action="dailyDetail" method="POST">
+                        <div class="form-inline">
+                        <input type="text" name="date" class="form-control"  placeholder="Seleziona giorno" size="12" id="datepicker">
+                        <input type="radio" name="system" value="ASDN" checked="checked" >ASDN
+                        <input type="radio" name="system" value="ASSV">ASSV
+                        </div>
+                        <input type="submit" value="Download .xls">
+                        </form>
                     </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -95,18 +92,21 @@ response.setDateHeader ("Expires", 0);
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-
+    <!-- jQuery UI (per datepicker)-->
+    <script src="../js/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
-    <script src="../js/highcharts.js"></script>
-    <script src="../js/data.js"></script>
-    <script src="../js/exporting.js"></script>
-    <script src="../js/charts/consumptions.js">   </script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript">
+    $(function() {
+    	
+        $( "#datepicker" ).datepicker({
+        	    dateFormat: 'yy-mm-dd'});
+    })
+    </script>
 
 </body>
 <%} %>

@@ -8,16 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exporter.ExcelExporter;
+import utility.MapUtility;
 
 /**
  * Servlet implementation class BatchAbendExcelServlet
  */
 public class BatchAbendExcelServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+        private final static String TABLE_PARAMETER_STRING="$table_name";
 	private static final String SUFFIX_FILE_NAME = "batch-abend";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = 	"datalayer.db";
-	private static final String SELECT ="SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3)as CPUTIME,truncate(ZIPTM,3) as ZIPTIME,truncate(ELAPSED,3) as RESPONSETIME,SMF30RUD FROM smfacc.epv030_5_jobterm_t10_rm where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc"; 
+	private static final String SELECT ="SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3)"
+                + "as CPUTIME,truncate(ZIPTM,3) as ZIPTIME,truncate(ELAPSED,3) as RESPONSETIME,SMF30RUD "
+                + "FROM "+TABLE_PARAMETER_STRING+"  where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc"; 
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -40,8 +44,9 @@ public class BatchAbendExcelServlet extends HttpServlet {
 	    response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
 	    
 		try {
-			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT
-					,parameterSystem,parameterDate);
+			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT.replace(TABLE_PARAMETER_STRING
+                                , MapUtility.mapBatchTable().get(parameterSystem))
+				,parameterSystem,parameterDate);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

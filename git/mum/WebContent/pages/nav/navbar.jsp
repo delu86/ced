@@ -180,6 +180,27 @@ String profile=request.getParameter("profile");
                                 <li>
                                     <a href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                                 </li>
+                                <li> 
+                              <a href="carigeCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
+                              </li>
+                              <li> 
+                              <a href="volumeTimesCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CICS eff.</a>
+                              </li>
+                              <li> 
+                              <a href="testCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
+                              </li>
+                              <li> 
+                              <a href="dailyDetailCarige.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Export data</a>
+                              </li>
+                              <li>
+                              <a href="joobleCarige.jsp"><i class="fa fa-search fa-fw"></i>Jobs search</a>
+                              </li>
+                              <li> 
+                              <a href="cicsAbendCarige.jsp"><i class="fa fa-exclamation fa-fw"></i>Transactions ABEND</a>
+                              </li>
+                              <li>
+                              <a href="batchAbendCarige.jsp"><i class="fa fa-exclamation fa-fw"></i>Batch ABEND</a>
+                              </li>
                             </ul>
                             <!-- /.nav-second-level -->
                             </li>

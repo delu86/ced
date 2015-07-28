@@ -99,8 +99,8 @@ response.setDateHeader ("Expires", 0);
                                <button type="button" title="Vai indietro di una settimana" class="shift shift-left btn btn-default btn-circle"><i class="fa fa-angle-double-left"></i></button>
                                <button type="button" title="Vai indietro di un giorno" class="shift shift-left-one btn btn-default btn-circle"><i class="fa fa-angle-left"></i></button>
                                <h4 id="info"><input type="text" class="form-control"id="date-interval" size="22" readonly='true'></h4>
-                               <button type="button" title="Vai avanti di una settimana" class="shift shift-right-one btn btn-default btn-circle"><i class="fa fa-angle-right"></i></button>
-                               <button type="button" title="Vai avanti di un giorno" class="shift shift-right btn btn-default btn-circle"><i class="fa fa-angle-double-right"></i></button>
+                               <button type="button" title="Vai avanti di un giorno" class="shift shift-right-one btn btn-default btn-circle"><i class="fa fa-angle-right"></i></button>
+                               <button type="button" title="Vai avanti di una settimana" class="shift shift-right btn btn-default btn-circle"><i class="fa fa-angle-double-right"></i></button>
                                <input type="number" id="baseline_value" placeholder="Baseline">
                            </div>
                            </div>

@@ -63,11 +63,20 @@ public class DatabaseManager {
 			+ " FROM mtrnd.lparcpu as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
+        private final static String SELECT_LPAR_CONSUMPTION_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR,sum( TRUNCATE(t1.MIPLPAR,2)),sum(TRUNCATE(t1.SMF70LAC,2))"
+			+ " FROM mtrnd.lparcpu as t1 "
+			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
+			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
+        
 	private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
 			+ " FROM mtrnd.lpariip as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
-	private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),2),SUM(CTRANS) from mtrnd.cicsdayh"
+	private final static String SELECT_LPAR_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
+			+ " FROM mtrnd.lpariip as t1 "
+			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
+			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
+        private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),2),SUM(CTRANS) from mtrnd.cicsdayh"
 			+ " WHERE SYSTEM=? and EPVDATE=?"
 			+ " GROUP BY EPVDATE,APPLVTNAME ORDER BY EPVDATE ASC, APPLVTNAME ASC;";
 	private final static String SELECT_VOLUME_TIMES_BY_DAY="SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),2),SUM(CTRANS) from mtrnd.cicsdayh "
@@ -111,7 +120,7 @@ public class DatabaseManager {
                                               "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
          private static final String SELECT_TRANSACTION_ABEND_WINDOWS_TIME="SELECT date(START_010),sum(TOT),truncate(sum(CPUTIME), 3)  FROM "+TABLE_PARAMETER_STRING+" where"+
                                              " SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>\"\""+
-    		                                 " group by date(START_010) order by date(START_010)";
+    		                             " group by date(START_010) order by date(START_010)";
         
         private static final String SELECT_VIRTUAL_TAPE_MOUNT_TIME="SELECT EPVDATE , CASE "
     		+ " WHEN VTCS13VMT='mount sl scratch VTV' or VTCS13VMT='mount existing VTV as scratch' then 'SCRATCH'"
@@ -254,12 +263,22 @@ public class DatabaseManager {
 
 	
 	public Collection<SystemConsumptionsReport> get30DaysConsumptionsReport(String system) throws ClassNotFoundException, SQLException{
-		connection(EPV_DB_PROPERTIES,SELECT_SYSTEM_CONSUMPTION_LAST30_DAY);
-		PreparedStatement st2=conn.prepareStatement(SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY);
+	     ResultSet rs2;
+             PreparedStatement st2;
+             if(!system.equals("ALL")){
+                connection(EPV_DB_PROPERTIES,SELECT_SYSTEM_CONSUMPTION_LAST30_DAY);
+		st2=conn.prepareStatement(SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY);
 		st2.setString(1, system);
 		st.setString(1, system);
-        ResultSet rs2=st2.executeQuery();
+                rs2=st2.executeQuery();
 		rs=st.executeQuery();
+             }
+             else{
+                connection(EPV_DB_PROPERTIES,SELECT_LPAR_CONSUMPTION_LAST30_DAY);
+		st2=conn.prepareStatement(SELECT_LPAR_CONSUMPTION_ZIIP_LAST30_DAY);
+		rs2=st2.executeQuery();
+		rs=st.executeQuery(); 
+             }
 		Collection<SystemConsumptionsReport> coll=new ArrayList<SystemConsumptionsReport>();
 		while(rs.next()&&rs2.next()){
 			SystemConsumptionsReport el=new SystemConsumptionsReport();
@@ -341,10 +360,10 @@ public class DatabaseManager {
 			}
        private  static HashMap<String, String> initializeMapSTCTable() {
         HashMap<String, String> map=new HashMap<String, String>();
-		map.put("SIES", "smfacc.epv030_5_jobterm_t10_rm_STC");
-		map.put("SIGE", "smfacc.epv030_5_jobterm_t10_rm_STC");
-                map.put("ASDN", "smfacc.epv030_5_jobterm_t10_carige_STC");
-		map.put("ASSV", "smfacc.epv030_5_jobterm_t10_carige_STC");
+		map.put("SIES", "smfacc.epv030_23_intrvl_t10_rm_STC");
+		map.put("SIGE", "smfacc.epv030_23_intrvl_t10_rm_STC");
+                map.put("ASDN", "smfacc.epv030_23_intrvl_t10_carige_STC");
+		map.put("ASSV", "smfacc.epv030_23_intrvl_t10_carige_STC");
 		return map;
     }
 
@@ -502,9 +521,9 @@ public class DatabaseManager {
 	public Collection<TransactionReport> getTransactionInAbend(String system, String date, int limit) throws ClassNotFoundException, SQLException{
 		
             if(limit!=0)
-			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
+			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 		else
-			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system)));
+			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap    .get(system)));
 		st.setString(1, system);
 		st.setString(2, date);
 		rs=st.executeQuery();

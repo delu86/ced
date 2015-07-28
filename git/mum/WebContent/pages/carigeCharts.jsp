@@ -16,7 +16,7 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("REALE")){
+    	if(!profile.equals("CED")&&!profile.equals("CARIGE")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
     
@@ -76,7 +76,7 @@ response.setDateHeader ("Expires", 0);
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h3 class="page-header">Reale Mutua Charts
+                        <h3 class="page-header">Carige Workload
                         </h3>
                     </div>
                     
@@ -87,8 +87,8 @@ response.setDateHeader ("Expires", 0);
                  <div class="row">
                        <div class="col-lg-4">
                           <div title="Seleziona sistema" class="btn-group" role="group" aria-label="...">
-                              <button type="button"autofocus="true" class="btn btn-default target" value="SIES"> SIES</button>
-                              <button type="button" class="btn btn-default target" value="SIGE"> SIGE</button>
+                              <button type="button"autofocus="true" class="btn btn-default target" value="ASDN"> ASDN</button>
+                              <button type="button" class="btn btn-default target" value="ASSV"> ASSV</button>
                         </div>
                         <div id="expo">
                         <h5 >Excel exporter

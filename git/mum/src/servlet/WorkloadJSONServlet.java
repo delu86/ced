@@ -52,7 +52,7 @@ public class WorkloadJSONServlet extends HttpServlet {
 			f1.setTimeZone(TimeZone.getTimeZone("UTC"));
 			String json="[";
 			String categories="[";
-			String data="[";
+			String data="[[";
 			String actualWorkload=null;
 			for(WorkloadInterval work :coll){
 				Date d=f1.parse(work.getDate_interval_start());
@@ -61,11 +61,11 @@ public class WorkloadJSONServlet extends HttpServlet {
 					actualWorkload=work.getWorkloadName();
 					categories=categories.concat("\""+actualWorkload+"\"");
 					
-					data=data.concat("[["+date+","+String.format(Locale.US,"%.2f",work.getMipsCpu())+"]");
+					data=data.concat("["+date+","+String.format(Locale.US,"%.2f",work.getMipsCpu())+"]");
 					}
 				else{
 					if(actualWorkload.equals(work.getWorkloadName())){
-						;
+						
 						data=data.concat(",["+date+","+String.format(Locale.US,"%.2f",work.getMipsCpu())+"]");
 					}
 					else{

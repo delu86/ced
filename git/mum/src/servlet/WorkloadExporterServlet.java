@@ -32,6 +32,8 @@ public class WorkloadExporterServlet extends HttpServlet {
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "smfacc.workload_view");
 		map.put("SIGE", "smfacc.workload_view");
+                map.put("ASDN", "smfacc.workload_view_carige");
+		map.put("ASSV", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
 		map.put("ZSY5", "smfacc.workload_view_sy5");
 		map.put("CSY3", "smfacc.workload_view_sy5");
