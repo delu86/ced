@@ -5,6 +5,9 @@
  */
 package jatm;
 
+import parser.ATMParserFactory;
+import parser.AtmParser;
+
 /**
  *
  * @author CRE0260
@@ -15,7 +18,12 @@ public class JAtm {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        ATMParserFactory factory=new ATMParserFactory();
+        AtmParser parser=factory.getAtmParser(ATMParserFactory.FARO_NCH_PARSER_TYPE);
+        AtmParser parser2=factory.getAtmParser(ATMParserFactory.NCH_PARSER_TYPE);
+        //parser.parse("LOGSIA.FARONCH.BTD.V6032.txt");
+        //parser.parse("LOGSIA.FARONCH.BTD.V6033.txt");
+        parser2.parse("LOGATM.20150715.NCH.txt");
     }
     
 }

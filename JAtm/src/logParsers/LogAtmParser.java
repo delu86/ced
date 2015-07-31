@@ -8,6 +8,7 @@ package logParsers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,8 +33,7 @@ public class LogAtmParser {
     private Connection connection=null;
     private PreparedStatement statement=null;
     private final String DB_RESOURCE_PATH="logParsers.database";
-    private static final String INSERT_RECORD="INSERT into atm.logAtm VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            ;
+    private static final String INSERT_RECORD="INSERT into atm.logAtm VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     //cartella dove viene prelevato il log
     private final static String LOG_FOLDER_PATH="C:\\Users\\cre0260\\Desktop\\ATM\\";
     
@@ -77,6 +77,7 @@ public class LogAtmParser {
             while(input.hasNext()){
                 scanRecord(input.nextLine());
                    }//termine scansione del file
+            executesStoredProcedure();
         } catch (FileNotFoundException ex) {//file non trovato
             Logger.getLogger(LogFaroParser.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {//eccezione nel parser
@@ -252,16 +253,7 @@ public class LogAtmParser {
         }
         
     }
-    public static void main(String[] args) throws ParseException {
-        try{
-        //LogFaroParser parser=new LogFaroParser("ATM/LOGSIA.FARONCH.BTD.V6032.txt");
-        LogAtmParser parser =new LogAtmParser("ATM/LOGATM.20150715.NCH.txt");
-        }
-            catch(Exception e){
-                e.printStackTrace();
-        }
-        
-    }
+    
     //crea connessione con il database
     private void connectDB() throws ClassNotFoundException, SQLException{
         ResourceBundle resourceBundle=ResourceBundle.getBundle(DB_RESOURCE_PATH); 
@@ -338,9 +330,9 @@ public class LogAtmParser {
 
 
     private void salvaRecord(String logDateTime, String opeDateTime, String codAbi, String codAtm, String opeCode, String opeNum, String codiceAnomalia, String logProgr, String causale, String stato_sa, String esito, String stato_periferiche, String codiceRepl, String disponibilità) throws SQLException {
-       if((codAbi+"-"+codAtm).equals("03032-0070")){
+       
         statement=connection.prepareStatement(INSERT_RECORD);
-        
+        if(!(opeCode.equals("A94")||opeCode.equals("A93"))){
         statement.setString(1, opeDateTime);
         statement.setString(2, opeDateTime);
         statement.setString(3, logDateTime);
@@ -357,10 +349,63 @@ public class LogAtmParser {
         statement.setString(15, stato_periferiche);
         statement.setString(14, esito);
         statement.setString(16, null);
+        statement.setString(17, null);
         statement.executeUpdate();}
+        else{
+        statement.setString(1, logDateTime);
+        statement.setString(2, opeDateTime);
+        statement.setString(3, logDateTime);
+        statement.setString(4, codAbi);
+        statement.setString(5, opeCode);
+        statement.setString(6, opeNum);
+        statement.setString(7, codAbi+"-"+codAtm);
+        statement.setString(8, disponibilità);
+        statement.setString(9, codiceAnomalia);
+        statement.setString(10, codiceRepl);
+        statement.setString(11, logProgr);
+        statement.setString(12, causale);
+        statement.setString(13, stato_sa);
+        statement.setString(15, stato_periferiche);
+        statement.setString(14, esito);
+        statement.setString(16, null);
+        statement.setString(17, null);
+        statement.executeUpdate();
+        
+       }
+        statement.close();
+       
+       
     }
+      
 
-    
+    private void executesStoredProcedure() {
+        try {
+            CallableStatement callNormalizzaA93_A94=connection.prepareCall("call atm.normalizzaA93_A94");
+            CallableStatement call294Record=connection.prepareCall("call atm.get294Log");
+            CallableStatement callB25Record=connection.prepareCall("call atm.accoppiaB24B25");
+            System.out.println("Normalizzazione a93 a94");
+            callNormalizzaA93_A94.executeQuery();
+            System.out.println("Normalizzazione 294");
+            call294Record.executeQuery();
+            System.out.println("Normalizzazione b25");
+            callB25Record.executeQuery();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(LogAtmParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+      public static void main(String[] args) throws ParseException {
+        try{
+        
+        LogFaroParser parser2=new LogFaroParser("ATM/LOGSIA.FARONCH.BTD.V6032.txt");
+        LogFaroParser parser1=new LogFaroParser("ATM/LOGSIA.FARONCH.BTD.V6033.txt");
+        LogAtmParser  parser3 =new LogAtmParser("ATM/LOGATM.20150715.NCH.txt");
+        }
+            catch(Exception e){
+                e.printStackTrace();
+        }
+        
+    }
 
     
     
