@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import logParsers.LogFaroParser;
 
 /**
  * Classe astratta per parsing dei log Atm. Ogni classe concreta 
@@ -64,14 +63,14 @@ public abstract class AbstractATMParser implements AtmParser{
               executesStoredProcedure();
             
         } catch (FileNotFoundException ex) {//file non trovato
-            Logger.getLogger(LogFaroParser.class.getName()).log(Level.ALL, null, ex);
+            Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
               System.out.println(ex.getMessage());
         } catch (ParseException ex) {
             Logger.getLogger(AbstractATMParser.class.getName()).log(Level.ALL, null, ex);
             System.out.println(ex.getMessage());
         }
           catch (ClassNotFoundException | SQLException ex) {
-             Logger.getLogger(LogFaroParser.class.getName()).log(Level.ALL, null, ex);
+             Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
              System.out.println(ex.getMessage());
         }
         finally{//disconnessione dal database
@@ -109,7 +108,7 @@ public abstract class AbstractATMParser implements AtmParser{
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(LogFaroParser.class.getName()).log(Level.ALL, null, ex);
+                Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
                 System.out.println(ex.getMessage());
             }
         }

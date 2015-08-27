@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class LogNCHParser extends AbstractATMParser{
     //codice di uscita del programma di parsing nel caso che il line abbia una lunghezza errata;
     private final static int WRONG_ERROR_LENGTH_EXIT_CODE=1234;
-    private static final String INSERT_RECORD="INSERT into atm.logAtm VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_RECORD="INSERT into atm.logAtm VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private final   HashMap<String,Integer> mapOpCodeAnomalie=initializeMapOpCodeAnomalie(); //la map restituisce 1 se il codice operazione indica una anomalia;
     private final   HashMap<String,Integer> mapOpCodeSbloccanti=initializeMapOpCodeSbloccanti();//la map restituisce 1 se il codice operazione può sbloccare uno stato di indisponibiltià dell'ATM
     private final   HashMap<String,Integer> mapAnomaliaIndisponibilità=initializeMapAnomaliaIndisponibilità();//la map restituisce 1 se il codice anomalia indica una anomalia che rende indisponibile l'ATM
@@ -143,7 +143,16 @@ public class LogNCHParser extends AbstractATMParser{
                                  if (stato_a94.equals("2"))  disponibilità = "3";
                                  if (stato_a94.equals("3"))  disponibilità = "3";
                                  if (stato_a94.equals("4"))  disponibilità = "4";
-                          } } }else{
+                          } 
+                           int stato_tastiera=Integer.parseInt(lineRest.substring(9,10));
+                           int stato_lettore_badge=Integer.parseInt(lineRest.substring(10,11));
+                           int stato_dispensatore=Integer.parseInt(lineRest.substring(11,12));
+                           int stato_modulo_cifratura=Integer.parseInt(lineRest.substring(16,17));
+                           if(stato_tastiera>=2||stato_lettore_badge>=2||stato_dispensatore>=2||stato_modulo_cifratura>=2)
+                               disponibilità="4";
+                           if((codAbi+"-"+codAtm).equals("03032-0003"))
+                           System.out.println(disponibilità);
+                        } }else{
                         if(mapAnomaliaIndisponibilità.containsKey(codiceAnomalia)){
                             disponibilità=String.valueOf(mapAnomaliaIndisponibilità.get(codiceAnomalia));
                             if(disponibilità.equals("3")) disponibilità="4";
@@ -155,7 +164,7 @@ public class LogNCHParser extends AbstractATMParser{
                             !disponibilità.equals("1")&&
                             !disponibilità.equals("2")&&
                             !disponibilità.equals("3")&&
-                            disponibilità.equals("4"))
+                            !disponibilità.equals("4"))
                             disponibilità="0";
                     //System.out.println(disponibilità);
                     String causale="";
@@ -173,12 +182,12 @@ public class LogNCHParser extends AbstractATMParser{
                         stato_periferiche     = lineRest.substring(9,27);
                     }
                     if(!(opeCode.equals("A94")||opeCode.equals("A93")))
-                            saveRecord(INSERT_RECORD,opeDateTime,opeDateTime,logDateTime,codAbi,
+                            saveRecord(INSERT_RECORD,null,opeDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
                     else
-                            saveRecord(INSERT_RECORD,logDateTime,opeDateTime,logDateTime,codAbi,
+                            saveRecord(INSERT_RECORD,null,logDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
@@ -258,9 +267,11 @@ public class LogNCHParser extends AbstractATMParser{
     @Override
     protected void executesStoredProcedure() throws SQLException {
             CallableStatement callNormalizzaA93_A94=connection.prepareCall("call atm.normalizzaA93_A94");
+            CallableStatement callCalcolaIndisponibilita=connection.prepareCall("call calcolaIndisponibilità()");
             System.out.println("Normalizzazione a93 a94");
             callNormalizzaA93_A94.executeQuery();
-            
+            System.out.println("Calcola indisponibilità");
+            callCalcolaIndisponibilita.executeQuery();
         }
     
 }
