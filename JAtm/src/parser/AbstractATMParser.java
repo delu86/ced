@@ -27,7 +27,7 @@ public abstract class AbstractATMParser implements AtmParser{
     
     private final static String DB_RESOURCES="parser.database";
     protected Connection connection;
-    private final String LOG_FOLDER_PATH="C:\\Users\\cre0260\\Desktop\\ATM\\ATM\\";
+    private final String LOG_FOLDER_PATH="C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\";
     private PreparedStatement statement;
     
     protected final static String DATETIME_FORMAT="yyyy-MM-dd hh:mm:ss";

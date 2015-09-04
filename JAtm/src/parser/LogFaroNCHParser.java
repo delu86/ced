@@ -19,9 +19,9 @@ import java.util.Date;
 public class LogFaroNCHParser extends AbstractATMParser{
     
     
-    private static final String INSERT_RECORD_OK_TABLE="INSERT into atm.atm_faro_log VALUES"
+    private static final String INSERT_RECORD_OK_TABLE="REPLACE into atm_stat.log_faro_nch_temp VALUES"
             + "(?,?,?,?,?,?,?,?,?,?)";
-    private static final String INSERT_RECORD_SCARTI="INSERT into atm.atm_faro_log_scarti VALUES (?,?,?)";
+    private static final String INSERT_RECORD_SCARTI="INSERT into atm_stat.atm_faro_log_scarti VALUES (?,?,?)";
     /*
     Lunghezza dei campi che si trovano all'interno del log
     */
@@ -83,6 +83,7 @@ public class LogFaroNCHParser extends AbstractATMParser{
                                 dataOraMSG="20"+A94.substring(16,18)+"-"+A94.substring(14,16)+"-"+A94.substring(12,14)+" "+A94.substring(18,20)+
                                       ":"+  A94.substring(20,22)+":"+A94.substring(22,24);
                             }
+                            
                             saveRecord(INSERT_RECORD_OK_TABLE, String.valueOf(indexOk),date,dataOraMSG,codAbi,codAtm,msg,pr,st,String.valueOf(numMSG),A94);
                             indexOk++;
                             
@@ -108,8 +109,8 @@ public class LogFaroNCHParser extends AbstractATMParser{
 
     @Override
     protected void executesStoredProcedure() throws SQLException {
-            CallableStatement call294Record=connection.prepareCall("call atm.get294Log");
-            CallableStatement callB25Record=connection.prepareCall("call atm.accoppiaB24B25");
+            CallableStatement call294Record=connection.prepareCall("call atm_stat.normalize294message");
+            CallableStatement callB25Record=connection.prepareCall("call atm_stat.coupleB24B25");
             System.out.println("Normalizzazione 294");
             call294Record.executeQuery();
             System.out.println("Normalizzazione b25");

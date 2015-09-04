@@ -20,7 +20,8 @@ import java.util.HashMap;
 public class LogNCHParser extends AbstractATMParser{
     //codice di uscita del programma di parsing nel caso che il line abbia una lunghezza errata;
     private final static int WRONG_ERROR_LENGTH_EXIT_CODE=1234;
-    private static final String INSERT_RECORD="INSERT into atm.logAtm VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_RECORD="INSERT into atm_stat.logAtm_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_A93_A94_RECORD="INSERT into atm_stat.logAtm_temp_a93_a94 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private final   HashMap<String,Integer> mapOpCodeAnomalie=initializeMapOpCodeAnomalie(); //la map restituisce 1 se il codice operazione indica una anomalia;
     private final   HashMap<String,Integer> mapOpCodeSbloccanti=initializeMapOpCodeSbloccanti();//la map restituisce 1 se il codice operazione può sbloccare uno stato di indisponibiltià dell'ATM
     private final   HashMap<String,Integer> mapAnomaliaIndisponibilità=initializeMapAnomaliaIndisponibilità();//la map restituisce 1 se il codice anomalia indica una anomalia che rende indisponibile l'ATM
@@ -150,8 +151,6 @@ public class LogNCHParser extends AbstractATMParser{
                            int stato_modulo_cifratura=Integer.parseInt(lineRest.substring(16,17));
                            if(stato_tastiera>=2||stato_lettore_badge>=2||stato_dispensatore>=2||stato_modulo_cifratura>=2)
                                disponibilità="4";
-                           if((codAbi+"-"+codAtm).equals("03032-0003"))
-                           System.out.println(disponibilità);
                         } }else{
                         if(mapAnomaliaIndisponibilità.containsKey(codiceAnomalia)){
                             disponibilità=String.valueOf(mapAnomaliaIndisponibilità.get(codiceAnomalia));
@@ -181,17 +180,18 @@ public class LogNCHParser extends AbstractATMParser{
                         esito     = lineRest.substring(8,9);
                         stato_periferiche     = lineRest.substring(9,27);
                     }
+                    if(codAbi.equals("03032")){
                     if(!(opeCode.equals("A94")||opeCode.equals("A93")))
                             saveRecord(INSERT_RECORD,null,opeDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
                     else
-                            saveRecord(INSERT_RECORD,null,logDateTime,opeDateTime,logDateTime,codAbi,
+                            saveRecord(INSERT_A93_A94_RECORD,null,logDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
-                    indexOk++;
+                    indexOk++;}
                     
                 }else{//data operazione minore di mindate
                     indexKo++;
@@ -266,12 +266,15 @@ public class LogNCHParser extends AbstractATMParser{
 
     @Override
     protected void executesStoredProcedure() throws SQLException {
-            CallableStatement callNormalizzaA93_A94=connection.prepareCall("call atm.normalizzaA93_A94");
-            CallableStatement callCalcolaIndisponibilita=connection.prepareCall("call calcolaIndisponibilità()");
-            System.out.println("Normalizzazione a93 a94");
+            /*
+            CallableStatement callCreateBackup=connection.prepareCall("call atm_stat.createBackup");
+            CallableStatement callNormalizzaA93_A94=connection.prepareCall("call atm_stat.coupleA93_A94");
+            CallableStatement calllogAtmRecordDispatcher=connection.prepareCall("call atm_stat.logAtmRecordDispatcher");
+            System.out.println("Normalizza A93-A94");
             callNormalizzaA93_A94.executeQuery();
-            System.out.println("Calcola indisponibilità");
-            callCalcolaIndisponibilita.executeQuery();
-        }
+            System.out.println("Dispatcher ");
+            calllogAtmRecordDispatcher.executeQuery();
+        */
+                    }
     
 }
