@@ -6,9 +6,26 @@ public class BatchReport {
 	private String system;
 	private String dateInterval;
 	private String initialTitme;
-
+        private long   numExcp; 
+        private long   serviceClass;
 	private String abend;
 	private String conditionCode;
+
+    public long getNumExcp() {
+        return numExcp;
+    }
+
+    public void setNumExcp(long numExcp) {
+        this.numExcp = numExcp;
+    }
+
+    public long getServiceClass() {
+        return serviceClass;
+    }
+
+    public void setServiceClass(long serviceClass) {
+        this.serviceClass = serviceClass;
+    }
 	private String jobClasString;
 	private String jesNumber;
 	private double jesInputPriorityString;

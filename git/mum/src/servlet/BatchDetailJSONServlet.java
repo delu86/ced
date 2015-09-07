@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import object.BatchReport;
 import utility.UtilityDate;
 import datalayer.DatabaseManager;
+import object.StepReport;
 
 /**
  * Servlet implementation class BatchDetailJSONServlet
@@ -44,57 +45,54 @@ public class BatchDetailJSONServlet extends HttpServlet {
 		String type=request.getParameter("type"); //job oppure stc (start&task)
 		long dateInMillis=Long.parseLong(request.getParameter("day"));
 		String daytime=UtilityDate.fromMilliSecondToDateTimeString(dateInMillis, TIMEZONE,FORMAT_DATETIME);
-       DatabaseManager db=new DatabaseManager();
+                DatabaseManager db=new DatabaseManager();
 		response.setContentType("application/json");
 		try {
 			String jsonString="{\"data\":[";
 			String dataJSON="";
 			out = response.getWriter();
-			Collection<BatchReport> collection;
+			Collection<StepReport> collection;
 			if(type.equals(JOB_TYPE))
 				 collection=db.getBatchByDate(daytime, system);
 			else
-				 collection=db.getSTCByDate(daytime, system);
+				collection=db.getSTCByDate(daytime, system);
 			int i=0;
-			for(BatchReport  report:collection){
+			for(StepReport  report:collection){
 				
-			if(i==0){			 //SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED
-	             //DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM
-				dataJSON=dataJSON.concat("{"+
+			if(i==0){			 
+                          //DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,
+	                 //SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX,CONDCODE,ABEND
+					dataJSON=dataJSON.concat("{"+
 					"\"SMF30JBN\":"+	"\""+report.getJobName()+"\","+
-					"\"CONDCODE\":"+	"\""+report.getConditionCode()+"\","+
-					"\"SMF30CLS\":"+	"\""+report.getJobClasString()+"\","+
-					"\"SMF30JPT\":"+		"\""+report.getJesInputPriorityString()+"\","+
+					"\"JESNUM\":"+	        "\""+report.getJesNumber()+"\","+
+					"\"SMF30STM\":"+	"\""+report.getStepNameString()+"\","+
+					"\"SMF30STN\":"+		"\""+report.getStepNumber()+"\","+
+					"\"SMF30PSN\":"+		"\""+report.getProcStep()+"\","+
+					"\"SMF30PGM\":"+		"\""+report.getProgramName()+"\","+
 					"\"SMF30RUD\":"+		"\""+report.getRacfUserIdString()+"\","+
-					"\"TOT\":"+		"\""+report.getCount()+"\","+
-					"\"EXECTM\":"+		"\""+report.getExecTime()+"\","+
-					"\"ELAPSED\":"+		"\""+report.getElapsed()+"\","+
-					"\"DISKIO\":"+		"\""+report.getDiskio()+"\","+
-					"\"DISKIOTM\":"+		"\""+report.getDiskioTime()+"\","+
-					"\"ZIPTM\":"+		"\""+report.getZipTime()+"\","+
 					"\"CPUTIME\":"+		"\""+report.getCpuTime()+"\","+
-					"\"TAPEIO\":"+		"\""+report.getTapeIO()+"\","+
-					"\"TAPEIOTM\":"+		"\""+report.getTapeIOtime()+"\""+
-			         	"}");
+					"\"SMF30SRV_L\":"+		"\""+report.getServiceClass()+"\","+
+					"\"SMF30TEX\":"+		"\""+report.getNumExcp()+"\","+
+					"\"CONDCODE\":"+		"\""+report.getConditionCode()+"\","+
+					"\"ABEND\":"+		"\""+report.getAbend()+"\""+
+					"}");
 				i++;
 			}
 			else{
 				dataJSON=dataJSON.concat(",{"+					
-			            "\"SMF30JBN\":"+	"\""+report.getJobName()+"\","+
-						"\"CONDCODE\":"+	"\""+report.getConditionCode()+"\","+
-						"\"SMF30CLS\":"+	"\""+report.getJobClasString()+"\","+
-						"\"SMF30JPT\":"+    "\""+report.getJesInputPriorityString()+"\","+
-						"\"SMF30RUD\":"+    "\""+report.getRacfUserIdString()+"\","+
-						"\"TOT\":"+		    "\""+report.getCount()+"\","+
-						"\"EXECTM\":"+		"\""+report.getExecTime()+"\","+
-						"\"ELAPSED\":"+		"\""+report.getElapsed()+"\","+
-						"\"DISKIO\":"+		"\""+report.getDiskio()+"\","+
-						"\"DISKIOTM\":"+     "\""+report.getDiskioTime()+"\","+
-						"\"ZIPTM\":"+		"\""+report.getZipTime()+"\","+
-						"\"CPUTIME\":"+		"\""+report.getCpuTime()+"\","+
-						"\"TAPEIO\":"+		"\""+report.getTapeIO()+"\","+
-						"\"TAPEIOTM\":"+		"\""+report.getTapeIOtime()+"\""+
-						"}");
+			                "\"SMF30JBN\":"+	"\""+report.getJobName()+"\","+
+					"\"JESNUM\":"+	        "\""+report.getJesNumber()+"\","+
+					"\"SMF30STM\":"+	"\""+report.getStepNameString()+"\","+
+					"\"SMF30STN\":"+		"\""+report.getStepNumber()+"\","+
+					"\"SMF30PSN\":"+		"\""+report.getProcStep()+"\","+
+					"\"SMF30PGM\":"+		"\""+report.getProgramName()+"\","+
+					"\"SMF30RUD\":"+		"\""+report.getRacfUserIdString()+"\","+
+					"\"CPUTIME\":"+		"\""+report.getCpuTime()+"\","+
+					"\"SMF30SRV_L\":"+		"\""+report.getServiceClass()+"\","+
+					"\"SMF30TEX\":"+		"\""+report.getNumExcp()+"\","+
+					"\"CONDCODE\":"+		"\""+report.getConditionCode()+"\","+
+					"\"ABEND\":"+		"\""+report.getAbend()+"\""+
+                                        "}");
 								}
 		}
 			jsonString=jsonString.concat(dataJSON+"]}");

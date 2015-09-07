@@ -69,7 +69,7 @@ var optionsChart={
 
    	                }
    	            ,opposite: true
-   	        ,}],          	            		xAxis: {
+   	        }],          	            		xAxis: {
       	         labels: {
       	        	 
     	             rotation: -45,
@@ -109,10 +109,7 @@ var optionsChart={
    	            	name:'CPU time',yAxis:1,type:'spline', color: Highcharts.getOptions().colors[3] ,
    	        	             point:{
 	       	            	  events:{
-	       	            		  mouseOver:function(e){
-	       	            			$("#heading-table").text("Top10 consumer "+system+" "+e.currentTarget.category);
-		            				table.ajax.url( 'transactionAbendJSON?system='+system +'&date='+e.currentTarget.category+"&limit="+limit).load();
-		          	       	            		},
+	       	            		 
 		          	       	        click:function(e){
 		          	       	              drilldown(e.currentTarget.category);
 

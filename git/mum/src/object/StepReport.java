@@ -4,10 +4,19 @@ public class StepReport extends BatchReport {
 
 	private String stepNameString;
 	private String stepNumber;
+        private String procStep;
 	private String programName;
 	public StepReport() {
 		
 	}
+
+    public String getProcStep() {
+        return procStep;
+    }
+
+    public void setProcStep(String procStep) {
+        this.procStep = procStep;
+    }
 	public String getStepNameString() {
 		return stepNameString;
 	}

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import datalayer.DatabaseManager;
 import object.DiskInformation;
 import object.ProcessInformation;
+import object.SondaWorkloadEmptySlot;
 import utility.UtilityDate;
 
 /**
@@ -96,13 +97,10 @@ public class AdministrationServlet extends HttpServlet {
 		 request.setAttribute("process",process);
 		 try{
 			 
-			 DatabaseManager db=new DatabaseManager();
-			 HashMap<String, Boolean> mapSystemEmptySlot=new HashMap<String, Boolean>();
-			 for(String sys:wkl_system_array){
-				 mapSystemEmptySlot.put(sys, db.isThereAnyEmptySlot(sys, UtilityDate.conversionToEpvformat(UtilityDate.getDate(-1))));
-			 }
-			 request.setAttribute("mapSystemSlot",mapSystemEmptySlot);
-		 }
+                         DatabaseManager db=new DatabaseManager();
+			 Collection<SondaWorkloadEmptySlot> coll=db.isThereAnyEmptySlot( UtilityDate.conversionToEpvformat(UtilityDate.getDate(-1)));
+		         request.setAttribute("emptySlot", coll);
+                 }
 		 catch(Exception e){
 			 e.printStackTrace();
 		 }

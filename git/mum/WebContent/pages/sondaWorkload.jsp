@@ -60,7 +60,13 @@ Collection<SondaWorkloadInterval> coll=(Collection<SondaWorkloadInterval>)reques
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <style>
+        #table-responsive {
+                height:150px;
+                overflow:auto;  
+                margin-top:20px;
+                      }
+    </style>
 </head>
 
 <body>

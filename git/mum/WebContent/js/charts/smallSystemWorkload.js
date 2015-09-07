@@ -32,24 +32,25 @@ $("#baseline_value").on('keyup change', function(e){
 });
 
 
-
+//DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,
+//SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX,CONDCODE,ABEND
 var tableBatch = $('#dataTables-batch').DataTable( {
     paging: true,
     processing:true,
     responsive: true,
     columns:[
              { "data": "SMF30JBN" },
-             { "data": "CONDCODE" },
-             { "data": "SMF30CLS" },
-             { "data": "SMF30JPT" },
+             { "data": "JESNUM" },
+             { "data": "SMF30STM" },
+             { "data": "SMF30STN" },
+             { "data": "SMF30PSN" },
+             { "data": "SMF30PGM" },
              { "data": "SMF30RUD" },
-             { "data": "EXECTM" },
-             { "data": "ELAPSED" },
-             { "data": "DISKIO" },
-             { "data": "DISKIOTM" },
-             { "data": "ZIPTM" },
-             { "data": "CPUTIME" }
-             
+             { "data": "CPUTIME" },
+             { "data": "SMF30SRV_L" },
+             { "data": "SMF30TEX" },
+             { "data": "CONDCODE" },
+             { "data": "ABEND" }
              ]});
 var tableSTC = $('#dataTables-stc').DataTable( {
     paging: true,
@@ -57,16 +58,17 @@ var tableSTC = $('#dataTables-stc').DataTable( {
     responsive: true,
     columns:[
              { "data": "SMF30JBN" },
-             { "data": "CONDCODE" },
-             { "data": "SMF30CLS" },
-             { "data": "SMF30JPT" },
+             { "data": "JESNUM" },
+             { "data": "SMF30STM" },
+             { "data": "SMF30STN" },
+             { "data": "SMF30PSN" },
+             { "data": "SMF30PGM" },
              { "data": "SMF30RUD" },
-             { "data": "EXECTM" },
-             { "data": "ELAPSED" },
-             { "data": "DISKIO" },
-             { "data": "DISKIOTM" },
-             { "data": "ZIPTM" },
-             { "data": "CPUTIME" }
+             { "data": "CPUTIME" },
+             { "data": "SMF30SRV_L" },
+             { "data": "SMF30TEX" },
+             { "data": "CONDCODE" },
+             { "data": "ABEND" }
              
              ]});
 var tableCics = $('#dataTables-cics').DataTable( {
@@ -245,15 +247,15 @@ var optionsGeneral={
         };
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     $('.table:visible').each( function(e) {
-   
+   //per avere datatable responsive
       $(this).DataTable().columns.adjust().responsive.recalc();
     });
   });
 function setDateInterval(){
 	var d=new Date();
  	var d1=new Date();
- 	d1.setDate(d.getDate()+offset);
- 	d.setDate(d.getDate()+offset-limit+1);
+ 	d1.setDate(d.getDate()+offset+1);
+ 	d.setDate(d.getDate()+offset-limit+2);
  	var mydate = new Date();
  	$.datepicker.formatDate('yy-mm-dd', d);
  	$("#date-interval").val($.datepicker.formatDate('dd/mm/yy', d)+'-'+$.datepicker.formatDate('dd/mm/yy', d1));

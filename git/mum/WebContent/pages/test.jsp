@@ -66,7 +66,7 @@ response.setDateHeader ("Expires", 0);
                         <h3 class="page-header">RMF e R4H</h3>
                     </div>
                     <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-2">
         <div title="Seleziona sistema" class="btn-group" role="group" aria-label="...">
               <button type="button"autofocus="true" class="btn btn-default target" value="SIES"> SIES</button>
               <button type="button" class="btn btn-default target" value="SIGE"> SIGE</button>
@@ -74,7 +74,12 @@ response.setDateHeader ("Expires", 0);
         </div>
         
                     </div>
-                    <!-- /.col-lg-10 -->
+                    <!-- /.col-lg-2 -->
+                    <div class="col-lg-8">
+                        <h5 >Excel exporter
+                        <a  title="Esporta grafico in excel" id="excelExporter" href="consumptionsExporter?system=SIES"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>
+                        </div>
+                    <!-- /.col-lg-8 -->
                     <div class="col-lg-2">
                         <input type="number" id="baseline_value" placeholder="Baseline MSU">
                     </div>

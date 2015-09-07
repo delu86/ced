@@ -62,9 +62,9 @@
         $('#loading').show();
         drawChart();
         $( ".target" ).click(function() {
- 		   
  		   system=$(this).val();
- 		    drawChart();
+ 		   $("#excelExporter").attr("href","consumptionsExporter?system="+system);
+                   drawChart();
  		   chart.yAxis[1].addPlotLine(optionsPlotline);
  	});
         function drawChart(){

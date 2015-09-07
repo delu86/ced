@@ -93,7 +93,7 @@ response.setDateHeader ("Expires", 0);
                         <div id="expo">
                         <h5 >Excel exporter
                         <a  title="Esporta grafico in excel" id="excelExporter" href="#"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>
-                                                      </div>
+                        </div>
                         </div>
                         <div class="col-lg-7">
                         <div class="form-inline">
@@ -166,18 +166,21 @@ response.setDateHeader ("Expires", 0);
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-batch">
                                     <thead>
                                         <tr>
+                                            <!--DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,
+                                                SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,
+                                                SMF30SRV_L,SMF30TEX,CONDCODE,ABEND -->
                                             <th>JOBname</th>
-                                            <th>CONCODE</th>
-                                            <th>CLASS</th>
-                                            <th>JPT</th>
-                                            <th>RUD</th>
-                                            <th>ExeTime</th>
-                                            <th>Elapsed</th>
-                                            <th>DISKIO</th>
-                                            <th>DISKIOTM</th>
-                                            <th>ZIPTM</th>
+                                            <th>JESNUM</th>
+                                            <th>SMF30STM</th>
+                                            <th>SMF30STN</th>
+                                            <th>SMF30PSN</th>
+                                            <th>SMF30PGM</th>
+                                            <th>SMF30RUD</th>
                                             <th>CPUTIME</th>
-
+                                            <th>SMF30SRV_L</th>
+                                            <th>SMF30TEX</th>
+                                            <th>CONDCODE</th>
+                                            <th>ABEND</th>
                                          </tr>
                                     </thead>
                                     </table>
@@ -191,18 +194,18 @@ response.setDateHeader ("Expires", 0);
                                     <thead>
                                         <tr>
                                             <th>JOBname</th>
-                                            <th>CONCODE</th>
-                                            <th>CLASS</th>
-                                            <th>JPT</th>
-                                            <th>RUD</th>
-                                            <th>ExeTime</th>
-                                            <th>Elapsed</th>
-                                            <th>DISKIO</th>
-                                            <th>DISKIOTM</th>
-                                            <th>ZIPTM</th>
+                                            <th>JESNUM</th>
+                                            <th>SMF30STM</th>
+                                            <th>SMF30STN</th>
+                                            <th>SMF30PSN</th>
+                                            <th>SMF30PGM</th>
+                                            <th>SMF30RUD</th>
                                             <th>CPUTIME</th>
-
-                                         </tr>
+                                            <th>SMF30SRV_L</th>
+                                            <th>SMF30TEX</th>
+                                            <th>CONDCODE</th>
+                                            <th>ABEND</th>
+                                       </tr>
                                     </thead>
                                     </table>
                                     </div>

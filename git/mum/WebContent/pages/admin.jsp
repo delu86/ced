@@ -1,3 +1,4 @@
+<%@page import="object.SondaWorkloadEmptySlot"%>
 <%@page import="utility.UtilityDate"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Iterator"%>
@@ -35,7 +36,7 @@ Collection<DiskInformation> disksInfo=(Collection<DiskInformation>)request.getAt
 Collection<ProcessInformation> processInfo=  (Collection<ProcessInformation>)request.getAttribute("process");
 String datastage=(String) request.getAttribute("datastage");
 @SuppressWarnings("unchecked")
-HashMap<String,Boolean> map=(HashMap<String,Boolean>) request.getAttribute("mapSystemSlot");
+Collection<SondaWorkloadEmptySlot> coll=(Collection<SondaWorkloadEmptySlot>) request.getAttribute("emptySlot");
 %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -147,27 +148,29 @@ HashMap<String,Boolean> map=(HashMap<String,Boolean>) request.getAttribute("mapS
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
+                            <%if(coll.isEmpty()){%>
+                           <img alt="green" src="img/b_green.png"> Nessuno slot vuoto
+                            <%}else{%>
                     <div class="table-responsive">
                      <table class="table table-hover">
-					<thead>
-						<tr>
+                         
+                         <thead>
+                             <tr>
 						<th>System</th>
-						<th>Empty slot?</th>
-						</thead>
-						<tbody>
-						<%    Iterator it = map.entrySet().iterator();
-                      while (it.hasNext()) {
-        Map.Entry <String,Boolean> entry = (Map.Entry)it.next();
-        %>
-						
-					<tr>	
-					<td><a href="sondaWorkload?system=<%=entry.getKey()%>&date=<%=UtilityDate.conversionToEpvformat(UtilityDate.getDate(-1)) %>"><%out.print(entry.getKey()); %></a></td>
-					<td><%if(entry.getValue()==true){ %><img alt="red" src="img/b_alert.png"> <%}else{ %><img alt="red" src="img/b_green.png">  <%} %></td>
-					</tr>
-				<%} %>	
+						<th>#Empty slots</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                         <%for(SondaWorkloadEmptySlot s:coll){%>
+                         <tr>
+                             <td><a href="sondaWorkload?system=<%= s.getSystem()%>&date=<%=UtilityDate.conversionToEpvformat(UtilityDate.getDate(-1)) %>"> <img alt="red" src="img/b_alert.png"><%out.print(s.getSystem());%></a></td>
+                         <td><%out.print(s.getCountEmptySlot());%></td>
+                         </tr>
+                         <%}%>
 				</tbody>
 				</table>   
 				    </div>
+                    <%}%>
 				    </div>
 				    </div>
 				    

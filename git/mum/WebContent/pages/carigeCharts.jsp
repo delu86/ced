@@ -167,16 +167,17 @@ response.setDateHeader ("Expires", 0);
                                     <thead>
                                         <tr>
                                             <th>JOBname</th>
-                                            <th>CONCODE</th>
-                                            <th>CLASS</th>
-                                            <th>JPT</th>
-                                            <th>RUD</th>
-                                            <th>ExeTime</th>
-                                            <th>Elapsed</th>
-                                            <th>DISKIO</th>
-                                            <th>DISKIOTM</th>
-                                            <th>ZIPTM</th>
+                                            <th>JESNUM</th>
+                                            <th>SMF30STM</th>
+                                            <th>SMF30STN</th>
+                                            <th>SMF30PSN</th>
+                                            <th>SMF30PGM</th>
+                                            <th>SMF30RUD</th>
                                             <th>CPUTIME</th>
+                                            <th>SMF30SRV_L</th>
+                                            <th>SMF30TEX</th>
+                                            <th>CONDCODE</th>
+                                            <th>ABEND</th>
 
                                          </tr>
                                     </thead>
@@ -190,17 +191,18 @@ response.setDateHeader ("Expires", 0);
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-stc">
                                     <thead>
                                         <tr>
-                                            <th>JOBname</th>
-                                            <th>CONCODE</th>
-                                            <th>CLASS</th>
-                                            <th>JPT</th>
-                                            <th>RUD</th>
-                                            <th>ExeTime</th>
-                                            <th>Elapsed</th>
-                                            <th>DISKIO</th>
-                                            <th>DISKIOTM</th>
-                                            <th>ZIPTM</th>
+                                           <th>JOBname</th>
+                                            <th>JESNUM</th>
+                                            <th>SMF30STM</th>
+                                            <th>SMF30STN</th>
+                                            <th>SMF30PSN</th>
+                                            <th>SMF30PGM</th>
+                                            <th>SMF30RUD</th>
                                             <th>CPUTIME</th>
+                                            <th>SMF30SRV_L</th>
+                                            <th>SMF30TEX</th>
+                                            <th>CONDCODE</th>
+                                            <th>ABEND</th>
 
                                          </tr>
                                     </thead>
