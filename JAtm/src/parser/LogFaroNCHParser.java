@@ -107,14 +107,5 @@ public class LogFaroNCHParser extends AbstractATMParser{
                 }
     }
 
-    @Override
-    protected void executesStoredProcedure() throws SQLException {
-            CallableStatement call294Record=connection.prepareCall("call atm_stat.normalize294message");
-            CallableStatement callB25Record=connection.prepareCall("call atm_stat.coupleB24B25");
-            System.out.println("Normalizzazione 294");
-            call294Record.executeQuery();
-            System.out.println("Normalizzazione b25");
-            callB25Record.executeQuery();
-    }
     
 }

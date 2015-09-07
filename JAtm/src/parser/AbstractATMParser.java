@@ -59,8 +59,7 @@ public abstract class AbstractATMParser implements AtmParser{
             
               System.out.println("Record ok: "+indexOk);
               System.out.println("Record Ko: "+indexKo);
-              //finalizzazione tramite esecuzione delle stored procedure
-              executesStoredProcedure();
+              
             
         } catch (FileNotFoundException ex) {//file non trovato
             Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
@@ -74,13 +73,10 @@ public abstract class AbstractATMParser implements AtmParser{
              System.out.println(ex.getMessage());
         }
         finally{//disconnessione dal database
-            
+            disconnectDB();
             System.out.println("Connection close! BYE ^^");//da eliminare
         }
     }
-    //stored procedure da eseguire alla fine della scansione del log; effettuano normalizzazione 
-    //dei dati
-    protected  abstract  void executesStoredProcedure() throws SQLException; 
 
     protected abstract void scanRecord(String line) throws ParseException,SQLException;
     

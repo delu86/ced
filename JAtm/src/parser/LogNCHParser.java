@@ -5,7 +5,6 @@
  */
 package parser;
 
-import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -51,6 +50,7 @@ public class LogNCHParser extends AbstractATMParser{
             DateFormat dateFormat=new SimpleDateFormat(LOGDATEFORMAT);
             Date dayLog=dateFormat.parse(logdate);
             Date minDay=dateFormat.parse(MIN_DATE);
+            if(codAbi.equals("03032")){
             if(!codAbi.equals(WRONG_CODABI)&&dayLog.after(minDay)){
                 //System.out.println(codAbi+" -->"+logdate+" "+ora+":"+minuti+":"+secondi);
                 String opeCode=line.substring(index,index+=3);//index=99; codice operazione
@@ -180,7 +180,7 @@ public class LogNCHParser extends AbstractATMParser{
                         esito     = lineRest.substring(8,9);
                         stato_periferiche     = lineRest.substring(9,27);
                     }
-                    if(codAbi.equals("03032")){
+                    
                     if(!(opeCode.equals("A94")||opeCode.equals("A93")))
                             saveRecord(INSERT_RECORD,null,opeDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
@@ -191,7 +191,7 @@ public class LogNCHParser extends AbstractATMParser{
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
-                    indexOk++;}
+                    indexOk++;
                     
                 }else{//data operazione minore di mindate
                     indexKo++;
@@ -203,7 +203,7 @@ public class LogNCHParser extends AbstractATMParser{
                 indexKo++;
                 System.out.println("data inferiore a mindate o codice abi errato-->"+line);
             }
-        }else{//check line errato
+        }}else{//check line errato
             indexKo++;
             System.out.println("check line errato-->"+line);
         }
@@ -263,10 +263,7 @@ public class LogNCHParser extends AbstractATMParser{
         map.put("56", 3);
         return map;
     }
-
-    @Override
-    protected void executesStoredProcedure() throws SQLException {
-            /*
+        /*
             CallableStatement callCreateBackup=connection.prepareCall("call atm_stat.createBackup");
             CallableStatement callNormalizzaA93_A94=connection.prepareCall("call atm_stat.coupleA93_A94");
             CallableStatement calllogAtmRecordDispatcher=connection.prepareCall("call atm_stat.logAtmRecordDispatcher");
@@ -275,6 +272,5 @@ public class LogNCHParser extends AbstractATMParser{
             System.out.println("Dispatcher ");
             calllogAtmRecordDispatcher.executeQuery();
         */
-                    }
-    
+                       
 }
