@@ -74,6 +74,9 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="err.jsp"><i class="fa  fa-exclamation-circle fa-fw"></i> Errori Batch </a>
                              </li>
+                             <li>
+                              <a href="consumi.jsp"><i class="fa  fa-table fa-fw"></i>Trend</a>
+                             </li>
                               </ul></li>
                                <li>
                                     <a href="#"><i class="fa fa-tasks fa-fw"></i>MQ  <span class="fa arrow"></span></a>

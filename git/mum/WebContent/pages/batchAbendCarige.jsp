@@ -19,7 +19,7 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("CARIGE")){
+    	if(!profile.equals("CED")&&!profile.equals("REALE")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
     
@@ -84,7 +84,7 @@ response.setDateHeader ("Expires", 0);
                    </div>
                    <!-- /.row -->
                 <div class="row" id="first-level">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                 <div class="panel panel-default">
                       <div class="panel-heading" id="heading-graph">
                     Abend SIES
@@ -96,40 +96,11 @@ response.setDateHeader ("Expires", 0);
                     <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto">
                     </div>
                     </div>
-                    <!-- /.col-lg-8 -->
-                    </div>
-                    </div>
-                    <div class="col-lg-4">
                     
-                     <div class="panel panel-default">
-                      <div class="panel-heading" id="heading-table">
-                    Top 10 ABEND consumer
                     </div>
-                    <!-- /.panel -heading -->
-                    <div class="panel-body">
-                                      
-                    <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-top10">
-                                      <thead>
-            <tr>
-                <th>Ora</th>
-                <th>CONDCODE</th>
-                <th>JOB</th>
-                <th>CPUTIME</th>
-                <th>COUNT</th>
-                <th>ZIPTIME</th>
-            </tr>
-        </thead>
-
-                                    </table>
-                                    </div>
-                                    
-                    </div>
-                    <!-- /.body -->
-                  </div>
-                  <!-- /.panel -->  
-                    </div>
-                    <!-- /.col-lg-4 -->
+                <!-- /.col-lg-12 -->    
+                </div>
+                    
                 </div>
                 <!-- /.row -->
                <div class=row id="second-level" style="display:none;">
@@ -195,4 +166,4 @@ response.setDateHeader ("Expires", 0);
     <script src="../dist/js/sb-admin-2.js"></script>
 </body>
 <%} %>
-</html>
+</html></html>

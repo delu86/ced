@@ -80,7 +80,7 @@ response.setDateHeader ("Expires", 0);
                      <div class="col-lg-11">
                           <div class="btn-group" role="group" aria-label="...">
                               <button type="button"autofocus="true" class="btn btn-default target" value="ASDN"> ASDN</button>
-                              <button type="button" class="btn btn-default target" value="ASSV">ASSV</button>                  
+                              <button type="button" class="btn btn-default target" value="ASSV"> ASSV</button>                  
                          </div>
                    </div>
                    <!-- /.col-lg-11 -->
@@ -92,7 +92,7 @@ response.setDateHeader ("Expires", 0);
                    </div>
                    <!-- /.row -->
                 <div class="row" id="first-level">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                 <div class="panel panel-default">
                       <div class="panel-heading" id="heading-graph">
                     Abend SIES
@@ -104,40 +104,10 @@ response.setDateHeader ("Expires", 0);
                     <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto">
                     </div>
                     </div>
-                    <!-- /.col-lg-8 -->
-                    </div>
-                    </div>
-                    <div class="col-lg-4">
                     
-                     <div class="panel panel-default">
-                      <div class="panel-heading" id="heading-table">
-                    Top 10 ABEND consumer
                     </div>
-                    <!-- /.panel -heading -->
-                    <div class="panel-body">
-                                      
-                    <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-top10">
-                                      <thead>
-            <tr>
-                <th>Ora</th>
-                <th>Abend</th>
-                <th>Tran</th>
-                <th>CPUTIME</th>
-                <th>COUNT</th>
-                <th>DB2REQ</th>
-            </tr>
-        </thead>
-
-                                    </table>
-                                    </div>
-                                    
                     </div>
-                    <!-- /.body -->
-                  </div>
-                  <!-- /.panel -->  
-                    </div>
-                    <!-- /.col-lg-4 -->
+                    <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
                <div class=row id="second-level" style="display:none;">
