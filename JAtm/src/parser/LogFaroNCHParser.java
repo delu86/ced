@@ -5,7 +5,6 @@
  */
 package parser;
 
-import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -51,7 +50,6 @@ public class LogFaroNCHParser extends AbstractATMParser{
         String codAbi,abiCA,msg,date,hour,minute,second,codAtm,cabATM,A94,pr,st,dataOraMSG = "";
          int numMSG = 0;
          int index=0;
-         
                 int error;
                 codAbi=line.substring(index, index+=LENGTH_CODABI);
                 if(codAbi.matches(COD_ABI_PATTERN)){//codice istituto corretto
@@ -106,6 +104,4 @@ public class LogFaroNCHParser extends AbstractATMParser{
                              saveRecord(INSERT_RECORD_SCARTI,filename, line, String.valueOf(error));
                 }
     }
-
-    
 }

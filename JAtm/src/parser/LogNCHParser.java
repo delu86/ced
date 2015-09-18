@@ -5,12 +5,14 @@
  */
 package parser;
 
+import static jatm.JAtm.logger;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  *
@@ -157,7 +159,6 @@ public class LogNCHParser extends AbstractATMParser{
                             if(disponibilità.equals("3")) disponibilità="4";
                             if(disponibilità.equals("2")) disponibilità="3";
                             if(disponibilità.equals("1")) disponibilità="2";
-                            
                         }}
                     if(!disponibilità.equals("=")&&
                             !disponibilità.equals("1")&&
@@ -195,17 +196,17 @@ public class LogNCHParser extends AbstractATMParser{
                     
                 }else{//data operazione minore di mindate
                     indexKo++;
-                    System.out.println("data operazione minore di mindate-->"+line);
+                   logger.log(Level.SEVERE, "data operazione minore di mindate--> {0}",line);
                 }
                 
             }
             else{//data inferiore a mindate o codice abi errato
                 indexKo++;
-                System.out.println("data inferiore a mindate o codice abi errato-->"+line);
+                logger.log(Level.SEVERE, "data inferiore a mindate o codice abi errato--> {0}",line);
             }
         }}else{//check line errato
             indexKo++;
-            System.out.println("check line errato-->"+line);
+            logger.log(Level.SEVERE, "check line errato--> {0}",line);
         }
     }
     
@@ -272,5 +273,4 @@ public class LogNCHParser extends AbstractATMParser{
             System.out.println("Dispatcher ");
             calllogAtmRecordDispatcher.executeQuery();
         */
-                       
 }
