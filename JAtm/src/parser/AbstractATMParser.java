@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package parser;
-
 import static jatm.JAtm.logger;
 import java.io.File;
 import java.io.FileNotFoundException;

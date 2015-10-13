@@ -52,7 +52,7 @@ public class LogNCHParser extends AbstractATMParser{
             DateFormat dateFormat=new SimpleDateFormat(LOGDATEFORMAT);
             Date dayLog=dateFormat.parse(logdate);
             Date minDay=dateFormat.parse(MIN_DATE);
-            if(codAbi.equals("03032")){
+         //   if(codAbi.equals("03032")){
             if(!codAbi.equals(WRONG_CODABI)&&dayLog.after(minDay)){
                 //System.out.println(codAbi+" -->"+logdate+" "+ora+":"+minuti+":"+secondi);
                 String opeCode=line.substring(index,index+=3);//index=99; codice operazione
@@ -204,7 +204,8 @@ public class LogNCHParser extends AbstractATMParser{
                 indexKo++;
                 logger.log(Level.SEVERE, "data inferiore a mindate o codice abi errato--> {0}",line);
             }
-        }}else{//check line errato
+        //}
+        }else{//check line errato
             indexKo++;
             logger.log(Level.SEVERE, "check line errato--> {0}",line);
         }

@@ -89,7 +89,7 @@ public class LogFaroNCHParser extends AbstractATMParser{
                         else{//data inferiore al 02 Gennaio 2004
                             error=3;
                             indexKo++;
-                            saveRecord(INSERT_RECORD_SCARTI,filename, line, String.valueOf(error));
+                             saveRecord(INSERT_RECORD_SCARTI,filename, line, String.valueOf(error));
                         }
                     }
                     else{//codice istituto = '00000'
