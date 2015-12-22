@@ -52,7 +52,9 @@ public class WorkloadByDayJSON extends HttpServlet {
 			response.setContentType("application/json");
 			out = response.getWriter();
 			String day=UtilityDate.fromMilliSecondToDateTimeString(dayInMillis,TIMEZONE,FORMAT_DATE);
-			SimpleDateFormat f1=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat f1;
+                        
+                            f1=new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			f1.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
 			Collection<WorkloadInterval> coll=db.getWorkloadByDay(system, day);
 			String json="[";

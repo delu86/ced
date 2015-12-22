@@ -64,7 +64,7 @@ public class ExcelExporter {
 			types[i]=rsMetaData.getColumnType(i+1);
 			WritableFont labelFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD, true); 
 			WritableCellFormat labelFormat = new WritableCellFormat (labelFont);
-			Label lab=new Label(i, 0,rsMetaData.getColumnName(i+1),labelFormat);
+			Label lab=new Label(i, 0,rsMetaData.getColumnLabel(i+1),labelFormat);
 			sheet.addCell(lab);
 			}
 		int row=1;
@@ -82,7 +82,7 @@ public class ExcelExporter {
 					types[i]=rsMetaData.getColumnType(i+1);
 					WritableFont labelFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD, true); 
 					WritableCellFormat labelFormat = new WritableCellFormat (labelFont);
-					Label lab=new Label(i, 0,rsMetaData.getColumnName(i+1),labelFormat);
+					Label lab=new Label(i, 0,rsMetaData.getColumnLabel(i+1),labelFormat);
 					sheet.addCell(lab);
 					}
 		   }
@@ -117,7 +117,7 @@ public class ExcelExporter {
 			types[i]=rsMetaData.getColumnType(i+1);
 			WritableFont labelFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD, true); 
 			WritableCellFormat labelFormat = new WritableCellFormat (labelFont);
-			Label lab=new Label(i, 0,rsMetaData.getColumnName(i+1),labelFormat);
+			Label lab=new Label(i, 0,rsMetaData.getColumnLabel(i+1),labelFormat);
 			sheet.addCell(lab);
 			}
 		int row=1;

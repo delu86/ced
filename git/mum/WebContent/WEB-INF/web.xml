@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <display-name>mum</display-name>
-
+   
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
@@ -16,10 +16,41 @@
         <servlet-name>ChartDispatcherServlet</servlet-name>
         <servlet-class>servlet.ChartDispatcherServlet</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>TopConsumerCicsJSONServlet</servlet-name>
+        <servlet-class>servlet.TopConsumerCicsJSONServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ATMStatServlet</servlet-name>
+        <servlet-class>servlet.ATMStatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>JobAnalisysSuggestServlet</servlet-name>
+        <servlet-class>servlet.JobAnalisysSuggestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetSuggestedColumnQuery</servlet-name>
+        <servlet-class>servlet.GetSuggestedColumnQuery</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JobAnalisysSuggestServlet</servlet-name>
+        <url-pattern>/pages/jobAnalisysSuggest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetSuggestedColumnQuery</servlet-name>
+        <url-pattern>/pages/getSuggestedColumn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TopConsumerCicsJSONServlet</servlet-name>
+        <url-pattern>/pages/topCics</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChartDispatcherServlet</servlet-name>
         <url-pattern>/pages/chartsDispatcher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ATMStatServlet</servlet-name>
+        <url-pattern>/pages/atmStat</url-pattern>
     </servlet-mapping>
     <servlet>
         <description/>
@@ -27,6 +58,30 @@
         <servlet-name>SystemInformationJsonServlet</servlet-name>
         <servlet-class>servlet.SystemInformationJsonServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TopCicsExportServlet</servlet-name>
+        <servlet-class>servlet.TopCicsExportServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetColumnsServlet</servlet-name>
+        <servlet-class>servlet.GetColumnsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>JobAnalysisServlet</servlet-name>
+        <servlet-class>servlet.JobAnalysisServlet</servlet-class>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>JobAnalysisServlet</servlet-name>
+        <url-pattern>/pages/jobAnalysis</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetColumnsServlet</servlet-name>
+        <url-pattern>/pages/getColumns</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TopCicsExportServlet</servlet-name>
+        <url-pattern>/pages/topCicsExcel</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SystemInformationJsonServlet</servlet-name>
         <url-pattern>/pages/systemJSON</url-pattern>
@@ -561,7 +616,7 @@
         <servlet-name>CpiDetailExportServlet</servlet-name>
         <url-pattern>/pages/cpiDailyDetail</url-pattern>
     </servlet-mapping>
-     <servlet>
+    <servlet>
         <description/>
         <display-name>SystemConsumptionExporterServlet</display-name>
         <servlet-name>SystemConsumptionExporterServlet</servlet-name>

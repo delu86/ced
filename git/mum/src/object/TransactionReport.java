@@ -3,9 +3,13 @@ package object;
 public class TransactionReport {
 	
 	 private String system;
+         private String cics;
 	 private String transaction;
 	 private String dateString;
 	 private String userID;
+         private String suserID;
+         private String cmduserID;
+         private String ouserID;
 	 private int transactionCount;
 	 private float cpuSecond;
 	 private float elapsed;
@@ -133,5 +137,36 @@ public class TransactionReport {
 	public void setAbend2(String abend2) {
 		this.abend2 = abend2;
 	}
+        
+        public String getSuserID() {
+            return suserID;
+        }
+
+        public String getCmduserID() {
+            return cmduserID;
+        }
+
+        public String getOuserID() {
+            return ouserID;
+        }
+        
+    public void setSuserID(String suserID) {
+        this.suserID = suserID;
+    }
+
+    public void setCmduserID(String cmduserID) {
+        this.cmduserID = cmduserID;
+    }
+
+    public void setOuserID(String ouserID) {
+        this.ouserID = ouserID;
+    }
+
+    public String getCics() {
+        return cics;
+    }
+        public void setCics(String cics) {
+        this.cics = cics;
+    }
 
 }

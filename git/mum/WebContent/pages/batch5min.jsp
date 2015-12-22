@@ -142,8 +142,6 @@ Connection con = null ;
 String sql = "";
 
 
-
-
 		try {
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
 			}
@@ -186,7 +184,7 @@ ResultSetMetaData rsmd = rs.getMetaData() ;
 int i = 0 ;
 String var="";
 out.print("<br>Sid:" + SIST + " Data: " + DATA + "  Job(S) Step(S)  min. CPU" );
- //out.print(sql);
+//out.print(sql);
 out.print("<table class=\"stat\">");
 
 			out.print("<tr>" ); 			

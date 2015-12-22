@@ -20,7 +20,8 @@ var tableBatch = $('#dataTables-batch').DataTable( {
              { "data": "CONCODE" },
              { "data": "CLASS" },
              { "data": "PRIORITY" },
-             { "data": "REPORT_CLASS" }]
+             { "data": "REPORT_CLASS" },
+             { "data": "SERVICE_CLASS" }]
 });
 var tableStep = $('#dataTables-step').DataTable( {
 	"dom": '<"top"i>rt<"bottom"flp><"clear">',
@@ -83,8 +84,8 @@ $.ui.autocomplete.prototype._renderItem = function (ul, item) {
         	 $("#excelExporter").show(1000);
         	 job=$('.input-search').val();
         	 $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+$('.input-search').val().replace("#","%23").replace(" ","%20"));
-        	$(".dataTable_wrapper_step").hide(500); 
-        	$(".dataTable_wrapper").show(1000);
+        	 $(".dataTable_wrapper_step").hide(500); 
+        	 $(".dataTable_wrapper").show(1000);
         	tableBatch.ajax.url("getJobByName?system="+system+"&jobname="+$('.input-search').val().replace("#","%23")).load();
         	tableBatch.columns.adjust().responsive.recalc();
         }
@@ -109,7 +110,7 @@ function searchJobs(){
     		   tableBatch.ajax.url("getJobByName?system="+system+"&jobname="+parameter).load();
     		   tableBatch.columns.adjust().responsive.recalc();    	}
     	});
-    }
+    };
     $("#autocomplete").keyup(function(){
     	searchJobs();
     });
@@ -143,4 +144,4 @@ function searchJobs(){
 		   return -1;
 		   
 	   }
-   })
+   });

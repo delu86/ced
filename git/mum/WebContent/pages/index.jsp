@@ -198,7 +198,9 @@ response.setDateHeader ("Expires", 0);
              <!-- /.col-lg-6 -->
             </div>
             <!-- /.row -->
+           <!--     
             <div>
+             
             <div class="col-lg-12">
              <div class="panel panel-default">
                         <div class="panel-heading">
@@ -211,11 +213,13 @@ response.setDateHeader ("Expires", 0);
                             </div>
                             
                         </div>
-                        <!-- /.panel-body -->
+                        
              </div>
              </div>
-             <!-- /.col-lg-12 -->
+                         
+            
             </div>
+                          -->
             <!-- /.row -->
             <%} %>
             <!-- /.container-fluid -->

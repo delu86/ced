@@ -64,7 +64,10 @@ public class TransactionDetailJSONServlet extends HttpServlet {
 				         	"\""+report.getMs()+"\","+
 				         	"\""+report.getMem()+"\","+
 				         	"\""+report.getQr()+"\","+
-				         	"\""+report.getS8()+"\""+
+				         	"\""+report.getS8()+"\","+
+                                                "\""+report.getSuserID()+"\","+
+                                                "\""+report.getCmduserID()+"\","+
+                                                "\""+report.getOuserID()+"\""+
 				         	"]");
 					i++;
 				}
@@ -82,7 +85,10 @@ public class TransactionDetailJSONServlet extends HttpServlet {
 				         	"\""+report.getMs()+"\","+
 				         	"\""+report.getMem()+"\","+
 				         	"\""+report.getQr()+"\","+
-				         	"\""+report.getS8()+"\""+
+				         	"\""+report.getS8()+"\","+
+                                                "\""+report.getSuserID()+"\","+
+                                                "\""+report.getCmduserID()+"\","+
+                                                "\""+report.getOuserID()+"\""+
 							"]");
 									}
 			}

@@ -126,91 +126,29 @@ response.setDateHeader ("Expires", 0);
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                                <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a href="#cics" data-toggle="tab">CICS</a>
-                                </li>
-                                <li><a href="#batch" data-toggle="tab">JOBS</a>
-                                </li>
-                                <li><a href="#stc" data-toggle="tab">Started Task</a>
-                                </li>                               
-                            </ul>
+                             
                            <div class="tab-content">
-                                <div class="tab-pane fade in active" id="cics">
+                                
                                 <div class="dataTable_wrapper" >
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-cics">
                                     <thead>
                                         <tr>
-                                            <th>Tran.</th>
-                                            <th>Utente</th>
-                                            <th>Count</th>
-                                            <th>CPU time</th>
-                                            <th>Elapsed</th>
-                                            <th>DB2 Req.</th>
-                                            <th>J8</th>
-                                            <th>K8</th>
-                                            <th>L8</th>
-                                            <th>MS</th>
-                                            <th>Memoria</th>
-                                            <th>Qr</th>
-                                            <th>S8</th>
+                                            <th>APPLVTNAME</th>
+                                            <th>TRANS</th>
+                                            <th>DATE</th>
+                                            <th>HOUR</th>
+                                            <th>#TRANS</th>
+                                            <th>TOTCPUTM</th>
+                                            <th>TOTELAP</th>
+                                            <th>TOTIRESP</th>
+                                            <th>TOTL8CPU</th>
+                                            <th>TOTDB2RQ</th>
                                          </tr>
                                     </thead>
                                     </table>
                                     </div>
                                     <!-- /.dataTable-wrapper -->
-                                    </div>
-                                    <!-- /.tab-pane -->
-                            <div class="tab-pane fade" id="batch">
-                                <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-batch">
-                                    <thead>
-                                        <tr>
-                                            <th>JOBname</th>
-                                            <th>JESNUM</th>
-                                            <th>SMF30STM</th>
-                                            <th>SMF30STN</th>
-                                            <th>SMF30PSN</th>
-                                            <th>SMF30PGM</th>
-                                            <th>SMF30RUD</th>
-                                            <th>CPUTIME</th>
-                                            <th>SMF30SRV_L</th>
-                                            <th>SMF30TEX</th>
-                                            <th>CONDCODE</th>
-                                            <th>ABEND</th>
-
-                                         </tr>
-                                    </thead>
-                                    </table>
-                                    </div>
-                                    <!-- /.dataTable-wrapper -->
-                                    </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane fade" id="stc">
-                                <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-stc">
-                                    <thead>
-                                        <tr>
-                                           <th>JOBname</th>
-                                            <th>JESNUM</th>
-                                            <th>SMF30STM</th>
-                                            <th>SMF30STN</th>
-                                            <th>SMF30PSN</th>
-                                            <th>SMF30PGM</th>
-                                            <th>SMF30RUD</th>
-                                            <th>CPUTIME</th>
-                                            <th>SMF30SRV_L</th>
-                                            <th>SMF30TEX</th>
-                                            <th>CONDCODE</th>
-                                            <th>ABEND</th>
-
-                                         </tr>
-                                    </thead>
-                                    </table>
-                                    </div>
-                                    <!-- /.dataTable-wrapper -->
-                                    </div>
-                                    <!-- /.tab-pane --> 
+                                
                                     </div>
                                    <!-- /.tab-content -->
                                     </div>
@@ -246,7 +184,7 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
-    <script src="../js/charts/smallSystemWorkload.js" charset="utf-8"></script>
+    <script src="../js/charts/smallSystemWorkloadTemp.js" charset="utf-8"></script>
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>

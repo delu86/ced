@@ -16,7 +16,8 @@ import datalayer.DatabaseManager;
  * Servlet implementation class Top10AbendJSONServlet
  */
 public class TransactionAbendJSONSTableServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+        private static final long serialVersionUID = 1L;
 	private static final String SYSTEM_PARAMETER="system";
 	private static final String DATE_PARAMETER="date";
 	private static final String LIMIT_PARAMETER = "limit";
@@ -45,15 +46,18 @@ public class TransactionAbendJSONSTableServlet extends HttpServlet {
 		DatabaseManager db=new DatabaseManager();
 		response.setContentType("application/json");
 		try {
+                        String add="";
 			String jsonString="{\"data\":[";
 			String dataJSON="";
 			out = response.getWriter();
 			Collection<TransactionReport> collection=db.getTransactionInAbend(system, date,limit);
 			int i=0;
 			for(TransactionReport report:collection){
-				if(i==0){
+                            if(system.equals("SIES")||system.equals("SIGE")){
+                                
+                                if(i==0){
 					dataJSON=dataJSON.concat("{"+
-						"\"hour\":"+	"\""+report.getDateString()+"\","+
+						"\"hour\":"+	"\""+report.getDateString()+"\","+add+
 						"\"trans\":"+	"\""+report.getTransaction()+"\","+
 						"\"abend\":"+	"\""+report.getAbend1()+"\","+
 						"\"cpu_sec\":"+		"\""+report.getCpuSecond()+"\","+
@@ -61,13 +65,16 @@ public class TransactionAbendJSONSTableServlet extends HttpServlet {
 						"\"count\":"+		"\""+report.getTransactionCount()+"\","+
 						"\"db2\":"+		"\""+report.getDb2req()+"\","+
 						"\"user\":"+		"\""+report.getUserID()+"\","+
+                                                "\"suser\":"+		"\""+report.getSuserID()+"\","+
+                                                "\"cmduser\":"+		"\""+report.getCmduserID()+"\","+
+                                                "\"ouser\":"+		"\""+report.getOuserID()+"\","+
 						"\"db2\":"+		"\""+report.getDb2req()+"\""+
 				         	"}");
 					i++;
 				}
 				else{
 					dataJSON=dataJSON.concat(",{"+
-							"\"hour\":"+	"\""+report.getDateString()+"\","+
+							"\"hour\":"+	"\""+report.getDateString()+"\","+add+
 							"\"trans\":"+	"\""+report.getTransaction()+"\","+
 							"\"abend\":"+	"\""+report.getAbend1()+"\","+
 							"\"cpu_sec\":"+		"\""+report.getCpuSecond()+"\","+
@@ -75,11 +82,44 @@ public class TransactionAbendJSONSTableServlet extends HttpServlet {
 							"\"count\":"+		"\""+report.getTransactionCount()+"\","+
 							"\"db2\":"+		"\""+report.getDb2req()+"\","+
 							"\"user\":"+		"\""+report.getUserID()+"\","+
-							"\"db2\":"+		"\""+report.getDb2req()+"\""+
+                                                        "\"suser\":"+		"\""+report.getSuserID()+"\","+
+                                                        "\"cmduser\":"+		"\""+report.getCmduserID()+"\","+
+                                                        "\"ouser\":"+		"\""+report.getOuserID()+"\","+
+                                                        "\"db2\":"+		"\""+report.getDb2req()+"\""+
 							"}");
 									}
-			}
-			jsonString=jsonString.concat(dataJSON+"]}");
+			}else{
+                                add=add.concat("\"cics\":"+	"\""+report.getCics()+"\",");
+                                if(i==0){
+					dataJSON=dataJSON.concat("{"+
+						"\"hour\":"+	"\""+report.getDateString()+"\","+add+
+						"\"trans\":"+	"\""+report.getTransaction()+"\","+
+						"\"abend\":"+	"\""+report.getAbend1()+"\","+
+						"\"cpu_sec\":"+		"\""+report.getCpuSecond()+"\","+
+						"\"response\":"+		"\""+report.getDb2req()+"\","+
+						"\"count\":"+		"\""+report.getTransactionCount()+"\","+
+						"\"db2\":"+		"\""+report.getDb2req()+"\","+
+						"\"user\":"+		"\""+report.getUserID()+"\","+
+                                                "\"db2\":"+		"\""+report.getDb2req()+"\""+
+				         	"}");
+					i++;
+				}
+				else{
+					dataJSON=dataJSON.concat(",{"+
+							"\"hour\":"+	"\""+report.getDateString()+"\","+add+
+							"\"trans\":"+	"\""+report.getTransaction()+"\","+
+							"\"abend\":"+	"\""+report.getAbend1()+"\","+
+							"\"cpu_sec\":"+		"\""+report.getCpuSecond()+"\","+
+							"\"response\":"+		"\""+report.getDb2req()+"\","+
+							"\"count\":"+		"\""+report.getTransactionCount()+"\","+
+							"\"db2\":"+		"\""+report.getDb2req()+"\","+
+							"\"user\":"+		"\""+report.getUserID()+"\","+
+                                                        "\"db2\":"+		"\""+report.getDb2req()+"\""+
+							"}");
+									}
+                            }
+                        }
+                       jsonString=jsonString.concat(dataJSON+"]}");
 			out.print(jsonString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

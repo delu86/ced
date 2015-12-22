@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
@@ -62,9 +62,22 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="http://10.99.252.22/datifs/html/cedacri/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                               </li>
+                              <li> 
+                               <a href="#"><i class="fa  fa-code"></i>Workload<span class="fa arrow"></span></a>   
+                              <ul class="nav nav-second-level">
                              <li>
-                              <a href="cedacriCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
+                              <a href="cedacriCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Detail</a>
                               </li>
+                              <li>
+                              <a href="jWeekDiff.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Overlap Week</a>
+                              </li>
+                              <li>
+                              <a href="jMonthWKL.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Trend month</a>
+                              </li>
+                              
+
+                               </ul>
+                                  </li>
                               <li>
                                <a href="#"><i class="fa  fa-code"></i>JOB<span class="fa arrow"></span></a>
                               <ul class="nav nav-second-level">
@@ -77,6 +90,17 @@ String profile=request.getParameter("profile");
                              <li>
                               <a href="consumi.jsp"><i class="fa  fa-table fa-fw"></i>Trend</a>
                              </li>
+                             <li>
+                              <a href="jobAnalysis.jsp"><i class="fa  fa-bar-chart-o  fa-fw"></i> Analysis </a>
+                             </li>
+                              </ul></li>
+                              <li>
+                               <a href="#"><i class="fa  fa-code"></i>CICS<span class="fa arrow"></span></a>
+                              <ul class="nav nav-second-level">
+                              <li>
+                              <a href="consumiCICS.jsp"><i class="fa fa-table fa-fw"></i>Trend</a>
+                              </li>
+                          
                               </ul></li>
                                <li>
                                     <a href="#"><i class="fa fa-tasks fa-fw"></i>MQ  <span class="fa arrow"></span></a>
@@ -113,15 +137,28 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="virtualTape.jsp"><i class="fa fa-database fa-fw"></i>Virtual Tapes</a>
                               </li>
-                              <li>
+                              <li><a href="#"><i class="fa fa-database fa-fw"></i>SMF<span class="fa arrow"></span></a>
+                                  <ul class="nav nav-third-level">
+                                      <li>
                               <a href="volumiSMF.jsp"><i class="fa  fa-download fa-fw"></i>Volumi SMF</a>
                               </li>
                               <li>
+                              <a href="bigdata.jsp"><i class="fa  fa-rocket fa-fw"></i>Dati IDAA</a>
+                              </li>
+                              <li>
+                              <a href="nfstransfer.jsp"><i class="fa  fa-table fa-fw"></i>Daily files</a>
+                              </li>
+                                  </ul>
+                                  </li>
+                              <li>
                               <a href="scrt.jsp"><i class="fa fa-book fa-fw"></i>SCRT</a>
                               </li>
-                                                            
+                              <li>
+                              <a href="jIse.jsp"><i class="fa fa-exclamation fa-fw"></i>Codici ISE</a>
+                              </li>
                             </ul>
                                <!-- /.nav-second-level -->
+                               
                             </li>
                             <%} %>
                             <%if(profile.equals("CED")||profile.equals("REALE")){ %>
@@ -161,6 +198,7 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="batchAbendReale.jsp"><i class="fa fa-exclamation fa-fw"></i>Batch ABEND</a>
                               </li>
+                              
                             </ul>
                                <!-- /.nav-second-level -->
                             </li>
@@ -171,6 +209,12 @@ String profile=request.getParameter("profile");
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="http://10.99.252.22/datifs/html/credem/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                                </li> 
+                                <li>
+                                    <a href="consumiCREDEM.jsp"><i class="fa fa-table fa-fw"></i>JOB Trend batch</a>
+                                </li>
+                                <li>
+                                    <a href="joobleCredem.jsp"><i class="fa fa-search fa-fw"></i>Job search</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -180,14 +224,20 @@ String profile=request.getParameter("profile");
                         <li>
                             <a href="#"><i class="fa fa-institution fa-fw"></i>Carige Assicurazioni<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
+                                <li> 
+                              <a href="carigeDocs.jsp"><i class="fa fa-book fa-fw"></i>Documents</a>
+                              </li>
                                 <li>
-                                    <a href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                                    <a target="_blank" href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                                 </li>
                                 <li> 
                               <a href="carigeCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
                               </li>
                               <li> 
                               <a href="volumeTimesCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CICS eff.</a>
+                              </li>
+                              <li> 
+                              <a href="topConsumerCics.jsp"><i class="fa fa-table fa-fw"></i>Top consumer CICS</a>
                               </li>
                               <li> 
                               <a href="testCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
@@ -213,9 +263,6 @@ String profile=request.getParameter("profile");
                             <a href="#"><i class="fa fa-institution fa-fw"></i>Accenture<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="accentureCalendar.jsp"><i class="fa fa-calendar fa-fw"></i>Calendario jobs</a>
-                                </li>
-                                <li>
                                     <a href="detailAccenture.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Estrazione dettaglio</a>
                                 </li>
                             </ul>
@@ -228,15 +275,32 @@ String profile=request.getParameter("profile");
                              <li> 
                               <a href="infocenter.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Export to...</a>
                               <a href="infocenterDocs.jsp"><i class="fa fa-book fa-fw"></i>Documents</a>
+                              <a href="infocenterDocs.jsp?dir=mail"><i class="fa fa-book fa-fw"></i>Documents MAIL</a>
+                              
                               </li>
                             </ul>
                                <!-- /.nav-second-level -->
                             </li>
                             <%} %>
                             <%if(profile.equals("CED")){ %>
-                            
+                            <li>
+                            <a href="slDocs.jsp"><i class="fa fa-certificate fa-fw"></i>Service level</a>
+                             
+                             
+                            </li>
+                            <%} %>
+                            <%if(profile.equals("CED")){ %>
+                            <li>
+                            <a href="atm.jsp"><i class="fa fa-money fa-fw"></i> ATM </a>
+                        </li>
                          <li>
-                            <a href="admin"><i class="fa fa-wrench fa-fw"></i> Admin Server & UI</a>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i>Utility<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                             <li> 
+                              <a href="admin"><i class="fa fa-wrench fa-fw"></i>Admin server & UI</a>
+                              <a href="searchForColumn.jsp"><i class="fa fa-search fa-fw"></i>Find columns</a>
+                              </li>
+                            </ul>
                         </li>
                         <%} %>
  				</ul>                     

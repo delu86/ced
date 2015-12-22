@@ -44,23 +44,25 @@ public class VolumesTimesDailyServlet extends HttpServlet {
 		String cpuTimes="[";
 		String volumes="[";
 		String efficiency="[";
+              
 		try {
 			Collection<VolumeTimeInformation> collection=db.getDailyVolumesTimesInformation(system, date);
 			response.setContentType("application/json");
 			outPrintWriter=response.getWriter();
 			int i=0;
 			for(VolumeTimeInformation el: collection){
+                             float eff= (system.equals("SIES")||system.equals("SIGE"))?(1/el.getEfficienza()):el.getEfficienza();
 				if(i==0){
 				volumes=volumes.concat(String.valueOf(el.getVolume()));
 				cpuTimes=cpuTimes.concat(String.valueOf(el.getCpuTime()));
-				efficiency=efficiency.concat(String.valueOf(el.getEfficienza()));
+				efficiency=efficiency.concat(String.valueOf(eff));
 				categories=categories.concat("\""+el.getApplvtname()+"\"");
 				i++;
 				}
 				else {
 					volumes=volumes.concat(","+String.valueOf(el.getVolume()));
 					cpuTimes=cpuTimes.concat(","+String.valueOf(el.getCpuTime()));
-					efficiency=efficiency.concat(","+String.valueOf(el.getEfficienza()));
+					efficiency=efficiency.concat(","+String.valueOf(eff));
 					categories=categories.concat(",\""+el.getApplvtname()+"\"");
 				}
 			}

@@ -22,7 +22,28 @@ var table = $('#dataTables-top10').DataTable( {
 	            { "data": "db2" }
 		    ]
 			});
-var tableDrill=$('#dataTables-drill').DataTable({
+var tableDrill;
+if(system==='ASSV' || system==='ASDN'){
+    tableDrill=$('#dataTables-drill').DataTable({
+	responsive: true,
+	processing:true,
+	order: [[ 1, "asc" ]],
+    columns:[
+        { "data": "cics" },
+        { "data": "trans" },
+        { "data": "hour" },
+        { "data": "count" },
+        { "data": "cpu_sec" },
+        { "data": "response" },
+        { "data": "db2" },
+        { "data": "abend" },
+        { "data": "user" },
+        
+    ]
+});
+}
+else{
+      tableDrill=$('#dataTables-drill').DataTable({
 	responsive: true,
 	processing:true,
 	order: [[ 1, "asc" ]],
@@ -34,9 +55,14 @@ var tableDrill=$('#dataTables-drill').DataTable({
         { "data": "response" },
         { "data": "db2" },
         { "data": "abend" },
-        { "data": "user" }
+        { "data": "user" },
+        { "data": "suser" },
+        { "data": "cmduser" },
+        { "data": "ouser" }
     ]
-});
+}); 
+}
+
 var optionsChart={
             chart: {
             	zoomType: 'x',

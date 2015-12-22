@@ -52,7 +52,11 @@ response.setDateHeader ("Expires", 0);
 </head>
 
 <body>
-
+	<%String fdir = ""; 
+ 	 fdir= request.getParameter("dir"); 
+	if (fdir == null || fdir.length() == 0) 
+		fdir="";
+	%>
     <div id="wrapper">
            <!-- Navigation -->
        <jsp:include page="nav/navbar.jsp">
@@ -93,7 +97,8 @@ response.setDateHeader ("Expires", 0);
     //        String file = application.getRealPath("/tmp"); 
 
        String file = "/datifs/infocenter/"; 
-
+       if (fdir.equals("mail") ) 
+		file = "/datifs/infocenter/mail/";
             File f = new File(file);
             String [] fileNames = f.list();
             File [] fileObjects= f.listFiles();

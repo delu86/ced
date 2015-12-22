@@ -37,7 +37,7 @@ public class InfocenterExporterServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InfocenterExporterServlet() {
+        public InfocenterExporterServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -71,4 +71,4 @@ public class InfocenterExporterServlet extends HttpServlet {
 		processRequest(request,response);
 	}
 
-}
+}   

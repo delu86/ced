@@ -43,6 +43,15 @@ public class BatchReport {
 	private String endTime;
 	private String class8;
 	private String reportClassString;
+        private String serviceClassString;
+
+    public String getServiceClassString() {
+        return serviceClassString;
+    }
+
+    public void setServiceClassString(String serviceClassString) {
+        this.serviceClassString = serviceClassString;
+    }
 	
 	public BatchReport() {
 		// TODO Auto-generated constructor stub

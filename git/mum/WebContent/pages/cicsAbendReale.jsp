@@ -131,7 +131,9 @@ response.setDateHeader ("Expires", 0);
                                             <th>DB2 Req.</th>
                                             <th>ABEND </th>
                                             <th>User</th>
-
+                                            <th>SUSERID</th>
+                                            <th>CMDUSER</th>
+                                            <th>OUSERID</th>
                                          </tr>
                                     </thead>
                                     </table>

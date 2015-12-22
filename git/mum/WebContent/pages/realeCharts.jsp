@@ -154,6 +154,9 @@ response.setDateHeader ("Expires", 0);
                                             <th>Memoria</th>
                                             <th>Qr</th>
                                             <th>S8</th>
+                                            <th>SUSERID</th>
+                                            <th>CMDUSER</th>
+                                            <th>OUSERID</th>
                                          </tr>
                                     </thead>
                                     </table>

@@ -45,7 +45,7 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 	private static final String MONTH_TOKEN_STRING=" and substr(INITIALTIME , 6 , 2)=? ";
 	private static final String SELECT_JOB_BY_NAME = "SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME ,"+
 			" ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "+
-			" SMF30PTY AS priority, SMF30RCN AS reportClass "+ 
+			" SMF30PTY AS priority, SMF30RCN AS reportClass, SMF30SCN as serviceClass "+ 
 			" FROM CR00515.EPV30_5_JOBTERM"+
 			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN like ?  and CPUTIME>0";
 	private static final String SELECT_TOP_CONSUMER="SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME , ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "
@@ -108,7 +108,8 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 						"\"CONCODE\":"+		"\""+report.getConditionCode()+"\","+
 						"\"CLASS\":"+		"\""+report.getClass8()+"\","+
 						"\"PRIORITY\":"+		"\""+report.getJesInputPriorityString()+"\","+
-						"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\""+
+						"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\","+
+                                                "\"SERVICE_CLASS\":"+		"\""+report.getServiceClassString()+"\""+
 				         	"}");
 					i++;
 				}
@@ -127,8 +128,9 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 							"\"CONCODE\":"+		"\""+report.getConditionCode()+"\","+
 							"\"CLASS\":"+		"\""+report.getClass8()+"\","+
 							"\"PRIORITY\":"+		"\""+report.getJesInputPriorityString()+"\","+
-							"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\""
-							+"}");
+							"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\","+
+						        "\"SERVICE_CLASS\":"+		"\""+report.getServiceClassString()+"\""	
+                                                +"}");
 									}
 			}
 			jsonString=jsonString.concat(dataJSON+"]}");

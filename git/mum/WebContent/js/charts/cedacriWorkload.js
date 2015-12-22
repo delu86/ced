@@ -324,8 +324,8 @@ $(function () {
 	function setDateInterval(){
 		var d=new Date();
 	 	var d1=new Date();
-	 	d1.setDate(d.getDate()+offset);
-	 	d.setDate(d.getDate()+offset-limit+1);
+	 	d1.setDate(d.getDate()+offset+1);
+	 	d.setDate(d.getDate()+offset-limit+2);
 	 	var mydate = new Date();
 	 	$.datepicker.formatDate('yy-mm-dd', d);
 	 	$("#date-interval").val($.datepicker.formatDate('dd/mm/yy', d)+'-'+$.datepicker.formatDate('dd/mm/yy', d1));}

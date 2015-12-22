@@ -15,7 +15,6 @@ String[] SID  = new String[4];
 		
 		try {
 			String currentDir = System.getProperty("user.dir");
-			//File file = new File( currentDir + File.separator +"config.properties");
 			String webRootPath = getServletContext().getRealPath("/").replace('\\', '/');
 			File file = new File( webRootPath + File.separator  + "config.properties");
 			System.out.println( webRootPath + File.separator  + "config.properties" );
@@ -66,34 +65,6 @@ int month = 0;
 int anno = 0;
 
 /*
-cal.add(Calendar.MONTH, 1);
-month = cal.get(Calendar.MONTH);
-anno = cal.get(Calendar.YEAR);
-MeseN= ""+ month;
-if (month<10) 
-	MeseN="0" + month;
-AnnoN= "" + anno;
-
-cal.add(Calendar.MONTH, -1);
-month = cal.get(Calendar.MONTH);
-anno = cal.get(Calendar.YEAR);
-MeseN1= ""+ month;
-if (month<10) 
-	MeseN1="0" + month;
-AnnoN1= "" + anno;
-
-cal.add(Calendar.MONTH, -1);
-month = cal.get(Calendar.MONTH);
-anno = cal.get(Calendar.YEAR);
-MeseN2= ""+ month;
-if (month<10) 
-	MeseN2="0" + month;
-AnnoN2= "" + anno;
-
-String[] cal_sel = new String[3];
- cal_sel[0] =  AnnoN  + "-" + MeseN ;
- cal_sel[1] =   AnnoN1  + "-" +  MeseN1 ;
- cal_sel[2] =  AnnoN2 + "-"+   MeseN2 ;
 */
 
 
@@ -102,11 +73,16 @@ String[] cal_sel = new String[MESI];
 cal.add(Calendar.MONTH, 1);
 month = cal.get(Calendar.MONTH);
 anno = cal.get(Calendar.YEAR);
+
 MeseN= ""+ month;
 AnnoN= "" + anno;
 if (month<10) 
 	MeseN="0" + month;
-	
+if ((month==0) || anno==2016 )	
+  {
+	AnnoN="2015";
+	MeseN="12";
+  }	
 cal_sel[0] =  AnnoN   + "-" + MeseN;
 
 // System.out.print(cal_sel[0]);
@@ -235,7 +211,7 @@ p.verde {   color: green;}
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            ...  from <b>I</b>BM <b>D</b>B2 <b>A</b>nalytics <b>A</b>ccelerator for zOS on SYA 
+                            <b>J</b>ob batch Full Outsourcing analysis  
                         </div>
                         <!-- .panel-heading -->
                         <div class="panel-body">
@@ -315,53 +291,23 @@ String sql = "";
 try {
 	
 //con =  DriverManager.getConnection("jdbc:db2://sya.ced.it:5036/ITCDNDBEM:user=CRIDA00;password=CRIDA000;specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;");
-con =  DriverManager.getConnection(DB_URL + ":user=" + USER_DB+";password=" + PASS_DB + ";specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;");
-stmt = con.createStatement();
+// con =  DriverManager.getConnection(DB_URL + ":user=" + USER_DB+";password=" + PASS_DB + ";specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;");
+// con =  DriverManager.getConnection(DB_URL ,  USER_DB , PASS_DB );
 
-sql =   " SELECT YY.SID , ggSett , DATA , NroSS, totJOBS ,  totJOBSDistinti AS jobsDist, UserDist,  " + 
-"  round ( totJOBSDistinti / double(totJOBS) * 100 , 1 )  as pjobsDist ,  " + 
-"  totERR , round( double(totERR) / totJOBS *100 , 4)   as ERR ,  " + 
-" round(  (totERRCPU / cputime * 100) , 2 ) as errCPU , tot1MIN , " + 
-"round(  ( double(tot1min) / double(totjobs) * 100) , 1 ) as j1min,   " + 
-"round(  (tot1mincpu/ cputime * 100) , 1 ) as j1minCPU ,  tot1TO5min ,  " + 
-"round(  ( double(tot1TO5min) / double(totjobs) * 100) , 1 ) as j1to5min,   " + 
-"round(  (tot1TO5minCPU/ cputime * 100) , 1 ) as j1TO5minCPU ,  tot5min ,  " +  
-"round(  ( double(tot5min) / double(totjobs) * 100) , 1 ) as j5min,   " + 
-"round(  (tot5minCPU / cputime * 100) , 1 ) as j5minCPU , " + 
-" cputime , ziptime , elapsed ,  " + 
-" round( totDay / cputime * 100 , 1 ) as totDay, " + 
-" round( totNight / cputime * 100 , 1 ) as totNight   " + 
-  " from (   " + 
-"    SELECT  " + 
- "  	 SYSTEM as SID  ,  " + 
-       	" CASE DAYOFWEEK_ISO ( TO_DATE( SUBSTR( ENDTIME , 1 ,  10 ) , 'YYYY-MM-DD'  ) )    " + 
-"           WHEN 1 THEN 'Lu' " + 
-"           WHEN 2 THEN 'Ma' " + 
-"           WHEN 3 THEN 'Me' " + 
-"           WHEN 4 THEN 'Gi' " + 
-"           WHEN 5 THEN 'Ve' " + 
-"           WHEN 6 THEN 'Sa' " + 
-"           WHEN 7 THEN 'Do' " + 
-"      END AS ggSett , " +      
-"     SUBSTR(ENDTIME , 1 , 10 ) AS DATA  , COUNT(*) AS totJOBS,   " + 
-"      COUNT(DISTINCT SMF30JBN ) AS totJOBSDistinti,  " + 
-      "  count( DISTINCT SUBSTR( SMF30JBN , 1  , 2 )  ) AS NroSS, " + 
-      "  count( DISTINCT SMF30RUD ) AS UserDist ,  " + 
-      "  SUM(case when SUBSTR(INITIALTIME , 12 , 2 ) in ( '19', '20', '21' , '22' , '23' , '00' , '01', '02' , '03' , '04', '05', '06' , '07'   )   then CPUTIME else 0 end) as totNight , " +         
-      "  SUM(case when SUBSTR(INITIALTIME , 12 , 2 ) in ( '08', '09', '10' , '11' , '12' , '13' , '14', '15' , '16' , '17', '18'   )        then CPUTIME else 0 end) as totDay , " + 
-      "  SUM(case when LTRIM( CONDCODE ) > '4'  then 1 else 0 end) as totERR , " +       
-      "   round (   SUM(case when LTRIM( CONDCODE ) > '4'  then CPUTIME else 0 end) , 3 ) as totERRcpu , " + 
-      "   SUM(case when CPUTIME  <= 60   then 1 else 0 end) as tot1min ,  " + 
-      "   SUM(case when CPUTIME  <= 60   then CPUTIME else 0 end) as tot1minCPU ,  " + 
-      "   SUM(case when ( CPUTIME > 60   and  CPUTIME  < 300 ) then 1 else 0 end) as tot1TO5min ,  " + 
-      "   SUM(case when ( CPUTIME > 60   and  CPUTIME  < 300 ) then CPUTIME else 0 end) as tot1TO5minCPU ,  " + 
-      "   SUM(case when CPUTIME  >= 300   then 1 else 0 end) as tot5min ,  " + 
-      "   SUM(case when CPUTIME  >= 300   then CPUTIME else 0 end) as tot5minCPU ,           " + 
-      "	SUM ( CPUTIME ) as cputime ,        SUM( ZIPTM ) as ziptime ,       SUM( ELAPSED ) as elapsed   " + 
-"   FROM CR00515.EPV30_5_JOBTERM  " + 
- "    where SUBSTR(ENDTIME , 1 , 7 )  = '" + AAAAMM + "'  AND SYSTEM = '" + SIST  + "'   and SMF30WID='JES2' And CPUTIME > 0        " + 
- "  GROUP BY  " + 
- "   SYSTEM   ,  SUBSTR(ENDTIME , 1 , 10 )      ) AS YY   " + 
+ con= DriverManager.getConnection( "jdbc:mysql://10.99.252.23/smfacc","cedacri", "cedacri" );
+stmt = con.createStatement();
+sql =  "SELECT   SID , " + 
+      " ggSett , " + 
+      " DATA , " + 
+      " NroSS , " + 
+      " totJOBS , " + 
+      " jobsDist ," +
+     "  UserDist , pjobsDist , totERR , ERR , errCPU , " + 
+     "  tot1MIN , j1min , j1minCPU , tot1TO5min , j1to5min , " +
+     "  j1TO5minCPU , tot5min , j5min , j5minCPU , " + 
+     "  cputime , ziptime , elapsed , totDay , totNight " + 
+" FROM  smfacc.TrendBatch " +  
+ "    where SUBSTRING(DATA , 1 , 7 )  = '" + AAAAMM + "'  AND SID  = '" + SIST  +  "'" + 
  "   order by DATA;  "; 
 	
  ResultSet rs =  stmt.executeQuery(sql);
@@ -372,7 +318,7 @@ ResultSetMetaData rsmd = rs.getMetaData() ;
 int i = 0 ;
 String var="";
 //out.print("SID:" + SIST);
-//out.print(sql);
+// out.print(sql);
 out.print("<table class=\"stat\">");
 %>  
 

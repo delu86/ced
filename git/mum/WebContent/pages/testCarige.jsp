@@ -83,6 +83,7 @@ response.setDateHeader ("Expires", 0);
                 <div class="row">
                     <div class="col-lg-12">
                     <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+                    <div id="containerMIPS" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
                     </div>
             </div>
             <!-- /.container-fluid -->
@@ -103,7 +104,7 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/consumptions.js">   </script>
+    <script src="../js/charts/consumptionsCarige.js">   </script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 

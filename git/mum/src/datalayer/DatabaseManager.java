@@ -1,5 +1,6 @@
 package datalayer;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
@@ -39,7 +40,7 @@ public class DatabaseManager {
 	private final static String TABLE_PARAMETER_STRING="$table_name";
 	
 	private final static String SELECT_VOLUMI_SMF="SELECT concat(\"20\",SUBSTRING(Q3,3,9)) , CAST(sum(size) / 1000000000 as UNSIGNED INTEGER)FROM `support`.`nfs`"
-			+ "GROUP BY SUBSTRING(Q3,3,9)  ORDER BY concat(\"20\",SUBSTRING(Q3,3,9));";
+			+ "WHERE Q3<>\"\" GROUP BY SUBSTRING(Q3,3,9)  ORDER BY concat(\"20\",SUBSTRING(Q3,3,9));";
 
 	private final static String SELECT_SONDA_WORKLOAD="SELECT time, CASE WHEN sum(t2.cputime)>10 THEN 'GREEN'"
 			+ "	WHEN sum(t2.cputime)<10 and sum(t2.cputime)>1 THEN 'YELLOW' ELSE 'RED' END AS SEMAPHORE"
@@ -48,8 +49,8 @@ public class DatabaseManager {
 	
 	
 	private final static String SELECT_ERROR_COUNT_WKL="SELECT SYSTEM,count(*) from(\n" +
-"SELECT t3.system,time, CASE WHEN sum(t2.cputime)>10 THEN 'GREEN'\n" +
-"				WHEN sum(t2.cputime)<=10 and sum(t2.cputime)>=0 THEN 'YELLOW' ELSE 'RED' END AS SEMAPHORE\n" +
+                                        "SELECT t3.system,time, CASE WHEN sum(t2.cputime)>10 THEN 'GREEN'\n" +
+        "				WHEN sum(t2.cputime)<=10 and sum(t2.cputime)>=0 THEN 'YELLOW' ELSE 'RED' END AS SEMAPHORE\n" +
 "			    FROM ((select distinct(SYSTEM) from smfacc.workloadUnion) as t3 JOIN smfacc.interval_workload as t1) left join smfacc.workloadUnion \n" +
 "			    as t2 on t1.time=substr(t2.DATA_INT10,12,5)  and date(t2.DATA_INT10)=? and t3.system=t2.system\n" +
 "                group by time,t3.system) as DERIVED where (semaphore='RED' or semaphore='YELLOW') group by system;\n" +
@@ -73,20 +74,27 @@ public class DatabaseManager {
 			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
 			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
         
-	private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
+	private final static String SELECT_SYSTEM_CONSUMPTION_LAST30_DAY_CARIGE="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.SMF70LAC,2)"
+			+ " FROM mtrnd.lparcpu as t1 "
+			+ " where t1.RSYSTEM=? and datediff(current_date,t1.EPVDATE)<=30 and t1.epvdate>'2015-09-11'"
+			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
+        private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
 			+ " FROM mtrnd.lpariip as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
+        private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY_CARIGE="SELECT date(DATA_INT10),substr(DATA_INT10,12,2), "
+                + " TRUNCATE(sum(CPUTIME),2),TRUNCATE(sum(ZIPTM),2) from smfacc.workload_view_carige where SYSTEM=? and datediff(current_date,date(DATA_INT10))<=30 "
+                + " and date(DATA_INT10)>'2015-09-11' group by date(DATA_INT10),substr(DATA_INT10,12,2) order by DATA_INT10;";
 	private final static String SELECT_LPAR_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
 			+ " FROM mtrnd.lpariip as t1 "
 			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
 			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
-        private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),2),SUM(CTRANS) from mtrnd.cicsdayh"
+        private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd.cicsdayh"
 			+ " WHERE SYSTEM=? and EPVDATE=?"
 			+ " GROUP BY EPVDATE,APPLVTNAME ORDER BY EPVDATE ASC, APPLVTNAME ASC;";
-	private final static String SELECT_VOLUME_TIMES_BY_DAY="SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),2),SUM(CTRANS) from mtrnd.cicsdayh "
+	private final static String SELECT_VOLUME_TIMES_BY_DAY="SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd.cicsdayh "
 			+ " WHERE SYSTEM=? and EPVDATE=? and APPLVTNAME=?"
-			+ " GROUP BY EPVHOUR ORDER BY EPVHOUR ASC;";
+			+ " GROUP BY EPVHOUR HAVING SUM(CTRANS)>0 ORDER BY EPVHOUR ASC;";
 	private final static String SELECT_DISTINCT_SYSTEM="SELECT DISTINCT SYSTEM FROM smfacc.r113_2_hour";
 	private final static String SELECT_DISTINCT_SYSTEM_MQ="SELECT DISTINCT(SYSTEM) FROM  mtrnd.mqmdayh where system<>'FSYC' and system<>'CSY3'";
         private final static String SELECT_BATCH_INTERVAL="SELECT DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,"+
@@ -102,12 +110,18 @@ public class DatabaseManager {
                 " FROM smfacc.r113_resume_ctrl WHERE aaaammgg=? and (SYSTEM='SIES' or SYSTEM='SIGE') ORDER BY SYSTEM,CPU";
         private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
             " and datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
+        //nella tabella di carige nella colonna CPUTIME ci sono i MIPS non i secondi di CPU
+        private final static String SELECT_WKL_LAST_30_DAY_CARIGE="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME) from smfacc.workload_view_carige where SYSTEM=?"+
+            " and datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
 	private final static String SELECT_VOLUMES_TIMES_INFORMATION="SELECT DATE(START_005),SUM(CPUTIME),COUNT(*) from CR00515.EPV110_1_TRXACCT"+
 								" where SYSTEM=? and TRAN_001 = ?" +
-								" group by DATE(START_005) order by DATE(START_005) ASC;";
-	public final static String SELECT_TRANSACTION_BY_DATE="SELECT TRAN_001,USERID_089,TOT,truncate(CPUTIME,3),truncate(ELAPSED,3),truncate(J8CPUT_260TM,3),truncate(KY8CPUT_263TM,3),truncate(L8CPUT_259TM,3),truncate(MSCPUT_258TM,3),SCUSRHWM_106,truncate(QRDISPT_255TM,3),truncate(S8CPUT_261TM,3),DB2REQCT_180,ABCODEO_113,ABCODEC_114 FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
+								" group by DATE(START_005) HAVING COUNT(*)>0 order by DATE(START_005) ASC;";
+	public final static String SELECT_TRANSACTION_BY_DATE="SELECT TRAN_001,USERID_089,TOT,truncate(CPUTIME,3),truncate(ELAPSED,3),truncate(J8CPUT_260TM,3),truncate(KY8CPUT_263TM,3),truncate(L8CPUT_259TM,3),truncate(MSCPUT_258TM,3),SCUSRHWM_106,truncate(QRDISPT_255TM,3),truncate(S8CPUT_261TM,3),DB2REQCT_180,ABCODEO_113,ABCODEC_114,SUSERID,CMDUSER,OUSERID_364 FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
 	private final static String SELECT_WKL_BY_DAY="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
-            " and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC ";
+            " and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC ";   
+        private final static String SELECT_WKL_BY_DAY_CARIGE="SELECT CONCAT(substring(DATA_INT10,1,13),\":00\") ,SYSTEM,WKLOADNAME, sum(CPUTIME) from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
+            " and date(DATA_INT10)=? group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,substring(DATA_INT10,1,13) ASC ";
+        
         private static final String SELECT_CPI_MIPS_LAST_N_DAYS = "SELECT * FROM("+
             "SELECT SYSTEM,aaaammgg,SM113CPT,SUM(B0)/SUM(B1),SUM(B1)/(1000000*24*3600) as MIPS FROM smfacc.r113_2_hour "+
             " where SYSTEM=? and SM113CPT=? and aaaammgg<=?"+
@@ -124,7 +138,11 @@ public class DatabaseManager {
                 +" SYSTEM=? and datediff(current_date, date(DATET10) )<=? and datediff(current_date, date(DATET10) )>? and CONDCODE>=8"
                 + "  group by date(DATET10),SMF30JBN,JESNUM) as derived  group by date order by date;";
 	private static final String SELECT_BATCH_ABEND = "SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc";
-        private static final String SELECT_TRANSACTION_ABEND="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
+        private static final String SELECT_TRANSACTION_ABEND="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089,"
+                + "SUSERID, CMDUSER, OUSERID_364 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
+                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
+        private static final String SELECT_TRANSACTION_ABEND_CARIGE="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089"
+                + ", SMFMNPRN FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
                                               "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
          private static final String SELECT_TRANSACTION_ABEND_WINDOWS_TIME="SELECT date(START_010),sum(TOT),truncate(sum(CPUTIME), 3)  FROM "+TABLE_PARAMETER_STRING+" where"+
                                              " SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>\"\""+
@@ -141,7 +159,7 @@ public class DatabaseManager {
         private static final String SELECT_VOLUMES_TIMES_TRANSACTION_STRING="SELECT START_010,sum(CPUTIME),sum(TOT)"
     		+ " from "+TABLE_PARAMETER_STRING
     		+ " where TRAN_001=? and datediff( current_date,date(START_010))=? "
-    		+ " group by TRAN_001,START_010 order by START_010 ASC";
+    		+ " group by TRAN_001,START_010 HAVING sum(tot)>0 order by START_010 ASC";
 
         private static final String SELECT_JOB_INTERVAL_BY_JOBNAME_MONTH="SELECT substr(INITIALTIME, 1 , 16),substr(ENDTIME, 1 , 16) from CR00515.EPV30_5_JOBTERM "
                                                +    "WHERE SMF30JBN=? AND MONTH(INITIALTIME)=? AND CPUTIME>0";
@@ -270,7 +288,35 @@ public class DatabaseManager {
 
 	
 	public Collection<SystemConsumptionsReport> get30DaysConsumptionsReport(String system) throws ClassNotFoundException, SQLException{
-	     ResultSet rs2;
+	    if(system.equals("ASDN")||system.equals("ASSV")){
+                ResultSet rs2;
+                PreparedStatement st2;
+                ResourceBundle rb =   ResourceBundle.getBundle("datalayer.db");
+                connection(EPV_DB_PROPERTIES,SELECT_SYSTEM_CONSUMPTION_LAST30_DAY_CARIGE);
+                Connection conn2;
+                conn2 = DriverManager.getConnection(rb.getString("url"),rb.getString("user"),rb.getString("password"));
+                st2=conn2.prepareStatement(SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY_CARIGE);
+                st2.setString(1, system);
+		st.setString(1, system);
+                rs2=st2.executeQuery();
+		rs=st.executeQuery();
+                Collection<SystemConsumptionsReport> coll=new ArrayList<SystemConsumptionsReport>();
+                while(rs.next()&&rs2.next()){
+			SystemConsumptionsReport el=new SystemConsumptionsReport();
+			el.setDate(rs.getString(1));
+			el.setHour(rs.getInt(2));
+			el.setMipsCpu(rs2.getFloat(3));
+			el.setMipsZiip(rs2.getFloat(4));
+			el.setMsu4hra(rs.getFloat(3));
+			coll.add(el);
+		}
+		rs2.close();
+		st2.close();
+		disconnect();
+		return coll;
+            
+        } else{
+            ResultSet rs2;
              PreparedStatement st2;
              if(!system.equals("ALL")){
                 connection(EPV_DB_PROPERTIES,SELECT_SYSTEM_CONSUMPTION_LAST30_DAY);
@@ -279,6 +325,7 @@ public class DatabaseManager {
 		st.setString(1, system);
                 rs2=st2.executeQuery();
 		rs=st.executeQuery();
+                
              }
              else{
                 connection(EPV_DB_PROPERTIES,SELECT_LPAR_CONSUMPTION_LAST30_DAY);
@@ -299,7 +346,7 @@ public class DatabaseManager {
 		rs2.close();
 		st2.close();
 		disconnect();
-		return coll;
+		return coll;}
 	}
 	public Collection<MQQuequeReport> getMqByDay(int offset) throws ClassNotFoundException, SQLException{
 		connection(SELECT_MQ_BY_DAY_STRING);
@@ -501,6 +548,7 @@ public class DatabaseManager {
 			el.setClass8(rs.getString(12));
 			el.setJesInputPriorityString(rs.getDouble(13));
 			el.setReportClassString(rs.getString(14));
+                        el.setServiceClassString(rs.getString(15));
 			collection.add(el);
 		}
 		disconnect();
@@ -525,12 +573,21 @@ public class DatabaseManager {
 		return collection;
 	}
 	public Collection<TransactionReport> getTransactionInAbend(String system, String date, int limit) throws ClassNotFoundException, SQLException{
-		
+	    boolean isCarige=false;
+            if(system.equals("ASSV")||system.equals("ASDN")){
+                isCarige=true;
+            if(limit!=0)
+			connection(SELECT_TRANSACTION_ABEND_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
+		else
+			connection(SELECT_TRANSACTION_ABEND_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap    .get(system)));
+            
+        }else{	
             if(limit!=0)
 			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 		else
 			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap    .get(system)));
-		st.setString(1, system);
+        }	
+                st.setString(1, system);
 		st.setString(2, date);
 		rs=st.executeQuery();
 		Collection<TransactionReport>collection=new ArrayList<TransactionReport>();
@@ -544,15 +601,29 @@ public class DatabaseManager {
 			el.setDb2req(rs.getInt(6));
 			el.setElapsed(rs.getFloat(7));
 			el.setUserID(rs.getString(8));
-			collection.add(el);
+			if(isCarige)
+                            el.setCics(rs.getString(9));
+                        else{
+                            el.setSuserID(rs.getString(9));
+                            el.setCmduserID(rs.getString(10));
+                            el.setOuserID(rs.getString(11));
+                        }
+                        collection.add(el);
 		}
 		disconnect();
 		return collection;
 	}
 	public Collection<WorkloadInterval> getLast30dayWorkload(String system,int limit,int offset) throws ClassNotFoundException, SQLException{
 		String date=UtilityDate.conversionToFormat("yyyy-MM-dd", UtilityDate.getDate(offset));
-		String queryString=SELECT_WKL_LAST_30_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
-		connection(queryString);
+		String queryString;
+                if(!(system.equals("ASDN")||system.equals("ASSV"))){
+                queryString=SELECT_WKL_LAST_30_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
+		}
+                else{
+                    queryString=SELECT_WKL_LAST_30_DAY_CARIGE;
+                
+                }
+                connection(queryString);
         st.setString(1, system);
         st.setString(2, date);
         st.setInt(3, limit);
@@ -601,7 +672,8 @@ public class DatabaseManager {
 	}
 	public Collection<TransactionReport> getTransactionByDate(String date,String system) throws ClassNotFoundException, SQLException{
 		String queryString=SELECT_TRANSACTION_BY_DATE.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system));
-		connection(queryString);
+		          
+                connection(queryString);
 		st.setString(1, system);
 		st.setString(2, date);
 		rs=st.executeQuery();
@@ -625,14 +697,24 @@ public class DatabaseManager {
 			report.setDb2req(rs.getInt(13));
 			report.setAbend1(rs.getString(14));
 			report.setAbend2(rs.getString(15));
-			collection.add(report);
+                        report.setSuserID(rs.getString(16));
+                        report.setCmduserID(rs.getString(17));
+                        report.setOuserID(rs.getString(18));
+                        collection.add(report);
 		}
 		disconnect();
 		return collection;
 	}
 	public Collection<WorkloadInterval> getWorkloadByDay(String system,String day) throws ClassNotFoundException, SQLException{
-		String query=SELECT_WKL_BY_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
-		connection(query);
+	
+            String query;
+            if(system.equals("ASDN")||system.equals("ASSV"))
+                    
+             query=SELECT_WKL_BY_DAY_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
+		else
+              query=SELECT_WKL_BY_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
+	       
+                connection(query);
 		st.setString(1, system);
 		st.setString(2, day);
 		rs=st.executeQuery();
@@ -958,10 +1040,15 @@ public class DatabaseManager {
 		return coll;
 	}
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		 DatabaseManager db=new DatabaseManager();
-                 for(SondaWorkloadEmptySlot s :db.isThereAnyEmptySlot("2015-07-28")){
-                     System.out.println(s.getSystem()+" "+s.getCountEmptySlot());
-                 }
+		//File f1=new File("C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\ottobre\\LOGATM.20151001.020049.NCH.txt"); 
+                //System.out.println(f1.renameTo(new File("C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\ottobre\\LOGATM.20151001.020049.NCH.txt"+".FATTO")));
+                  File directory_log=new File("C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\ottobre");
+        File[] contents=directory_log.listFiles();
+        int i=0;
+        //scansiona la cartella dove vengono salvati i log
+        for(File f :contents){
+            System.out.println(f.getName()+".FATTO");      
+        }
 		 }
 
 

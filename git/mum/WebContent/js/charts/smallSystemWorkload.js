@@ -223,12 +223,11 @@ var optionsGeneral={
                             		$("#heading").html(system+" "+Highcharts.dateFormat("%A, %b %e, %H:%M",e.point.category)+
                             "<a href=\""+"transactionIntervalExcel?system="+system+"&date="+e.point.category.toString()+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>"
                                             	);
+                                        console.log(e.point.category.toString());
                             		tableBatch.ajax.url("batchDetail?type=job&system="+system+'&day='+e.point.category.toString()).load();
                             		tableSTC.ajax.url("batchDetail?type=stc&system="+system+'&day='+e.point.category.toString()).load();
                             		tableCics.ajax.url("transactionDetail?system="+system+'&day='+e.point.category.toString()).load();
-
-                           	 
-                            		drillCount+=1;
+                                 	drillCount+=1;
                             	}
                             	}};
                 	 chart = new Highcharts.Chart(optionsDrillDown);

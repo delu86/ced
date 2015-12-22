@@ -19,9 +19,11 @@ public class TransactionAbendExcelServlet extends HttpServlet {
 	private static final String SUFFIX_FILE_NAME = "transaction-abend";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = 	"datalayer.db";
-	private static final String SELECT ="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3)as CPUTIME,DB2REQCT_180,truncate(ELAPSED,3)as response,USERID_089 FROM"
+	private static final String SELECT ="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089,"
+                + "SUSERID, CMDUSER, OUSERID_364 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
+                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc";        private static final String SELECT_CARIGE="SELECT SMFMNPRN as CICS,SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3)as CPUTIME,DB2REQCT_180,truncate(ELAPSED,3)as response,USERID_089  FROM"
                 + " "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
-                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc";
+                                              "and SYSTEM=? and date(START_010)=? order by CPUTIME desc";;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -46,7 +48,11 @@ public class TransactionAbendExcelServlet extends HttpServlet {
 	    response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
 	    
 		try {
-			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
+                    if(parameterSystem.equals("ASDN")||parameterSystem.equals("ASSV"))
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT_CARIGE.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
+					parameterSystem,parameterDate);
+                    else
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
 					parameterSystem,parameterDate);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

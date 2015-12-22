@@ -95,7 +95,7 @@ response.setDateHeader ("Expires", 0);
                 <div class="col-lg-12">
                 <div class="panel panel-default">
                       <div class="panel-heading" id="heading-graph">
-                    Abend SIES
+                    Abend ASDN
                     </div>
                     <!-- /.panel -heading -->
                     <div class="panel-body">
@@ -123,6 +123,7 @@ response.setDateHeader ("Expires", 0);
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-drill">
                                     <thead>
                                         <tr>
+                                            <th>CICS</th>
                                             <th>Transazione</th>
                                             <th>Ora</th>
                                             <th>Count</th>

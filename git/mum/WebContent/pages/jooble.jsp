@@ -98,6 +98,7 @@ response.setDateHeader ("Expires", 0);
          </p>
       </div>
       </div>
+                <div class='row'>
                 <div class="col-lg-4">
                 </div>
                 <!-- /.col-lg-4 -->
@@ -108,7 +109,7 @@ response.setDateHeader ("Expires", 0);
                <a id="lastUpdate"></a>
                 </div>
                     <!-- /.col-lg-4 -->
-                </div>
+               </div>
                 <!-- /.row -->
                 <div class="row">
                 <div class="col-lg-2">
@@ -172,14 +173,15 @@ response.setDateHeader ("Expires", 0);
                                             <th>CLASS</th>
                                             <th>PRIORITY</th>
                                             <th>REPORT_CLASS</th>
+                                            <th>SERVICE_CLASS</th>
                                          </tr>
                                     </thead>
                                     </table>
                                     </div> 
-                                    
+                    <!-- /.dataTable_wrapper -->                
                                     </div>
                                    </div>
-                    <!-- /.dataTable_wrapper -->
+                    
                     <div class="row">
                     <div class="col-lg-12">
                                           <div class="dataTable_wrapper_step"style="display: none" >
@@ -213,7 +215,7 @@ response.setDateHeader ("Expires", 0);
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-    </div>
+     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>

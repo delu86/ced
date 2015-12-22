@@ -239,7 +239,26 @@ Collection<SondaWorkloadEmptySlot> coll=(Collection<SondaWorkloadEmptySlot>) req
                         <!-- /.col-lg-12 -->
                         </div>
                         <!-- /.row -->
-
+                                                                <div class="row">
+                    <div class="col-lg-12">
+                              <div class="panel panel-default">
+                        <div class="panel-heading">
+                            EPV log CARIGE
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div  class="panel-body">
+                        <iframe width="100%" height="300" 
+                                src="http://10.99.252.22/datifs/LOGS/CARIGEASS/LOGS/EPVFocalPoint.151007.HTML"
+  							frameBorder="0">
+  							</iframe>
+                        </div>
+                        <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                        </div>
+                        <!-- /.col-lg-12 -->
+                        </div>
+                        <!-- /.row -->
               <div class="row">
                     <div class="col-lg-12">
              <div class="panel panel-default">

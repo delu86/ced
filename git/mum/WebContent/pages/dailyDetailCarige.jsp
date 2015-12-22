@@ -62,7 +62,8 @@ response.setDateHeader ("Expires", 0);
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h3 class="page-header">Estrazione dati di dettaglio: Started Task,Jobs,Transazioni</h3>
+                        <h3 class="page-header">Estrazione dati di dettaglio: Jobs & Transazioni</h3>
+                        <h4>record type 30 subtype 2-3  (max 5 giorni indietro)  , 70 , 110</h4>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -105,7 +106,7 @@ response.setDateHeader ("Expires", 0);
     	
         $( "#datepicker" ).datepicker({
         	    dateFormat: 'yy-mm-dd'});
-    })
+    });
     </script>
 
 </body>

@@ -55,7 +55,7 @@ public class VolumeTimeInformation {
 	}
 
 	public float getEfficienza() {
-		return cpuTime/volume;
+		return volume/cpuTime;
 	}
 
 	

@@ -78,6 +78,16 @@ response.setDateHeader ("Expires", 0);
                         <input type="submit" value="Download .xls">
                         </form>
                     </div>
+                     
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+             <div class="row">
+                    <div class="col-lg-12">
+                        <h5><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIES.xls">Workload 180 giorni SIES</a></h5>
+                        <h5><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIGE.xls">Workload 180 giorni SIGE</a></h5>
+                    </div>
+                     
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->

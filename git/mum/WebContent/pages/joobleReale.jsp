@@ -137,6 +137,7 @@ response.setDateHeader ("Expires", 0);
                                             <th>CLASS</th>
                                             <th>PRIORITY</th>
                                             <th>REPORT_CLASS</th>
+                                            <th>SERVICE_CLASS</th>
                                          </tr>
                                     </thead>
                                     </table>
