@@ -125,8 +125,7 @@ $(function () {
 		drawChart();
 	});
 	$( "#date-interval" ).datepicker({
-		   
-		   changeMonth: true,
+		changeMonth: true,
 	        changeYear: true,
 	        showButtonPanel: true,
 	        dateFormat: 'MM yy',

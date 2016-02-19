@@ -268,7 +268,8 @@ Connection con = null ;
 String sql = "";
 
 		try {
-			Class.forName(JDBC_DRIVER);
+//			Class.forName(JDBC_DRIVER);
+			Class.forName("com.mysql.jdbc.Driver");
 			}
 			catch(java.lang.ClassNotFoundException e)
          {
@@ -279,12 +280,12 @@ String sql = "";
 try {
 	
 
-con= DriverManager.getConnection( "jdbc:mysql://10.99.252.23/smfacc","cedacri", "cedacri" );
+con= DriverManager.getConnection( "jdbc:mysql://localhost:3306/support","epv", "epv" );
 stmt = con.createStatement();
 
 sql = "SELECT SID,  " +  
     " ggSett, DATA,  volumi, Cputime, CpuAVG,CpuDevSTD,CpuMin, CpuMax,Elapsed,ElapsedAVG,ElapsedMin, ElapsedMax, L8, " + 
-"   avgL8, db2mil FROM smfacc.TrendCics  "  + 
+"   avgL8, db2mil FROM support.TrendCics  "  + 
 "    where SUBSTRING(DATA , 1 , 7 )  = '" + AAAAMM + "'  AND SID  = '" + SIST  +  "'" +  
  "   order by DATA;  "; 
 

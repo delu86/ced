@@ -21,14 +21,15 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
             " and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by DATA_INT10 ASC,WKLOADNAME ";
 	private static final String SUFFIX_FILE_NAME = "workload";
 	private static final String EXCEL_EXTENSION = ".xls";
-	private static final String RESOURCE_DB_PATH = "datalayer.db";    
+	private static final String RESOURCE_DB_PATH = "datalayer.db";
+        private static final String RESOURCE_DB_PATH_2 = "datalayer.db2";
 	public static final HashMap<String, String> mapSystemWorloadTableHashMap=initializeMapSystemWorloadTable();
 	
 	private static HashMap<String, String> initializeMapSystemWorloadTable() {
 		// TODO Auto-generated method stub
 		HashMap<String, String> map=new HashMap<String, String>();
-		map.put("SIES", "smfacc.workload_view");
-		map.put("SIGE", "smfacc.workload_view");
+		map.put("SIES", "realebis_ctrl.workload_view");
+		map.put("SIGE", "realebis_ctrl.workload_view");
                 map.put("ASDN", "smfacc.workload_view_carige");
 		map.put("ASSV", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
@@ -60,8 +61,13 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+system+"_"+date+EXCEL_EXTENSION);
 		try {
-			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,queryString
+                    if(system.equals("SIES")||system.equals("SIGE")){
+			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,queryString
+					,new String[]{system,date});}
+                    else{
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,queryString
 					,new String[]{system,date});
+                    }
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exporter.ExcelExporter;
+import exporter.XlsxExporter;
 import java.sql.SQLException;
 import jxl.write.WriteException;
 import utility.MapUtility;
@@ -20,16 +21,45 @@ public class DailyDetailExcelServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String SUFFIX_FILE_NAME = "detail";
 	private static final String EXCEL_EXTENSION = ".xls";
+        private static final String EXCEL_XEXTENSION = ".xlsx";
 	private static final String RESOURCE_DB_PATH = 	"datalayer.db";
         private static final String RESOURCE_DB_PATH_2 = 	"datalayer.db2";
-	private static final String SELECT_TRANSACTION ="SELECT START_010 as data ,SYSTEM as Sistema,TRAN_001 as transazione,USERID_089 as user,TOT as count,truncate(CPUTIME,3) as CPUtime,truncate(ELAPSED,3)as ELAPSED,truncate(J8CPUT_260TM,3) as J8,truncate(KY8CPUT_263TM,3) as K8,truncate(L8CPUT_259TM,3) as L8,truncate(MSCPUT_258TM,3) as MS,SCUSRHWM_106 as MEM,truncate(QRDISPT_255TM,3) as QR,truncate(S8CPUT_261TM,3) as S8,DB2REQCT_180 as DB2call,ABCODEO_113 as ABEND_START,ABCODEC_114 as ABEND_END "
-                + " FROM "+TABLE_PARAMETER_STRING+" where system=? and date(START_010)=? order by START_010 ASC, TOT DESC";
-	private static final String SELECT_BATCH="SELECT DATET10, SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
-            ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
-	private static final String SELECT_STC="SELECT DATET10,SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,TOT,EXECTM,ELAPSED"+
-            ",DISKIO,DISKIOTM,ZIPTM,CPUTIME,TAPEIO,TAPEIOTM FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
-	private static final String TRANSACTION="Transazioni";
-	private static final String JOBS="Jobs";
+	
+        private static final String SELECT_TRANSACTION ="SELECT START_010 as data ,SYSTEM as Sistema,TRAN_001 as transazione,"
+                + "USERID_089 as user,TOT as count,truncate(CPUTIME,3) as CPUtime,truncate(ELAPSED,3)as ELAPSED"
+                + ",truncate(J8CPUT_260TM,3) as J8,truncate(KY8CPUT_263TM,3) as K8,truncate(L8CPUT_259TM,3) as L8,"
+                + "truncate(MSCPUT_258TM,3) as MS,SCUSRHWM_106 as MEM,truncate(QRDISPT_255TM,3) as QR,"
+                + "truncate(S8CPUT_261TM,3) as S8,DB2REQCT_180 as DB2call,ABCODEO_113 as ABEND_START,ABCODEC_114 as ABEND_END "
+                + " FROM "+TABLE_PARAMETER_STRING+" where system=? and date(START_010)=? "
+                + "order by START_010 ASC, TOT DESC";   
+	
+        //private static final String SELECT_BATCH="SELECT DATET10, SMF30JBN,SMF30STN,JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"+
+        //    ",ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
+	//private static final String SELECT_STC="SELECT DATET10,SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"+
+        //    " ,ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
+	private static final String SELECT_JES="SELECT substr(BEGINTIME,1,19) as datetime,"
+                + " SMF30JBN,SMF30STN,JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"
+                + ",ZIPTM,CPUTIME ,  "
+                + "CASE \n" +
+                  "WHEN SMF30PGM='DFHSIP' THEN 'CICS'\n" +
+                  "WHEN SMF30PGM='DSNYASCP'  THEN 'DB2'\n" +
+                  "WHEN SMF30PGM='DXRRLM00'  THEN 'DB2'\n" +
+                  "WHEN SMF30PGM='DSNX9STP'  THEN 'DB2'\n" +
+                  "WHEN SMF30PGM='ASNLRP25'  THEN 'DB2'\n" +
+                  "WHEN SMF30PGM='DSNX9WLM'  THEN 'DB2'\n" +
+                  "WHEN SRVCLSNAME='SYSTEM'  THEN 'SYS'\n" +
+                  "WHEN SMF30WID='TSO'       THEN 'TSO'\n" +
+                  "WHEN SMF30WID='OMVS'       THEN 'OMVS'\n" +
+                  "WHEN SMF30PGM='CSQXJST'   THEN 'MQS'\n" +
+                  "WHEN SMF30PGM='CSQYASCP'  THEN 'MQS'\n" +
+                  "WHEN SMF30WID LIKE 'JES%' THEN 'JOB'\n" +
+                  "WHEN SMF30WID LIKE 'STC%' THEN 'STC'\n" +
+                  "WHEN SMF30WID='ASCH'      THEN 'ASCH'\n" +
+                  "ELSE 'OTHER'\n" +
+                  "END as WKL_TYPE FROM "+TABLE_PARAMETER_STRING
+                + " where  date(begintime)=?   order by 1 asc";
+        
+        private static final String JOBS="Jobs";
 	private static final String STC="Started Task";
         private static final String SELECT_TRAN_CARIGE="SELECT `cicsdayh`.`SYSTEM`,\n" +
 "    `cicsdayh`.`APPLVTNAME`,\n" +
@@ -152,23 +182,44 @@ public class DailyDetailExcelServlet extends HttpServlet {
 			HttpServletResponse response) {
 		String parameterSystem=request.getParameter("system");
 		String parameterDate=request.getParameter("date");
-		response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
+		
 		try {
                     if(parameterSystem.equals("ASDN")||parameterSystem.equals("ASSV"))
                     {
-  			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,new String[]{TRANSACTION,JOBS,"RECORD70"}
+                        response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
+  			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,new String[]{"Transactions",JOBS,"RECORD70"}
 			,new String[]{SELECT_TRAN_CARIGE    ,
                             SELECT_JOB_CARIGE,SELECT_RMF_CARIGE
                             }
 					,new String[]{parameterSystem,parameterDate},new String[]{parameterSystem,parameterDate},new String[]{parameterSystem,parameterDate});
                   
                 }else{
-			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,new String[]{TRANSACTION,JOBS,STC}
-			,new String[]{SELECT_TRANSACTION.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
+                        String flag=request.getParameter("flag");
+                        if(flag.equals("job")){
+                            response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
+                        
+                            ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,new String[]{"JES"}    
+			,new String[]{
+                            SELECT_JES.replace(TABLE_PARAMETER_STRING, MapUtility.mapJesTable().get(parameterSystem)),
+                            },new String[]{parameterDate});
+                        
+                        }
+                        else{
+                            response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_XEXTENSION);
+                         
+                        /*
+                        XlsxExporter.writeXLSX(response.getOutputStream(),RESOURCE_DB_PATH,new String[]{"Transactions",JOBS,STC}    
+			,new String[]{
+                            SELECT_TRANSACTION.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
                             SELECT_BATCH.replace(TABLE_PARAMETER_STRING, MapUtility.mapBatchTable().get(parameterSystem)),
                             SELECT_STC.replace(TABLE_PARAMETER_STRING, MapUtility.mapSTCTable().get(parameterSystem))}
 					,new String[]{parameterSystem,parameterDate},new String[]{parameterSystem,parameterDate},new String[]{parameterSystem,parameterDate});
-                        }} catch (IOException e) {
+                        */
+                        XlsxExporter.writeXLSX(response.getOutputStream(),RESOURCE_DB_PATH_2,    
+			
+                            SELECT_TRANSACTION.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
+                         new String[]{parameterSystem,parameterDate});}
+                    }} catch (IOException e) {
 		} catch (WriteException e) {
                 } catch (ClassNotFoundException e) {
                 } catch (SQLException e) {

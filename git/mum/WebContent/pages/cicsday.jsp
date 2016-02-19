@@ -139,13 +139,15 @@ function goBack() {
 <%
 
 Statement stmt = null;
+Statement stmt0 = null;
 Connection con = null ;
 String sql = "";
 
 
 
 		try {
-			Class.forName("com.ibm.db2.jcc.DB2Driver");
+//			Class.forName("com.ibm.db2.jcc.DB2Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			}
 			catch(java.lang.ClassNotFoundException e)
          {
@@ -155,11 +157,12 @@ String sql = "";
 
 try {
 	
-con =  DriverManager.getConnection("jdbc:db2://sya.ced.it:5036/ITCDNDBEM:user=CRIDA00;password=CRIDA000;specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;");
-stmt = con.createStatement();
+//con =  DriverManager.getConnection("jdbc:db2://sya.ced.it:5036/ITCDNDBEM:user=CRIDA00;password=CRIDA000;specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;");
+con= DriverManager.getConnection( "jdbc:mysql://localhost:3306/support","epv", "epv" );
 
+stmt0 = con.createStatement();
 	
-
+//cancellare
 sql = "SELECT SYSTEM,  SUBSTR(START_005, 1, 10) AS GIORNO,   CASE DAYOFWEEK_ISO(TO_DATE(SUBSTR(START_005, 1, 10), 'YYYY-MM-DD')) " +
 "      WHEN 1 THEN 'Lu' " +
 "      WHEN 2 THEN 'Ma' " +
@@ -184,17 +187,78 @@ sql = "SELECT SYSTEM,  SUBSTR(START_005, 1, 10) AS GIORNO,   CASE DAYOFWEEK_ISO(
   " GROUP BY SYSTEM, SUBSTR(START_005, 1, 10), TRAN_001 " +
 "  ORDER BY SYSTEM, SUBSTR(START_005, 1, 10), TRAN_001;" ;
 
-// out.print(sql);
+sql = "SELECT SID, " +
+  "    SDATA, " +
+  "  GG, " +
+  "  TRAN, " +
+  "  VOLUMI, " +
+  "  DB2REQ, " +
+  "  cputot, " +
+  "  elapsedtot, " +
+  "  L8Tot, " +
+  "  Cpumin, " +
+  "  Cpumax, " +
+  "  Elapsedmin, " +
+  "  Elapsedmax "  +
+" FROM cics_day " +
+" WHERE SDATA= '" + DATA + "' AND " + " SID='" + SIST + "' ";
 
+String sql0 = "  SELECT cics_acc.SID,  DATA,  ggSett,  PROC,  tran_dist,  ElapsedTot,  CputimeTot,  VolumiTot, " + 
+"   CpuAVG,  ElapsedAVG,  CpuPerc,  VolPerc FROM support.cics_acc " +
+" WHERE DATA= '" + DATA + "' AND " + " SID='" + SIST + "' ";
+
+out.print("<br> " );
+out.print("<br> - TOTALE PER PROCEDURA - SMF RECORD TYPE 110 " );
+out.print("<br>Sid:" + SIST + " Data: " + DATA + "  Cics PROC CPU" );
+
+//out.print(sql0);
+
+ResultSet rs0 =  stmt0.executeQuery(sql0);
+ResultSetMetaData rsmd0 = rs0.getMetaData() ;
+int numberOfColumns0 = rsmd0.getColumnCount();
+int count0=0;
+out.print("<table class=\"stat\">");
+                        out.print("<tr>" );
+                                                for (int h = 4;h<=numberOfColumns0;h++)
+                                                        out.println("<th>"+  rsmd0.getColumnLabel(h)  + "</th> " );
+                        out.print("</tr>" );
+
+
+      while(rs0.next())
+                        {
+                        out.print("<tr>" );
+                        out.println("<td>"+  rs0.getString(4) + "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.0f",rs0.getDouble(5) )  +  "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.2f",rs0.getDouble(6) )  +  "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.2f",rs0.getDouble(7) )  +  "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.0f",rs0.getDouble(8) )  +  "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.5f",rs0.getDouble(9) )  +  "</td> " );
+                        out.println("<td>"+  String.format(Locale.ITALIAN, "%.5f",rs0.getDouble(10) )  +  "</td> " );
+                        for (int h = 11 ;h<=numberOfColumns0;h++)
+                         out.println("<td>"+  String.format(Locale.ITALIAN, "%.2f",rs0.getDouble(h) )  +  "</td> " );
+                        out.print("</tr>" );
+
+                count0++;
+                }
+out.print("</table>" );
+
+
+
+out.print("<br>"  );
+out.print("<br> - TOTALE PER TRANSAZIONE - SMF RECORD TYPE 110 " );
+out.print("<br>Sid:" + SIST + " Data: " + DATA + "  Cics TRAN  CPU" );
+
+
+stmt = con.createStatement();
 ResultSet rs =  stmt.executeQuery(sql);
 ResultSetMetaData rsmd = rs.getMetaData() ;
- int numberOfColumns = rsmd.getColumnCount();
+int numberOfColumns = rsmd.getColumnCount();
  
 int i = 0 ;
 String var="";
-out.print("<br>Sid:" + SIST + " Data: " + DATA + "  Cics TRAN CPU" );
-out.print("<table class=\"stat\">");
 
+
+out.print("<table class=\"stat\">");
 			out.print("<tr>" ); 			
 						for (int h = 4;h<=numberOfColumns;h++)
 							out.println("<th>"+  rsmd.getColumnLabel(h)  + "</th> " );

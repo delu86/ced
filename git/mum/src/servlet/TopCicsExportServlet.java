@@ -23,36 +23,37 @@ public class TopCicsExportServlet extends HttpServlet {
     private static final String  EXCEL_EXTENSION= ".xls";
     private static final String  RESOURCE_DB_PATH = "datalayer.db2";
     private final String SELECT="SELECT \n" +
-"    `cicshour`.`APPLVTNAME`,\n" +
-"    `cicshour`.`TRANSACTNAME`,\n" +
-"    `cicshour`.`EPVDATE`,\n" +
-"    `cicshour`.`EPVHOUR`,\n" +
-"    `cicshour`.`CTRANS`,\n" +
-"    round(`cicshour`.`TOTCPUTM`,2) as TOTCPUTM,\n" +
-"    round(`cicshour`.`TOTELAP`,2) as TOTELAP,\n" +
-"    round(`cicshour`.`TOTIRESP`,2) as TOTIRESP,\n" +
-"    round(`cicshour`.`TOTL8CPU`,2) as TOTL8CPU,\n" +
-"    `cicshour`.`TOTDB2RQ` \n" +
-"    \n" +
-"FROM `mthru`.`cicshour` \n" +
-"WHERE SYSTEM = ?   AND EPVDATE  = ?\n" +
-"ORDER BY TRANSACTNAME DESC ;";
+    "    `cicshour`.`APPLVTNAME`,\n" +
+    "    `cicshour`.`TRANSACTNAME`,\n" +
+    "    `cicshour`.`EPVDATE`,\n" +
+    "    `cicshour`.`EPVHOUR`,\n" +
+    "    `cicshour`.`CTRANS`,\n" +
+    "    round(`cicshour`.`TOTCPUTM`,2) as TOTCPUTM,\n" +
+    "    round(`cicshour`.`TOTELAP`,2) as TOTELAP,\n" +
+    "    round(`cicshour`.`TOTIRESP`,2) as TOTIRESP,\n" +
+    "    round(`cicshour`.`TOTL8CPU`,2) as TOTL8CPU,\n" +
+    "    `cicshour`.`TOTDB2RQ` \n" +
+    "    \n" +
+    "FROM `mthru`.`cicshour` \n" +
+    "WHERE SYSTEM = ?   AND EPVDATE  = ?\n" +
+    "AND (`TRANSACTNAME` NOT LIKE 'C%' OR `TRANSACTNAME` IN ('CSMI','CPMI','CVMI'))"
+            + "ORDER BY TRANSACTNAME DESC ;";
     
     private static final String SELECT_BY_HOUR="SELECT \n" +
-"    `cicshour`.`APPLVTNAME`,\n" +
-"    `cicshour`.`TRANSACTNAME`,\n" +
-"    `cicshour`.`EPVDATE` as DATE,\n" +
-"    `cicshour`.`EPVHOUR`,\n" +
-"    `cicshour`.`CTRANS`,\n" +
-"    round(`cicshour`.`TOTCPUTM`,2) as TOTCPUTM,\n" +
-"    round(`cicshour`.`TOTELAP`,2) as TOTELAP,\n" +
-"    round(`cicshour`.`TOTIRESP`,2) as TOTIRESP,\n" +
-"    round(`cicshour`.`TOTL8CPU`,2) as TOTL8CPU,\n" +
-"    `cicshour`.`TOTDB2RQ` \n" +
-"    \n" +
-"FROM `mthru`.`cicshour` \n" +
-"WHERE SYSTEM = ?   AND EPVDATE  = ? AND EPVHOUR= ?\n" +
-"ORDER BY TRANSACTNAME DESC ;";
+    "    `cicshour`.`APPLVTNAME`,\n" +
+    "    `cicshour`.`TRANSACTNAME`,\n" +
+    "    `cicshour`.`EPVDATE` as DATE,\n" +
+    "    `cicshour`.`EPVHOUR`,\n" +
+    "    `cicshour`.`CTRANS`,\n" +
+    "    round(`cicshour`.`TOTCPUTM`,2) as TOTCPUTM,\n" +
+    "    round(`cicshour`.`TOTELAP`,2) as TOTELAP,\n" +
+    "    round(`cicshour`.`TOTIRESP`,2) as TOTIRESP,\n" +
+    "    round(`cicshour`.`TOTL8CPU`,2) as TOTL8CPU,\n" +
+    "    `cicshour`.`TOTDB2RQ` \n" +
+    "    \n" +
+    "FROM `mthru`.`cicshour` \n" +
+    "WHERE SYSTEM = ?   AND EPVDATE  = ? AND EPVHOUR= ?\n" +
+    "ORDER BY TRANSACTNAME DESC ;";
 
     /**;
     /**
@@ -83,8 +84,8 @@ public class TopCicsExportServlet extends HttpServlet {
 		}
 
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

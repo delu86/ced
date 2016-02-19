@@ -77,6 +77,7 @@ response.setDateHeader ("Expires", 0);
               				</div>
 						</div>
 						<div class="tab-pane" id="register">
+                                                    <h5>Utilizzare email aziendale per registrarsi  </h5>
 							<form class="form-signin" action="CreateNewAccountServlet" method="POST">
 								<input type="email" name="email" class="form-control" placeholder="Email Address ..." required autofocus>
 								<input type="password" id="pwd" name="password" class="form-control" placeholder="Password ...(min. 6 chars)" required onkeyup="controlPwd()">

@@ -24,32 +24,21 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author CRE0260
  */
-public class ATMStatServlet extends HttpServlet {
+public class ATMStatBySportelloServlet extends HttpServlet {
 
-    
-    private static final String COD_ABI_PARAMETER="codAbi";
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+       private static final String COD_ABI_PARAMETER="codAbi";
     private static final String PERIOD_PARAETER="period";//yyyy-MM
-    public static final String SELECT_CREDEM="select CASE when dayofweek(date)=1 then concat('Domenica, ',date)\n" +
-            "when dayofweek(date)=2 then concat('Lunedi, ',date)\n" +
-            "when dayofweek(date)=3 then concat('Martedi, ',date)\n" +
-            "when dayofweek(date)=4 then concat('Mercoledi, ',date)\n" +
-            "when dayofweek(date)=5 then concat('Giovedi, ',date)\n" +
-            "when dayofweek(date)=6 then concat('Venerdi, ',date)\n" +
-            "when dayofweek(date)=7 then concat('Sabato, ',date) end\n" +
-            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2) as perc_ko,round(100-perc_ko_faro,2) as perc_ok_faro"
-            + " ,ko_sla7,round(ko_sla7*100/ore_totali_faro,2) as perc_sla7,ko_sla8,round(ko_sla8*100/ore_totali_faro,2) as perc_sla8 from atm_stat.riepilogo_per_giorno_credem\n" +
-            "where substr(date,1,7)=? and codAbi=? order by date;";
-    public static final String SELECT="select CASE when dayofweek(date)=1 then concat('Domenica, ',date)\n" +
-            "when dayofweek(date)=2 then concat('Lunedi, ',date)\n" +
-            "when dayofweek(date)=3 then concat('Martedi, ',date)\n" +
-            "when dayofweek(date)=4 then concat('Mercoledi, ',date)\n" +
-            "when dayofweek(date)=5 then concat('Giovedi, ',date)\n" +
-            "when dayofweek(date)=6 then concat('Venerdi, ',date)\n" +
-            "when dayofweek(date)=7 then concat('Sabato, ',date) end\n" +
-            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2) as perc_ko,round(100-perc_ko_faro,2) as perc_ok_faro"
-            + " ,ko_sla7,round(ko_sla7*100/ore_totali_faro,2) as perc_sla7, '' , '' from atm_stat.riepilogo_per_giorno\n" +
-            " where substr(date,1,7)=? and codAbi=? order by date;";
-    public final String CREDEM_ABI="03032";
+    public static final String SELECT="SELECT atm,anno_mese,num_giorni,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2),(100-round(perc_ko_faro,2)) as perc_ok_faro,ko_sla7 \n" +
+                                      "from atm_stat.riepilogo_per_bancomat_credem where substr(atm,1,5)=? and anno_mese=?;";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -75,44 +64,39 @@ public class ATMStatServlet extends HttpServlet {
 	    out = response.getWriter();
             Class.forName(rb.getString("driver"));
             conn=DriverManager.getConnection(rb.getString("url"),rb.getString("user"),rb.getString("password"));
-            if(codAbi.equals(CREDEM_ABI))
-                ps=conn.prepareStatement(SELECT_CREDEM);
-                else
-                ps=conn.prepareStatement(SELECT);
-            ps.setString(2, codAbi);
-            ps.setString(1, period);
+            
+            ps=conn.prepareStatement(SELECT);
+            
+            ps.setString(1, codAbi);
+            ps.setString(2, period);
             rs=ps.executeQuery();
             int i=0;
             while (rs.next()) {                
                 if(i==0){
-                   
+                   //atm,anno_mese,num_giorni,ore_totali_faro,ore_ko_faro,perc_ko_faro,(100-perc_ko_faro) as perc_ok_faro,ko_sla7,ko_sla8
 					dataJSON=dataJSON.concat("{"+
-						"\"DATA\":"+	"\"<a>"+rs.getString(1)+"</a>\","+
-                                                "\"TotaleATM\":"+	"\""+rs.getString(2)+"\","+
-                                                "\"ORE_OK_FARO\":"+	"\""+rs.getString(3)+"\","+
-                                                "\"ORE_KO_FARO\":"+	"\""+rs.getString(4)+"\","+
-                                                "\"PERC_KO\":"+	"\""+rs.getString(5)+"\","+
-                                                "\"PERC_OK\":"+	"\""+rs.getString(6)+"\","+
-                                                "\"KO_SLA7\":"+	"\""+rs.getString(7)+"\","+
-                                                "\"PERC_SLA7\":"+	"\""+rs.getString(8)+"\","+
-                                                "\"KO_SLA8\":"+	"\""+rs.getString(9)+"\","+
-                                                "\"PERC_SLA8\":"+	"\""+rs.getString(10)+"\""+
+						"\"ATM\":"+	"\"<a>"+rs.getString(1)+"</a>\","+
+                                                "\"ANNO_MESE\":"+	"\""+rs.getString(2)+"\","+
+                                                "\"GIORNI_FARO\":"+	"\""+rs.getString(3)+"\","+
+                                                "\"ORE_TOTALI\":"+	"\""+rs.getString(4)+"\","+
+                                                "\"ORE_KO\":"+	"\""+rs.getString(5)+"\","+
+                                                "\"PERC_KO\":"+	"\""+rs.getString(6)+"\","+
+                                                "\"PERC_OK\":"+	"\""+rs.getString(7)+"\","+
+                                                "\"KO_SLA7\":"+	"\""+rs.getString(8)+"\""+
                                                 "}");
 					i++;
 				}
 				else{
 					dataJSON=dataJSON.concat(",{"+
-						"\"DATA\":"+	"\"<a>"+rs.getString(1)+"</a>\","+
-                                                "\"TotaleATM\":"+	"\""+rs.getString(2)+"\","+
-                                                "\"ORE_OK_FARO\":"+	"\""+rs.getString(3)+"\","+
-                                                "\"ORE_KO_FARO\":"+	"\""+rs.getString(4)+"\","+
-                                                "\"PERC_KO\":"+	"\""+rs.getString(5)+"\","+
-                                                "\"PERC_OK\":"+	"\""+rs.getString(6)+"\","+
-                                                "\"KO_SLA7\":"+	"\""+rs.getString(7)+"\","+
-                                                "\"PERC_SLA7\":"+	"\""+rs.getString(8)+"\","+
-                                                "\"KO_SLA8\":"+	"\""+rs.getString(9)+"\","+
-                                                "\"PERC_SLA8\":"+	"\""+rs.getString(10)+"\""+
-                                                "}");
+						"\"ATM\":"+	"\"<a>"+rs.getString(1)+"</a>\","+
+                                                "\"ANNO_MESE\":"+	"\""+rs.getString(2)+"\","+
+                                                "\"GIORNI_FARO\":"+	"\""+rs.getString(3)+"\","+
+                                                "\"ORE_TOTALI\":"+	"\""+rs.getString(4)+"\","+
+                                                "\"ORE_KO\":"+	"\""+rs.getString(5)+"\","+
+                                                "\"PERC_KO\":"+	"\""+rs.getString(6)+"\","+
+                                                "\"PERC_OK\":"+	"\""+rs.getString(7)+"\","+
+                                                "\"KO_SLA7\":"+	"\""+rs.getString(8)+"\""+
+                                               "}");
             }}
             
             rs.close();

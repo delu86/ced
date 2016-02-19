@@ -3,12 +3,10 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import object.TransactionReport;
 import datalayer.DatabaseManager;
 
@@ -29,7 +27,6 @@ public class TransactionAbendJSONSTableServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -125,7 +122,6 @@ public class TransactionAbendJSONSTableServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	/**

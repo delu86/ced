@@ -214,10 +214,11 @@ out.print("</select>");
 			if (Festivi.equals("N"))
 				sql = sql + " AND WEEKDAY(EPVDATE)<5 " ;
 			
-			sql = sql + " AND MONTH(EPVDATE) > 1 "  ;
+			sql = sql + " AND DATEDIFF( NOW() , EPVDATE) < 300 "  ;
 			
 			sql = sql + " AND EPVDATE NOT IN ( SELECT FDATE FROM support.calendar where FESTIVO = 'Y' ) " + 
 						"group by EPVDATE  order by 1" ;
+	// 	         sql = sql + 	" group by EPVDATE  order by 1" ;
 
 //			out.println(sql);
 			 rs = stmt.executeQuery(sql);

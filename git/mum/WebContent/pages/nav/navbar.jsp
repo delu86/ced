@@ -41,7 +41,8 @@ String profile=request.getParameter("profile");
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                       <li class="sidebar-search">
+                       <!--
+                        <li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
@@ -50,8 +51,8 @@ String profile=request.getParameter("profile");
                                 </button>
                             </span>
                             </div>
-                            <!-- /input-group -->
-                        </li> 
+                            <!-- /input-group 
+                        </li> -->
                         <li>
                             <a href="index.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard </a>
                         </li>
@@ -68,9 +69,9 @@ String profile=request.getParameter("profile");
                              <li>
                               <a href="cedacriCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Detail</a>
                               </li>
-                              <li>
+                           <%/*   <li>
                               <a href="jWeekDiff.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Overlap Week</a>
-                              </li>
+                              </li> */%>
                               <li>
                               <a href="jMonthWKL.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Trend month</a>
                               </li>
@@ -156,6 +157,7 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="jIse.jsp"><i class="fa fa-exclamation fa-fw"></i>Codici ISE</a>
                               </li>
+                              
                             </ul>
                                <!-- /.nav-second-level -->
                                
@@ -165,6 +167,9 @@ String profile=request.getParameter("profile");
                          <li>
                             <a href="#"><i class="fa fa-institution fa-fw"></i> Reale Mutua<span class="fa arrow"></span></a>
                              <ul class="nav nav-second-level">
+                               <li> 
+                              <a href="doc.jsp?dir=reale"><i class="fa fa-book fa-fw"></i>Documents</a>
+                              </li>   
                              <li>
                              <a href="http://10.99.252.22/datifs/html/reale/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                              </li>
@@ -178,8 +183,26 @@ String profile=request.getParameter("profile");
                               <a href="test.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
                               </li>
                               <li> 
-                              <a href="dailyDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Export data</a>
+                             <li><a href="#"><i class="fa fa-file-excel-o fa-fw"></i>Export data<span class="fa arrow"></span></a>
+                                  <ul class="nav nav-third-level">
+                              
+                              <li>
+                                          <li>
+ 
+                             <a href="dailyDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>JES</a>
                               </li>
+                              <li>
+ 
+                             <a href="dailyDetailRealeCics.jsp"><i class="fa fa-file-excel-o fa-fw"></i>CICS</a>
+                              </li>
+                              <li>
+                              <a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIES.xls"><i class="fa fa-file-excel-o fa-fw"></i>Workload 180 giorni SIES</a>
+                              </li>
+                              <li><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIGE.xls"><i class="fa fa-file-excel-o fa-fw"></i>Workload 180 giorni SIGE</a>
+                              </li>
+                                  </ul>
+                                 
+                     
                               <li> 
                               <a href="realeCPI.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CPI</a>
                               </li>
@@ -216,6 +239,9 @@ String profile=request.getParameter("profile");
                                 <li>
                                     <a href="joobleCredem.jsp"><i class="fa fa-search fa-fw"></i>Job search</a>
                                 </li>
+                                <li>
+                            <a href="atmCredem.jsp"><i class="fa fa-money fa-fw"></i> ATM </a>
+                        </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -299,6 +325,7 @@ String profile=request.getParameter("profile");
                              <li> 
                               <a href="admin"><i class="fa fa-wrench fa-fw"></i>Admin server & UI</a>
                               <a href="searchForColumn.jsp"><i class="fa fa-search fa-fw"></i>Find columns</a>
+                               <a href="Browser.jsp"><i class="fa fa-code fa-fw"></i>File Explorer</a>
                               </li>
                             </ul>
                         </li>

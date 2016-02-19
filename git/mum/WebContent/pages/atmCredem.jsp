@@ -1,3 +1,9 @@
+<%-- 
+    Document   : atmCredem
+    Created on : 19-gen-2016, 11.25.43
+    Author     : CRE0260
+--%>
+
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Cache-Control","no-store");
@@ -19,7 +25,7 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")){
+    	if(!profile.equals("CED")&&!profile.equals("CREDEM")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
     
@@ -85,10 +91,7 @@ response.setDateHeader ("Expires", 0);
                     </div>
                     <!-- /.row -->
                     <div class="row">
-                        <div class="col-lg-2">
-                             <input type="text" maxlength="5" size="5" class="input-search form-control" id="autocomplete" placeholder="Cerca ABI" value="">
-                             <!-- /.form -->
-                            </div>
+                        
                          <!-- /.col-lg-12 -->
                          <div class="col-lg-2">
                     <input type="text" class="form-control"id="date-interval" size="22" readonly='true'>
@@ -100,10 +103,9 @@ response.setDateHeader ("Expires", 0);
                         <div class="col-lg-12">
                             <div class="panel panel-default">
                         <div class="panel-heading">
-                           
-                            <a  title="Esporta  in excel" id="excelExporter" href="#"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>
+                         <a  title="Esporta  in excel" id="excelExporter" href="#"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>
                         
-                        
+                            Indisponibilità per giorno  Credem
                         </div>
                          <div class="dataTable_wrapper">
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTablesByDay">
@@ -118,6 +120,8 @@ response.setDateHeader ("Expires", 0);
                                             <th>%OK</th>
                                             <th>ORE KO SLA7</th>
                                             <th>%KO SLA7</th>
+                                            <th>ORE KO SLA8</th>
+                                            <th>%KO SLA8</th>
                                             </tr>
                                     </thead>
                                     </table>
@@ -126,7 +130,36 @@ response.setDateHeader ("Expires", 0);
                         </div>
                          <!-- /.col-lg-12 -->
                         </div><!-- /.row -->
-                         
+                                            <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                        <div class="panel-heading">
+                         <a  title="Esporta  in excel" id="excelExporter2" href="#"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>
+                        
+                            Indisponibilità per ATM  Credem
+                        </div>
+                         <div class="dataTable_wrapper">
+                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTablesByAtm">
+                                
+                                    <thead>
+                                        <tr>
+                                            <th class="desktop ">ATM</th>
+                                            <th class="desktop ">MESE</th>
+                                            <th class="desktop ">TOT GIORNI</th>
+                                            <th class="desktop ">ORE FARO</th>
+                                            <th class="desktop ">ORE KO</th>
+                                            <th class="desktop ">%KO</th>
+                                            <th class="desktop ">%OK</th>
+                                            <th class="desktop ">ORE KO SLA7</th>
+                                        </tr>
+                                    </thead>
+                                    </table>
+                                    </div>
+                        <!-- /.dataTable_wrapper -->
+                        </div>
+                         <!-- /.col-lg-12 -->
+                        </div><!-- /.row -->
+         </div>
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
@@ -151,7 +184,7 @@ response.setDateHeader ("Expires", 0);
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
     <script>
-        function pad(n, width, z) {
+          function pad(n, width, z) {
              z = z || '0';
              n = n + '';
             return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
@@ -167,19 +200,9 @@ response.setDateHeader ("Expires", 0);
         }
         else
             month=date.getMonth()-1;
-        
-        var codAbi='03011';
-        var meseAnno;
-        function setUpPage(){
-            meseAnno=year.toString()+"-"+(pad(month+1,2)).toString();
-            tableDay.ajax.url("atmStat?codAbi="+codAbi+"&period="+meseAnno).load();
-            
-        $('.panel-heading')
-                .html('<a  title="Esporta  in excel" id="excelExporter" href="'+
-                "atmExcel?type=day&codAbi="+codAbi+"&period="+meseAnno
-                +'"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>'+
-                'Riepilogo disponibilità per giorno: istituto  '+codAbi);}
-       
+                
+        var codAbi='03032';
+        var meseAnno=year.toString()+"-"+pad(month+1,2).toString();;
         var tableDay = $('#dataTablesByDay').DataTable({    
              bSort: false,
                  paging: false,
@@ -194,37 +217,60 @@ response.setDateHeader ("Expires", 0);
              { "data": "PERC_KO" },
              { "data": "PERC_OK" },
              { "data": "KO_SLA7" },
-             { "data": "PERC_SLA7" }
+             { "data": "PERC_SLA7" },
+             { "data": "KO_SLA8" },
+             { "data": "PERC_SLA8" }
              ]
                 });
-       $( "#date-interval" ).datepicker({
+        var tableATM = $('#dataTablesByAtm').DataTable({    
+             bSort: false,
+                 paging: true,
+    processing:true,
+    responsive: true,
+    "dom": '<"top"i>rt<"bottom"flp><"clear">',
+    columns:[
+             { "data": "ATM" },
+             { "data": "ANNO_MESE" },
+             { "data": "GIORNI_FARO" },
+             { "data": "ORE_TOTALI" },
+             { "data": "ORE_KO" },
+             { "data": "PERC_KO" },
+             { "data": "PERC_OK" },
+             { "data": "KO_SLA7" }
+             ]
+                });
+$( "#date-interval" ).datepicker({
 		 "aaSorting": [],   
 		changeMonth: true,
 	        changeYear: true,
 	        showButtonPanel: true,
 	        dateFormat: 'MM yy',
 	        defaultDate: new Date(year, month, 01),
+                onSelect: function(dateText, inst){
+                    $( "#date-interval" ).datepicker('setDate',new Date(year, month, 1));
+                },
                  onClose: function(dateText, inst) { 
                     
 	            month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
 	            year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
-	            
 	            $(this).datepicker('setDate', new Date(year, month, 1));
                     setUpPage();
 	            
 	        }
 	});
 	$( "#date-interval" ).datepicker('setDate',new Date(year, month, 1));
-        $('.input-search').on('keyup', function(e) {
-        if (e.keyCode === 13) {
-            codAbi=$('.input-search').val();
-            setUpPage();
-        }
-        });
+       
 	    
-            setUpPage();
-            
-       });
+            function setUpPage(){
+        $( "#date-interval" ).datepicker('setDate',new Date(year, month, 1));   
+            meseAnno=year.toString()+"-"+pad(month+1,2).toString();
+            $("#excelExporter").attr("href","atmExcel?type=day&codAbi="+codAbi+"&period="+meseAnno);
+            $("#excelExporter2").attr("href","atmExcel?type=atm&codAbi="+codAbi+"&period="+meseAnno);
+            tableATM.ajax.url("atmSportello?codAbi="+codAbi+"&period="+meseAnno).load();
+            tableDay.ajax.url("atmStat?codAbi="+codAbi+"&period="+meseAnno).load();
+       };
+       setUpPage();
+   });
 
     </script>    
 </body>

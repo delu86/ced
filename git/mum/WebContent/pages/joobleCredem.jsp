@@ -191,7 +191,7 @@ response.setDateHeader ("Expires", 0);
                                             <th class="desktop ">STEP NUMBER</th>
                                             <th class="desktop ">SMF30PGM</th>
                                             <th class="desktop ">USER</th>
-                                            <th class="desktop ">READTIME</th>
+                                            <th class="desktop ">BEGINTIME</th>
                                             <th class="desktop ">ENDTIME</th>
                                             <th class="desktop ">CPUTIME</th>
                                             <th class="desktop ">ZIPTIME</th>

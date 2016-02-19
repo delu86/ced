@@ -64,32 +64,22 @@ System.out.println("Before "+cal.getTime());
 int month = 0;
 int anno = 0;
 
-/*
-*/
-
 
 String[] cal_sel = new String[MESI];
-
-cal.add(Calendar.MONTH, 1);
-month = cal.get(Calendar.MONTH);
+month = cal.get(Calendar.MONTH) + 1 ;
 anno = cal.get(Calendar.YEAR);
 
 MeseN= ""+ month;
 AnnoN= "" + anno;
 if (month<10) 
 	MeseN="0" + month;
-if ((month==0) || anno==2016 )	
-  {
-	AnnoN="2015";
-	MeseN="12";
-  }	
 cal_sel[0] =  AnnoN   + "-" + MeseN;
 
 // System.out.print(cal_sel[0]);
 for (int j= 1 ; j<MESI; j++)
 {
 cal.add(Calendar.MONTH, -1);
-month = cal.get(Calendar.MONTH);
+month = cal.get(Calendar.MONTH) + 1;
 anno = cal.get(Calendar.YEAR);
 MeseN = ""+ month;
 if (month<10) 

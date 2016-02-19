@@ -18,11 +18,11 @@ public class JoobleStepExcelExporter extends HttpServlet {
 	private static final String IDAA_RESOURCE_PATH = "datalayer.idaa";  
 	private static final String SUFFIX_FILE_NAME = "export-step";
 	private static final String EXCEL_EXTENSION= ".xls";
-	private static final String SELECT="SELECT SMF30JBN , JESNUM , SMF30STM , SMF30STN , SMF30RUD , READTIME , ENDTIME ,"+
-										" ROUND(CPUTIME, 2) AS CPUTIME, ZIPTM , ELAPSED , DISKIO , DISKIOTM , CONDCODE ,SMF30CL8 as class, SMF30PGM "+
-									    " FROM CR00515.EPV30_4_STEP"+
-										" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN= ? AND JESNUM= ?"+
-										" ORDER BY READTIME ";
+	private static final String SELECT="SELECT SMF30JBN , JESNUM , SMF30STM , SMF30STN , SMF30RUD , BEGINTIME , ENDTIME ,"+
+			" ROUND(CPUTIME, 2) AS CPUTIME, ZIPTM , ELAPSED , DISKIO , DISKIOTM , CONDCODE ,SMF30CL8 as class, SMF30PGM  "+
+			" FROM CR00515.EPV30_23_intrvl"+
+			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN= ? AND JESNUM= ?"+
+			" ORDER BY SMF30STN, BEGINTIME ";
     /**
      * @see HttpServlet#HttpServlet()
      */

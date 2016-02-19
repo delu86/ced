@@ -96,7 +96,7 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 					
 					dataJSON=dataJSON.concat("{"+
 						"\"JOBname\":"+	"\""+report.getJobName()+"\","+
-						"\"JESNUM\":"+	"\""+report.getJesNumber()+"\","+
+						"\"JESNUM\":"+	"\"<a href='#'>"+report.getJesNumber()+"</a>\","+
 						"\"USER\":"+	"\""+report.getRacfUserIdString()+"\","+
 						"\"READTIME\":"+		"\""+report.getReadTime()+"\","+
 						"\"ENDTIME\":"+		"\""+report.getEndTime()+"\","+
@@ -116,7 +116,7 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 				else{
 					dataJSON=dataJSON.concat(",{"+
 							"\"JOBname\":"+	"\""+report.getJobName()+"\","+
-							"\"JESNUM\":"+	"\""+report.getJesNumber()+"\","+
+							"\"JESNUM\":"+	"\"<a href='#'>"+report.getJesNumber()+"</a>\","+
 							"\"USER\":"+	"\""+report.getRacfUserIdString()+"\","+
 							"\"READTIME\":"+		"\""+report.getReadTime()+"\","+
 							"\"ENDTIME\":"+		"\""+report.getEndTime()+"\","+

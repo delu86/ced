@@ -62,14 +62,14 @@ response.setDateHeader ("Expires", 0);
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h3 class="page-header">Estrazione dati di dettaglio: Started Task,Jobs,Transazioni</h3>
+                        <h3 class="page-header">Estrazione dati di dettaglio JES</h3>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
                  <div class="row">
                     <div class="col-lg-12">
-                        <form action="dailyDetail" method="POST">
+                        <form action="dailyDetail?flag=job" method="POST">
                         <div class="form-inline">
                         <input type="text" name="date" class="form-control"  placeholder="Seleziona giorno" size="12" id="datepicker">
                         <input type="radio" name="system" value="SIES" checked="checked" >SIES
@@ -83,11 +83,7 @@ response.setDateHeader ("Expires", 0);
                 </div>
                 <!-- /.row -->
              <div class="row">
-                    <div class="col-lg-12">
-                        <h5><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIES.xls">Workload 180 giorni SIES</a></h5>
-                        <h5><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIGE.xls">Workload 180 giorni SIGE</a></h5>
-                    </div>
-                     
+                    
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
@@ -115,7 +111,7 @@ response.setDateHeader ("Expires", 0);
     	
         $( "#datepicker" ).datepicker({
         	    dateFormat: 'yy-mm-dd'});
-    })
+    });
     </script>
 
 </body>

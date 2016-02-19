@@ -26,36 +26,36 @@ import javax.servlet.http.HttpServletResponse;
 public class TopConsumerCicsJSONServlet extends HttpServlet {
 
     private static final String SELECT="SELECT \n" +
-"    `cicshour`.`APPLVTNAME`,\n" +
-"    `cicshour`.`TRANSACTNAME`,\n" +
-"    `cicshour`.`EPVDATE` as DATE,\n" +
-"    `cicshour`.`EPVHOUR`,\n" +
-"    `cicshour`.`CTRANS`,\n" +
-"    round(`cicshour`.`TOTCPUTM`,2),\n" +
-"    round(`cicshour`.`TOTELAP`,2),\n" +
-"    round(`cicshour`.`TOTIRESP`,2),\n" +
-"    round(`cicshour`.`TOTL8CPU`,2),\n" +
-"    `cicshour`.`TOTDB2RQ` \n" +
-"    \n" +
-"FROM `mthru`.`cicshour` \n" +
-"WHERE SYSTEM = ?   AND EPVDATE  = ?\n" +
-"ORDER BY TRANSACTNAME DESC ;";
+    "    `cicshour`.`APPLVTNAME`,\n" +
+    "    `cicshour`.`TRANSACTNAME`,\n" +
+    "    `cicshour`.`EPVDATE` as DATE,\n" +
+    "    `cicshour`.`EPVHOUR`,\n" +
+    "    `cicshour`.`CTRANS`,\n" +
+    "    round(`cicshour`.`TOTCPUTM`,2),\n" +
+    "    round(`cicshour`.`TOTELAP`,2),\n" +
+    "    round(`cicshour`.`TOTIRESP`,2),\n" +
+    "    round(`cicshour`.`TOTL8CPU`,2),\n" +
+    "    `cicshour`.`TOTDB2RQ` \n" +
+    "    \n" +
+    "FROM `mthru`.`cicshour` \n" +
+    "WHERE SYSTEM = ?   AND EPVDATE  = ?\n" + 
+    "AND (`TRANSACTNAME` NOT LIKE 'C%' OR `TRANSACTNAME` IN ('CSMI','CPMI','CVMI'))" +
+    "ORDER BY TRANSACTNAME DESC ;";
     
         private static final String SELECT_BY_HOUR="SELECT \n" +
-"    `cicshour`.`APPLVTNAME`,\n" +
-"    `cicshour`.`TRANSACTNAME`,\n" +
-"    `cicshour`.`EPVDATE` as DATE,\n" +
-"    `cicshour`.`EPVHOUR`,\n" +
-"    `cicshour`.`CTRANS`,\n" +
-"    round(`cicshour`.`TOTCPUTM`,2),\n" +
-"    round(`cicshour`.`TOTELAP`,2),\n" +
-"    round(`cicshour`.`TOTIRESP`,2),\n" +
-"    round(`cicshour`.`TOTL8CPU`,2),\n" +
-"    `cicshour`.`TOTDB2RQ` \n" +
-"    \n" +
-"FROM `mthru`.`cicshour` \n" +
-"WHERE SYSTEM = ?   AND EPVDATE  = ? AND EPVHOUR= ?\n" +
-"ORDER BY TRANSACTNAME DESC ;";
+    "    `cicshour`.`APPLVTNAME`,\n" +
+    "    `cicshour`.`TRANSACTNAME`,\n" +
+    "    `cicshour`.`EPVDATE` as DATE,\n" +
+    "    `cicshour`.`EPVHOUR`,\n" +
+    "    `cicshour`.`CTRANS`,\n" +
+    "    round(`cicshour`.`TOTCPUTM`,2),\n" +
+    "    round(`cicshour`.`TOTELAP`,2),\n" +
+    "    round(`cicshour`.`TOTIRESP`,2),\n" +
+    "    round(`cicshour`.`TOTL8CPU`,2),\n" +
+    "    `cicshour`.`TOTDB2RQ` \n" +
+    "FROM `mthru`.`cicshour` \n" +
+    "WHERE SYSTEM = ?   AND EPVDATE  = ? AND EPVHOUR= ?\n" +
+    "ORDER BY TRANSACTNAME DESC ;";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

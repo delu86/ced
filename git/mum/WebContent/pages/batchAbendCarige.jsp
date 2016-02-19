@@ -129,7 +129,7 @@ response.setDateHeader ("Expires", 0);
                                     </thead>
                                     </table>
                                     </div>
-                                    </div>
+                                    </div>  
                         </div>               
                   </div>
                   <!-- /.col-lg-12 -->
@@ -154,8 +154,6 @@ response.setDateHeader ("Expires", 0);
         <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
-
-    
     <!-- DataTables JavaScript -->
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>

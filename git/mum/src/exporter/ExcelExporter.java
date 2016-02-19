@@ -102,8 +102,11 @@ public class ExcelExporter {
 		ResourceBundle rb =   ResourceBundle.getBundle(resourceDbPath);
 		Class.forName(rb.getString("driver"));
 		conn=DriverManager.getConnection(rb.getString("url"),rb.getString("user"),rb.getString("password"));
-		pStatement=conn.prepareStatement(queryString);
+		pStatement=conn.prepareStatement(queryString,java.sql.ResultSet.TYPE_FORWARD_ONLY, 
+           java.sql.ResultSet.CONCUR_READ_ONLY);
+                pStatement.setFetchSize(Integer.MIN_VALUE);
 	    int i=1;
+            int numbOfSheet=1;
 		for (String arg : args) {
 		        pStatement.setString(i, arg);
 		        i++;
@@ -126,8 +129,21 @@ public class ExcelExporter {
 			WritableCell writableCell=getWritableCell(rSet, types[count], row, count);
 		    sheet.addCell(writableCell);
 		    }
-		   row++;	
+		   row++;
+                     if(row==65536-1){
+	           row=1;
+			   numbOfSheet++;
+			   sheet=workbook.createSheet("SHEET"+numbOfSheet, numbOfSheet-1);
+				for(i=0;i<types.length;i++){
+					types[i]=rsMetaData.getColumnType(i+1);
+					WritableFont labelFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD, true); 
+					WritableCellFormat labelFormat = new WritableCellFormat (labelFont);
+					Label lab=new Label(i, 0,rsMetaData.getColumnLabel(i+1),labelFormat);
+					sheet.addCell(lab);
+					}
+		   }
 		}
+                
 		rSet.close();
 		pStatement.close();
 		conn.close();
