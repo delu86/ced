@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/mumSquare"/>
+<Context antiJARLocking="true" path="/mumSquare">
+
+  <Resource name="cedDB" auth="Container" type="javax.sql.DataSource"
+               maxActive="100" maxIdle="30" maxWait="10000"
+               username="cedacri" password="cedacri" driverClassName="com.mysql.jdbc.Driver"
+               url="jdbc:mysql://10.99.252.23:3306/atm_stat"/>
+  <Resource name="epvDB" auth="Container" type="javax.sql.DataSource"
+               maxActive="100" maxIdle="30" maxWait="10000"
+               username="epv" password="epv" driverClassName="com.mysql.jdbc.Driver"
+               url="jdbc:mysql://10.99.252.22:3306"/>
+  <Resource name="idaa" auth="Container" type="javax.sql.DataSource"
+               maxActive="100" maxIdle="30" maxWait="10000"
+               driverClassName="com.ibm.db2.jcc.DB2Driver"
+               url="jdbc:db2://sy3.ced.it:5036/ITCDNDBEM:user=CRIDA00;password=CRIDA000;specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES"/>
+  </Context>

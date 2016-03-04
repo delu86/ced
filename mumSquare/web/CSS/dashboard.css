@@ -1,0 +1,22 @@
+@CHARSET "ISO-8859-1";
+   
+    td{
+    font-size: 11px
+    }
+    
+   #loading{position:fixed;top:0px;right:0px;width:100%;height:100%;background-color:#666;background-image:url('../pages/img/loading.gif'); background-repeat:no-repeat;background-position:center;z-index:10000000;  opacity:0.9;
+filter: alpha(opacity=40); /* For IE8 and earlier */}
+   #loadingMessage{
+       
+       margin-left: auto;
+       margin-right: auto;
+       margin-top: 200px;
+       width: 50%;
+   }
+   #c
+{
+	position:fixed;top:0px;right:0px;width:100%;height:100%;background-color:#666;
+        background-repeat:no-repeat;background-position:center;z-index:10000000;  opacity:0.9;
+        filter: alpha(opacity=40);
+        
+}

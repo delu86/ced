@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import object.StringConstants;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -80,23 +81,26 @@ public class JsonQueryResolver extends HttpServlet {
                 rs=ps.executeQuery();
                //builder for creation of  array data
                JsonArrayBuilder builderDataArray= Json.createArrayBuilder();
-                ResultSetMetaData rsMetaData= rs.getMetaData();
+               JsonArrayBuilder builderDataLabelsArray= Json.createArrayBuilder();
+               ResultSetMetaData rsMetaData= rs.getMetaData();
                int columnCount=rsMetaData.getColumnCount(); 
+               for(int i=1;i<=rsMetaData.getColumnCount();i++){
+                   builderDataLabelsArray.add(rsMetaData.getColumnLabel(i));
+               }
                while(rs.next()){
                    JsonArrayBuilder builderData= Json.createArrayBuilder();
                    for(int i=1;i<=columnCount;i++){
                        builderData.add(rs.getString(i));
                    }
-                   
                    builderDataArray.add(builderData.build());
                }
                JsonObjectBuilder buildJSON=fromObjectToBuilder(json);
                //add data to final json
                buildJSON.add("data", builderDataArray.build());
+               buildJSON.add("dataLabel", builderDataLabelsArray.build());
                //write the json with on the response
                JsonWriter jsonWriter = Json.createWriter(out);
                jsonWriter.write(buildJSON.build());
-               
             } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(JsonQueryResolver.class.getName()).log(Level.SEVERE, null, ex);
             }
