@@ -23,7 +23,9 @@ public class PermissionMaps {
          Enumeration<String> systems=resourceBundle.getKeys();
          while(systems.hasMoreElements()){
              String next=systems.nextElement();
-             hashMap.put(next, resourceBundle.getString(next).split(StringConstants.PROPERTIES_SPLIT_CHARACTERS));
+             hashMap.put(next, resourceBundle.getString(next)
+                     .replaceAll("\\s+","") //remove possible blank spaces
+                     .split(StringConstants.PROPERTIES_SPLIT_CHARACTERS));
          }
          return hashMap;
     }
