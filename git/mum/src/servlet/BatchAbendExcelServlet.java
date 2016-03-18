@@ -19,10 +19,12 @@ public class BatchAbendExcelServlet extends HttpServlet {
 	private static final String SUFFIX_FILE_NAME = "batch-abend";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = 	"datalayer.db";
-	private static final String SELECT ="SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3)"
+        private static final String RESOURCE_DB2_PATH = 	"datalayer.db2";
+	private static final String SELECT ="SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,1 as TOT,truncate(CPUTIME,3)"
                 + "as CPUTIME,truncate(ZIPTM,3) as ZIPTIME,truncate(ELAPSED,3) as RESPONSETIME,SMF30RUD "
                 + "FROM "+TABLE_PARAMETER_STRING+"  where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc"; 
-    /**
+        private static final String SELECT_REALE ="SELECT SUBSTRING(tData,12) AS hour,SMF30JBN,CONDCODE,1 as tot,truncate(CPUTIME,3) as CPUTM,truncate(ZIPTM,3) as ZIPTM,truncate(ELAPSED,3) as ELAPSED,SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(tData)=? order by CPUTIME desc";
+        /**
      * @see HttpServlet#HttpServlet()
      */
     public BatchAbendExcelServlet() {
@@ -44,7 +46,12 @@ public class BatchAbendExcelServlet extends HttpServlet {
 	    response.setHeader("Content-Disposition", "attachment; filename="+SUFFIX_FILE_NAME+"_"+parameterSystem+"_"+parameterDate+EXCEL_EXTENSION);
 	    
 		try {
+                    if(parameterSystem.equals("ASDN")||parameterSystem.equals("ASSV"))
 			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT.replace(TABLE_PARAMETER_STRING
+                                , MapUtility.mapBatchTable().get(parameterSystem))
+				,parameterSystem,parameterDate);
+                    else
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB2_PATH,SELECT_REALE.replace(TABLE_PARAMETER_STRING
                                 , MapUtility.mapBatchTable().get(parameterSystem))
 				,parameterSystem,parameterDate);
 		} catch (Exception e) {

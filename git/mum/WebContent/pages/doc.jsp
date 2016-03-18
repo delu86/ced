@@ -53,7 +53,7 @@ response.setDateHeader ("Expires", 0);
 
 <body>
 	<%String fdir = ""; 
- 	 fdir= request.getParameter("dir"); 
+ 	 fdir= request.getParameter("dir")+"/"; 
 	if (fdir == null || fdir.length() == 0) 
 		fdir="";
 	%>

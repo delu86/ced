@@ -19,6 +19,7 @@ public class TransactionAbendExcelServlet extends HttpServlet {
 	private static final String SUFFIX_FILE_NAME = "transaction-abend";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = 	"datalayer.db";
+        private static final String RESOURCE_DB_PATH2 = "datalayer.db2";
 	private static final String SELECT ="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089,"
                 + "SUSERID, CMDUSER, OUSERID_364 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
                                               "and SYSTEM=? and date(START_010)=? order by CPUTIME desc";        private static final String SELECT_CARIGE="SELECT SMFMNPRN as CICS,SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3)as CPUTIME,DB2REQCT_180,truncate(ELAPSED,3)as response,USERID_089  FROM"
@@ -52,7 +53,7 @@ public class TransactionAbendExcelServlet extends HttpServlet {
                         ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT_CARIGE.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
 					parameterSystem,parameterDate);
                     else
-                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,SELECT.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH2,SELECT.replace(TABLE_PARAMETER_STRING, MapUtility.mapTransactionTable().get(parameterSystem)),
 					parameterSystem,parameterDate);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

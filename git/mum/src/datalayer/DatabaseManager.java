@@ -53,10 +53,7 @@ public class DatabaseManager {
         "				WHEN sum(t2.cputime)<=10 and sum(t2.cputime)>=0 THEN 'YELLOW' ELSE 'RED' END AS SEMAPHORE\n" +
 "			    FROM ((select distinct(SYSTEM) from smfacc.workloadUnion) as t3 JOIN smfacc.interval_workload as t1) left join smfacc.workloadUnion \n" +
 "			    as t2 on t1.time=substr(t2.DATA_INT10,12,5)  and date(t2.DATA_INT10)=? and t3.system=t2.system\n" +
-"                group by time,t3.system) as DERIVED where (semaphore='RED' or semaphore='YELLOW') group by system;\n" +
-"\n" +
-"\n" +
-"";
+"                group by time,t3.system) as DERIVED where (semaphore='RED' or semaphore='YELLOW') group by system;\n";
 	private final static String SELECT_WLC_BY_MONTH=" SELeCT EPVDATE,SERIAL,MAX(CAST(MSU4hra AS unsigned INTEGER)) FROM("
 			+ " SELECT EPVDATE,SERIAL,EPVHOUR,SUM(MSU4hra) as MSU4hra from("
 			+ " SELECT EPVDATE,EPVHOUR,SERIAL,SMF70GNM,SMF70GMU, ((CASE"
@@ -73,7 +70,6 @@ public class DatabaseManager {
 			+ " FROM mtrnd.lparcpu as t1 "
 			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
 			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
-        
 	private final static String SELECT_SYSTEM_CONSUMPTION_LAST30_DAY_CARIGE="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.SMF70LAC,2)"
 			+ " FROM mtrnd.lparcpu as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.EPVDATE)<=30 and t1.epvdate>'2015-09-11'"
@@ -139,10 +135,16 @@ public class DatabaseManager {
         private static final String SELECT_SYSTEM_HOURLY_REPORT = "SELECT h as ora,SUM(B0)/SUM(B1) as CPI,SUM(B1)/1000000/3600 as MIPS,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SYSTEM=? and SM113CPT=? group by SM113CPT,h";
 	private static final String SELECT_CPU_NUMBER_YESTERDAY="SELECT SYSTEM,aaaammgg,h,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SM113CPT='Standard CP' group by SYSTEM,h order by SYSTEM,h";
 	private static final String SELECT_BATCH_ABEND_WINDOWS_TIME = "SELECT date,count(*),sum(cputim) from(  "
+                + "SELECT date(tData) as date,SMF30JBN,JESNUM,truncate(sum(CPUTIME), 3) as cputim  FROM "+TABLE_PARAMETER_STRING+" where "
+                +" SYSTEM=? and datediff(current_date, date(tData) )<=? and datediff(current_date, date(tData) )>? and CONDCODE>=8"
+                + "  group by date(tData),SMF30JBN,JESNUM) as derived  group by date order by date;";
+	private static final String SELECT_BATCH_ABEND = "SELECT SUBSTRING(tData,12) AS hour,SMF30JBN,CONDCODE,1,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(tData)=? order by CPUTIME desc";
+        private static final String SELECT_BATCH_ABEND_WINDOWS_TIME_CARIGE = "SELECT date,count(*),sum(cputim) from(  "
                 + "SELECT date(DATET10) as date,SMF30JBN,JESNUM,truncate(sum(CPUTIME), 3) as cputim  FROM "+TABLE_PARAMETER_STRING+" where "
                 +" SYSTEM=? and datediff(current_date, date(DATET10) )<=? and datediff(current_date, date(DATET10) )>? and CONDCODE>=8"
                 + "  group by date(DATET10),SMF30JBN,JESNUM) as derived  group by date order by date;";
-	private static final String SELECT_BATCH_ABEND = "SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,TOT,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc";
+	private static final String SELECT_BATCH_ABEND_CARIGE = "SELECT SUBSTRING(DATET10,12) AS hour,SMF30JBN,CONDCODE,1,truncate(CPUTIME,3),truncate(ZIPTM,3),truncate(ELAPSED,3),SMF30RUD FROM "+TABLE_PARAMETER_STRING+" where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc";
+        
         private static final String SELECT_TRANSACTION_ABEND="SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089,"
                 + "SUSERID, CMDUSER, OUSERID_364 FROM "+TABLE_PARAMETER_STRING+" where ABCODEC_114<>\"\""+ 
                                               "and SYSTEM=? and date(START_010)=? order by CPUTIME desc ";
@@ -562,8 +564,13 @@ public class DatabaseManager {
 		
 	}
 	public Collection<TransactionReport> getTransactionInAbendInWindowTime(String system, int minDate,int maxDate) throws ClassNotFoundException, SQLException{
-		connection(SELECT_TRANSACTION_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system)));
-		st.setString(1, system);
+		if(system.equals("SIES")||system.equals("SIGE")){
+                     connection(EPV_DB_PROPERTIES,SELECT_TRANSACTION_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system)));
+                }
+                else{
+                    connection(SELECT_TRANSACTION_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))); 
+                }
+                st.setString(1, system);
 		st.setInt(2, minDate);
 		st.setInt(3, maxDate);
 		rs=st.executeQuery();
@@ -589,9 +596,9 @@ public class DatabaseManager {
             
         }else{	
             if(limit!=0)
-			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
+			connection(EPV_DB_PROPERTIES,SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 		else
-			connection(SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap    .get(system)));
+			connection(EPV_DB_PROPERTIES,SELECT_TRANSACTION_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemTransactionTableHashMap    .get(system)));
         }	
                 st.setString(1, system);
 		st.setString(2, date);
@@ -728,13 +735,15 @@ public class DatabaseManager {
             {        
              query=SELECT_WKL_BY_DAY_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
              connection(query);
-             if(system.equals("SIES")||system.equals("SIGE"))   
+             
+            }else
+                query=SELECT_WKL_BY_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
+            {if(system.equals("SIES")||system.equals("SIGE"))   
                     connection(EPV_DB_PROPERTIES,query);
                 else
                     connection(query);
-            }else
-            { query=SELECT_WKL_BY_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
-              connection(query);
+                
+              
             }  
                 st.setString(1, system);
 		st.setString(2, day);
@@ -909,7 +918,10 @@ public class DatabaseManager {
 	}
 	public Collection<BatchReport> getBatchInAbendInWindowTime(String system,
 			int minDate, int maxDate) throws ClassNotFoundException, SQLException {
-		connection(SELECT_BATCH_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
+	if(system.equals("SIES")||system.equals("SIGE")){
+             connection(EPV_DB_PROPERTIES,SELECT_BATCH_ABEND_WINDOWS_TIME.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
+        }else	
+            connection(SELECT_BATCH_ABEND_WINDOWS_TIME_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
 		st.setString(1, system);
 		st.setInt(2, minDate);
 		st.setInt(3, maxDate);
@@ -927,11 +939,19 @@ public class DatabaseManager {
 	}
 	public Collection<BatchReport> getBatchInAbend(String system, String date,
 			int limit)throws ClassNotFoundException, SQLException{
-				if(limit!=0)
-					connection(SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
+		if(system.equals("SIES")||system.equals("SIGE")){		
+                                   if(limit!=0)
+					connection(EPV_DB_PROPERTIES,SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
 				else
-					connection(SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
-				st.setString(1, system);
+					connection(EPV_DB_PROPERTIES,SELECT_BATCH_ABEND.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
+                    
+                }else{
+                                   if(limit!=0)
+					connection(SELECT_BATCH_ABEND_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system))+" LIMIT "+String.valueOf(limit));
+				else
+					connection(SELECT_BATCH_ABEND_CARIGE.replace(TABLE_PARAMETER_STRING, mapSystemBatchTableHashMap.get(system)));
+                }
+                st.setString(1, system);
 				st.setString(2, date);
 				rs=st.executeQuery();
 				Collection<BatchReport>collection=new ArrayList<BatchReport>();

@@ -9,9 +9,9 @@ public class User {
 	private Timestamp lastAccess;
 	
 	public User(String user, String profile,Timestamp lastAccess) {
-		this.setUser(user);
-		this.setProfile(profile);
-		this.setLastAccess(lastAccess);
+		this.user=user;
+		this.profile=profile;
+		this.lastAccess=lastAccess;
 	}
 
 	public String getUser() {

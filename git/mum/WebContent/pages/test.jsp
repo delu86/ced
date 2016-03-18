@@ -86,18 +86,21 @@ response.setDateHeader ("Expires", 0);
                     <!-- /.col-lg-2 -->
                 </div>
                 <!-- /.row -->
-                <div class="row">
+               
+        <!-- /#row -->
+            <div class="row">
                     <div class="col-lg-12">
                     <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
                     </div>
-            </div>
-            <!-- /.container-fluid -->
+         </div>
+         <!-- /#row -->
+    </div>
+    <!-- /.container-fluid -->
+    
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
-
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 

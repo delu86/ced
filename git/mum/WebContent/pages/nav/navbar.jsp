@@ -41,18 +41,22 @@ String profile=request.getParameter("profile");
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                       <!--
+                          <%if(profile.equals("CED")){ %>
+                        
                         <li class="sidebar-search">
                             <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
+                                <form action="command">
+                                <input type="text" name="command" class="form-control" placeholder="Insert command...">
+                                </form>
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
+                                    <i class="fa fa-code"></i>
                                 </button>
                             </span>
                             </div>
-                            <!-- /input-group 
-                        </li> -->
+                            <!-- /input-group --> 
+                        </li> 
+                            <%} %>
                         <li>
                             <a href="index.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard </a>
                         </li>
@@ -189,17 +193,16 @@ String profile=request.getParameter("profile");
                               <li>
                                           <li>
  
-                             <a href="dailyDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>JES</a>
+                             <a href="dailyDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>JES (giorno/10min)</a>
                               </li>
                               <li>
  
-                             <a href="dailyDetailRealeCics.jsp"><i class="fa fa-file-excel-o fa-fw"></i>CICS</a>
+                             <a href="dailyDetailRealeCics.jsp"><i class="fa fa-file-excel-o fa-fw"></i>CICS (giorno/10min)</a>
                               </li>
                               <li>
-                              <a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIES.xls"><i class="fa fa-file-excel-o fa-fw"></i>Workload 180 giorni SIES</a>
+                              <a href="doc.jsp?dir=reale/data"><i class="fa fa-file-excel-o fa-fw"></i>SMF data by hour</a>
                               </li>
-                              <li><a href="/work/export/WklReale/data/WORKLOAD_180DAY_SIGE.xls"><i class="fa fa-file-excel-o fa-fw"></i>Workload 180 giorni SIGE</a>
-                              </li>
+                              
                                   </ul>
                                  
                      
@@ -251,7 +254,7 @@ String profile=request.getParameter("profile");
                             <a href="#"><i class="fa fa-institution fa-fw"></i>Carige Assicurazioni<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li> 
-                              <a href="carigeDocs.jsp"><i class="fa fa-book fa-fw"></i>Documents</a>
+                              <a href="doc.jsp?dir=carige"><i class="fa fa-book fa-fw"></i>Documents</a>
                               </li>
                                 <li>
                                     <a target="_blank" href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
@@ -290,6 +293,16 @@ String profile=request.getParameter("profile");
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="detailAccenture.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Estrazione dettaglio</a>
+                                </li>
+                            </ul>
+                        </li>
+                            <%} %>
+                     <%if(profile.equals("CED")||profile.equals("BDP")){ %>
+                        <li>
+                            <a href="#"><i class="fa fa-institution fa-fw"></i>Banca del Piemonte<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="doc.jsp?dir=bdp"><i class="fa fa-file-excel-o fa-fw"></i>Documents</a>
                                 </li>
                             </ul>
                         </li>

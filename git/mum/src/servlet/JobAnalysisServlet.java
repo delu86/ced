@@ -62,7 +62,6 @@ public class JobAnalysisServlet extends HttpServlet {
                PrintWriter out = response.getWriter();
 		String queryString=request.getParameter("query");
 		String system=request.getParameter("system");
-		
 		response.setContentType("application/json");
 		String select=SELECT;
                 String queryType=request.getParameter("queryType");
