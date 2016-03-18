@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT SUBSTRING(START_010,12) AS hour,TRAN_001,ABCODEC_114,TOT,truncate(CPUTIME,3),DB2REQCT_180,truncate(ELAPSED,3),USERID_089,SUSERID, CMDUSER, OUSERID_364 FROM realebis_ctrl.epv110_1_trxacct_t10_rm where ABCODEC_114<>\"\"and SYSTEM=? and date(START_010)=? order by CPUTIME desc ",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admittedUsers":["CED","REALE"]
+}

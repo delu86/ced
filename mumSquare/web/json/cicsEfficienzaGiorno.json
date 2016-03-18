@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd.cicsdayh  WHERE SYSTEM=? and EPVDATE=? and APPLVTNAME=? GROUP BY EPVHOUR HAVING SUM(CTRANS)>0 ORDER BY EPVHOUR ASC;",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date","applid"]
+  },
+  "admittedUsers":["CED","REALE","CARIGE"]
+}

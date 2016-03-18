@@ -18,6 +18,7 @@ public class StringConstants {
     public final static String DATABASE_JSON_KEY_NAME="database";
     public final static String QUERY_JSON_KEY_NAME="query";
     public final static String URL_DB_CONNECTION_JSON_KEY_NAME="url_connection";
+    public final static String URL_DB_RESOURCE="resource_name";
     public final static String PARAMETER_JSON_KEY_NAME="parameters";
     public final static String DRIVER_JSON_KEY_NAME="driver";
     public final static String CHART_VIEW_PAGE="chart.jsp";

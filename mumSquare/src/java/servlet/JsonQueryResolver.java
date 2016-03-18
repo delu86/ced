@@ -9,8 +9,6 @@ import object.StringConstants;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -19,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -27,6 +26,9 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -50,9 +52,8 @@ public class JsonQueryResolver extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection connection=null;
-        PreparedStatement ps=null;
         ResultSet rs=null;
+        PreparedStatement ps=null;
         response.setContentType("application/json;");
         try (PrintWriter out = response.getWriter()) {
             ServletContext context=getServletContext();
@@ -67,10 +68,16 @@ public class JsonQueryResolver extends HttpServlet {
             JsonObject dbObject = json.getJsonObject(StringConstants.DATABASE_JSON_KEY_NAME);
             JsonArray parameters=dbObject.getJsonArray(StringConstants.PARAMETER_JSON_KEY_NAME);
             try {
-                Class.forName(dbObject.get(StringConstants.DRIVER_JSON_KEY_NAME).toString().replace("\"", ""));
+/*                Class.forName(dbObject.get(StringConstants.DRIVER_JSON_KEY_NAME).toString().replace("\"", ""));
                 connection= DriverManager.getConnection(dbObject.get(StringConstants.URL_DB_CONNECTION_JSON_KEY_NAME)
                         .toString().replace("\"", ""));
-                ps=connection.prepareStatement(dbObject.get(StringConstants.QUERY_JSON_KEY_NAME).toString().replace("\"", ""));
+                ps=connection.prepareStatement(dbObject.get(StringConstants.QUERY_JSON_KEY_NAME).toString().replace("\"", "")); */
+                Context initContext = new InitialContext();
+                Context envContext  = (Context)initContext.lookup("java:/comp/env/");  
+                DataSource datasource=(DataSource) envContext.lookup(
+                        dbObject.get(StringConstants.URL_DB_RESOURCE).toString().replace("\"", ""));
+                ps=
+                        datasource.getConnection().prepareStatement(dbObject.get(StringConstants.QUERY_JSON_KEY_NAME).toString().replace("\"", ""));
                 int indexParam=1;
                 if(parameters!=null){
                 Iterator iterator=parameters.iterator();
@@ -101,18 +108,10 @@ public class JsonQueryResolver extends HttpServlet {
                //write the json with on the response
                JsonWriter jsonWriter = Json.createWriter(out);
                jsonWriter.write(buildJSON.build());
-            } catch (SQLException | ClassNotFoundException ex) {
+            } catch (SQLException | NamingException ex) {
                 Logger.getLogger(JsonQueryResolver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            finally{
-                try {
-                    rs.close();
-                    ps.close();
-                    connection.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(JsonQueryResolver.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            
         }
     }
     
