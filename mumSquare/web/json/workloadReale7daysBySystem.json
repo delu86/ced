@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT substring(DATA_INT10,1,13) ,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from realebis_ctrl.epv030_23_intrvl_rm  where SYSTEM=? and datediff(?,date(DATA_INT10))BETWEEN 0 and (?-1)   group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date","limit"]
+  },
+  "admittedUsers":["CED","REALE"]
+}

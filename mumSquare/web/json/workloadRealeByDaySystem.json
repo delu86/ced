@@ -1,0 +1,10 @@
+{
+"database":{
+  "query":"SELECT DATA_INT10,WKLOADNAME, sum(CPUTIME)*1007.6/600 from realebis_ctrl.epv030_23_intrvl_rm where SYSTEM=? and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admittedUsers":["CED","REALE"]
+}
+
+             

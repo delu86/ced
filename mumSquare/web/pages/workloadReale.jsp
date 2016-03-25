@@ -12,6 +12,11 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <button value="SIES" class="systemSelector" autofocus="true">SIES</button>
+        <button value="SIGE" class="systemSelector">SIGE</button>
+        <button value="ALL"  class="systemSelector">ALL</button>
+        <button value="-1"  class="dateshift" id="dateshiftBackward">Indietro</button>
+        <button value="1"  class="dateshift" id="dateshiftForward">Avanti</button>
         <div id="container" style="min-width: 510px; height: 500px; margin: 0 auto"></div>
     </body>
     <!-- jQuery -->
@@ -21,33 +26,80 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
         <script src="../js/highcharts.js"></script>
-    <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
     <!-- DataTables JavaScript -->
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
+    <script src="../js/chartsJS.js"></script>
     <script>
          var chart;
-         var optionsChart={
-             
-         };
-         $(function(){
-            $.getJSON('../queryResolver?id=workloadReale&system=SIES&date=2016-03-15&limit=7',function(json){
-                var series=[];
-                var wkl;
-                var index=-1;
-                for(var i=0;i<json.data.length;i++){
-                    if(json.data[i][1]===wkl){
-                        series[index].data.push([json.data[i][0],json.data[i][2]]);
-                    }else{
-                        wkl=json.data[i][1];
-                        index++;
-                        var obj={name:wkl , data:[[json.data[i][0],json.data[i][2]]]};
-                        series.push(obj);
-                    }
-                }
-                console.log(series[0]);
-            }); 
+         var limit=7;
+         var offset=0;
+         var date=new Date();
+         //console.log(date);
+         var chart;
+         var system=$( ".systemSelector[autofocus='true']" ).val();
+         var optionsChart=getOptionsChartWorkload();
+         var optionsChartDrillDown=getOptionsChartWorkload();
+             optionsChartDrillDown.xAxis.minRange=600*1000;
+             optionsChartDrillDown.xAxis.minTickInterval=600*1000;
+         $('#dateshiftForward').prop('disabled',true);    
+         setUpDrillDown();
+         setUpGoBack();
+         $(".systemSelector").click(function(){
+             system=$(this).val();
+             draw();
          });
+         $(".dateshift").click(function(){
+             shiftDate(parseInt($(this).val()));
+         });
+
+$(function(){
+       draw();     
+        });
+        
+     function draw(){
+         system==='ALL' ?
+            drawWorkload(optionsChart,
+                                '../queryResolver?id=workloadReale7daysAll&date='+date.yyyymmdd()+'&limit=7') 
+                                :      
+            drawWorkload(optionsChart,
+                            '../queryResolver?id=workloadReale7daysBySystem&system='+system+'&date='+date.yyyymmdd()+'&limit=7'); 
+        
+        setUpDrillDown();
+     }
+     function shiftDate(amount){
+         offset+=amount;
+         offset===0 ? $('#dateshiftForward').prop('disabled',true) : $('#dateshiftForward').prop('disabled',false);
+         date.setDate(date.getDate()+amount);
+         draw();
+     }
+     function setUpDrillDown(){
+                  optionsChart.plotOptions.series={
+                point: {
+                    events: {
+                    	click: function (e) {
+                            if(system==='ALL'){
+            drawWorkload(optionsChartDrillDown,
+                                '../queryResolver?id=workloadRealeByDay&date='
+                                +Highcharts.dateFormat("%Y-%m-%d",e.point.category)
+                          );                 }
+              else{
+                  drawWorkload(optionsChartDrillDown,
+                                '../queryResolver?id=workloadRealeByDaySystem&system='+system+'&date='
+                                +Highcharts.dateFormat("%Y-%m-%d",e.point.category)
+                          );
+              }
+                                            }}}};
+     }
+     function setUpGoBack(){
+         optionsChartDrillDown.exporting={buttons: {
+     	              backButton: {
+     	                  text: '< <b>Back',
+     	                  onclick: function () {
+     	                  	chart = new Highcharts.Chart(optionsChart);
+     	             	   	 return true;
+     	                  }}}};
+     }
     </script>
