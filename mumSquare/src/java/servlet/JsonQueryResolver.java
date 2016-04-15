@@ -52,8 +52,8 @@ public class JsonQueryResolver extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ResultSet rs=null;
-        PreparedStatement ps=null;
+        ResultSet rs;
+        PreparedStatement ps;
         response.setContentType("application/json;");
         try (PrintWriter out = response.getWriter()) {
             ServletContext context=getServletContext();
@@ -67,6 +67,7 @@ public class JsonQueryResolver extends HttpServlet {
             JsonObject json=(JsonObject) reader.read();
             JsonObject dbObject = json.getJsonObject(StringConstants.DATABASE_JSON_KEY_NAME);
             JsonArray parameters=dbObject.getJsonArray(StringConstants.PARAMETER_JSON_KEY_NAME);
+            JsonArray admittedUsers= json.getJsonArray(StringConstants.ADMITTED_USERS);
             try {
 /*                Class.forName(dbObject.get(StringConstants.DRIVER_JSON_KEY_NAME).toString().replace("\"", ""));
                 connection= DriverManager.getConnection(dbObject.get(StringConstants.URL_DB_CONNECTION_JSON_KEY_NAME)

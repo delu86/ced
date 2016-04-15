@@ -1,0 +1,11 @@
+{
+  "database":{
+  "query":"SELECT START_005 as start, STOP_006 as STOP, TRAN_001 as TRAN, CPUTIME, ELAPSED , USERID_089 as user,DB2REQCT_180 as db2req,abcodec_114 as abend_code, netuowsx_098 as netid,netuowpx_097 as netsname from CR00515.EPQ110_1_TRXACCT where SYSTEM='SIES' and START_005_DATE=?' and TRAN_001=? and CPUTIME BETWEEN ? and ?;",
+  "resource_name": "idaaDB" ,
+  "parameters":["date","traname","lDown","lUp"]
+  },
+  "admitted_users":["CED","REALE"]
+}
+
+
+

@@ -9,7 +9,7 @@
                maxActive="-1" maxIdle="-1" maxWait="-1"
                username="epv" password="" driverClassName="com.mysql.jdbc.Driver"
                url="jdbc:mysql://10.99.252.22:3306"/>
-  <Resource name="idaa" auth="Container" type="javax.sql.DataSource"
+  <Resource name="idaaDB" auth="Container" type="javax.sql.DataSource"
                maxActive="-1" maxIdle="-1" maxWait="-1"
                driverClassName="com.ibm.db2.jcc.DB2Driver"
                url="jdbc:db2://sy3.ced.it:5036/ITCDNDBEM:user=CRIDA00;password=CRIDA000;specialRegisters=CURRENT QUERY ACCELERATION=ELIGIBLE,CURRENT GET_ACCEL_ARCHIVE=YES;"/>

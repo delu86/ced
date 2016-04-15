@@ -11,6 +11,10 @@ package object;
  */
 public class StringConstants {
     
+    //resource db
+    public final static String CED_DB="cedDB";
+    public final static String EPV_DB="epvDB";
+    public final static String IDAA_DB="idaaDB";
     
     public final static String ID_PARAMETER="id";
     public final static String JSON_FOLDER="/json/";
@@ -19,6 +23,7 @@ public class StringConstants {
     public final static String QUERY_JSON_KEY_NAME="query";
     public final static String URL_DB_CONNECTION_JSON_KEY_NAME="url_connection";
     public final static String URL_DB_RESOURCE="resource_name";
+    public final static String ADMITTED_USERS="admitted_users";
     public final static String PARAMETER_JSON_KEY_NAME="parameters";
     public final static String DRIVER_JSON_KEY_NAME="driver";
     public final static String CHART_VIEW_PAGE="chart.jsp";
@@ -39,4 +44,18 @@ public class StringConstants {
     
     public final static String SYSTEM_PERMISSION_PROPERTIES="properties.systemsPermission";
     public final static String PROPERTIES_SPLIT_CHARACTERS=",";
+    
+    //Login error messages
+    public static final String MESSAGE_ATTRIBUTE = "message";
+    public static final Object MESSAGE_ERROR = "Errore: username o password errati";
+    public static final Object MESSAGE_DOMAIN_ERROR = "Errore: dominio mail non autorizzato";
+    public static final Object MESSAGE_ERROR_SERVER = "Errore: server momentaneamente irraggiungibile; riprovare più tardi";
+
+    //Activation account  messages
+    public static final String MESSAGE_OK = "message_ok";
+    public static final Object MESSAGE_OK_TEXT =  "Attivazione andata a buon fine effettuare il login per accedere";
+    public static final Object MESSAGE_ERROR_ACTIVATION = "Errore:attivazione non eseguita";
+    //Pages
+    public static final String INDEX = "login.jsp";
+
 }

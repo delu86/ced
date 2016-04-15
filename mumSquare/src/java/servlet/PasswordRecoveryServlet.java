@@ -5,18 +5,22 @@
  */
 package servlet;
 
-import object.StringConstants;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import registration.RegistrationManager;
 
 /**
  *
  * @author CRE0260
  */
-public class ChartServlet extends HttpServlet {
+public class PasswordRecoveryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,13 +30,31 @@ public class ChartServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * 
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idJson=request.getParameter(StringConstants.ID_PARAMETER);
-        request.setAttribute("id", idJson);
-        request.getRequestDispatcher(StringConstants.CHART_VIEW_PAGE).forward(request, response);
+        		String email=request.getParameter("email");
+		String activationCode=request.getParameter("activationCode");
+		try {
+			if(RegistrationManager.verifyPasswordRecovery(email,activationCode)){
+				request.setAttribute("email",email);
+				request.getRequestDispatcher("recoveryForm.jsp").forward(request, response);
+			}
+			else{
+				request.setAttribute("message", "Errore nella richiesta");
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+			}
+		} catch (ClassNotFoundException | SQLException | ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			request.setAttribute("message", e.getMessage());
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} catch (NamingException ex) { 
+            Logger.getLogger(PasswordRecoveryServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

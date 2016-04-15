@@ -44,6 +44,10 @@ public class User {
     public void setLastAccess(String lastAccess) {
         this.lastAccess = lastAccess;
     }
+
+    public void updateLastAccess(String user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

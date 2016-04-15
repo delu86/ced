@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT concat(date,' ',HH_MM) as date  , round(slot_cp1tm,2) as slot_cp1 , round(slot_cp2tm,2) as slot_cp2 , round(slot_cp3tm,2) as slot_cp3, round(slot_cp4tm,2) as slot_cp4, round(slot_cp5tm,2) as slot_cp5, round(slot_cp6tm,2) as slot_cp6, round(slot_cp7tm,2) as slot_cp7, round(tot/(cputime*1000),2) as efficienza FROM realebis_ctrl.analisi_transazioni where tran_001=? and SYSTEM=? and date=? order by 1;",
+  "resource_name": "epvDB" ,
+  "parameters":["tranName","system","date"]
+  },
+  "admitted_users":["CED","REALE"],
+  "yAxis":["secondi cpu","#trans/cputime"]
+}

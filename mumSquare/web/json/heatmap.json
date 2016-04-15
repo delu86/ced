@@ -1,9 +1,0 @@
-{
-  "database":{
-  "query":
-  "SELECT hour(start_005_time) as hour,substr(start_005, 9 , 2) as date,round(count(*)/sum(CPUTIME) , 2) as efficienza from CR00515.EPQ110_1_TRXACCT where substr(start_005_HHMM, 12 , 2) between '09' and '18'  and substr(start_005 , 1 , 7)='2016-01' and system=? and DAYOFWEEK(start_005_date) between 2 and 6 group by  hour(start_005_time),substr(start_005, 9 , 2) order by 2 , 1",
-  "resource_name": "idaa" ,
-  "parameters":["system"]
-  },
-  "admittedUsers":["CED","REALE"]
-}

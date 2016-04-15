@@ -4,5 +4,5 @@
   "resource_name": "epvDB" ,
   "parameters":["system","date","applid"]
   },
-  "admittedUsers":["CED","REALE","CARIGE"]
+  "admitted_users":["CED","REALE","CARIGE"]
 }

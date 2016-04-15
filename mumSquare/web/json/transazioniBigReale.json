@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT START_005_DATE as date , TRAN_001 as tran,count(*) as tot ,avg(cputime) as cputm_medio, sum(CASE WHEN CPUTIME<1 then 1 else 0 end) as slot1, sum(CASE WHEN CPUTIME>=1 and CPUTIME<5  then 1 else 0 end) as slot5, sum(CASE WHEN CPUTIME>=5 and CPUTIME<10  then 1 else 0 end) as slot10, sum(CASE WHEN CPUTIME>=10 and CPUTIME<50  then 1 else 0 end) as slot50, sum(CASE WHEN CPUTIME>=50 and CPUTIME<100  then 1 else 0 end) as slot100, sum(CASE WHEN CPUTIME>=100   then 1 else 0 end) as slot100plus from CR00515.EPQ110_1_TRXACCT where SYSTEM='SIES' and START_005_DATE=? group by start_005_date , tran_001 HAVING count(*)- sum(CASE WHEN CPUTIME<1 then 1 else 0 end)>0 order by 1 , 10 desc, 9 desc, 8 desc, 7 desc, 6 desc; ",
+  "resource_name": "idaaDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED","REALE"]
+}
