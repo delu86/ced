@@ -77,16 +77,16 @@ $.ui.autocomplete.prototype._renderItem = function (ul, item) {
     	$(".goUp").hide(0);
     	$(".dataTable_wrapper_step").hide(500);
     	$(".dataTable_wrapper").show(1000);
-    	$("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+job.replace("#","%23"));
+    	$("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+job.replace("#","%23").toUpperCase());
     });
     $('.input-search').on('keyup', function(e) {
         if (e.keyCode === 13) {
         	 $("#excelExporter").show(1000);
         	 job=$('.input-search').val();
-        	 $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+$('.input-search').val().replace("#","%23").replace(" ","%20"));
+        	 $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+$('.input-search').val().replace("#","%23").replace(" ","%20").toUpperCase());
         	 $(".dataTable_wrapper_step").hide(500); 
         	 $(".dataTable_wrapper").show(1000);
-        	tableBatch.ajax.url("getJobByName?system="+system+"&jobname="+$('.input-search').val().replace("#","%23")).load();
+        	tableBatch.ajax.url("getJobByName?system="+system+"&jobname="+$('.input-search').val().replace("#","%23").toUpperCase()).load();
         	tableBatch.columns.adjust().responsive.recalc();
         }
         });

@@ -202,8 +202,10 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="doc.jsp?dir=reale/data"><i class="fa fa-file-excel-o fa-fw"></i>SMF data by hour</a>
                               </li>
-                              
-                                  </ul>
+<li>
+                              <a href="doc.jsp?dir=reale/big"><i class="fa fa-file-excel-o fa-fw"></i>Transazioni BIG</a>
+                              </li>
+                                                                </ul>
                                  
                      
                               <li> 

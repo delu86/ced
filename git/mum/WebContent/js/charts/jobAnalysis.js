@@ -1,4 +1,4 @@
-/* 
+/*  
  * 
  */
 Highcharts.setOptions({
@@ -22,9 +22,14 @@ $.ui.autocomplete.prototype._renderItem = function (ul, item) {
     	system= $("input[type='radio'][name='optradio']:checked").val();
     });
 function drawChart(){
+     var d = new Date();
+     d.setDate(d.getDate() - 35);
+     d.setUTCHours(0,0,0,0);
       $("#loading").show(0);
-     $.getJSON('jobAnalysis?queryType='+queryType+'&system='+system+'&query='+job, function (data) {
-     $("#loading").hide(0);
+      console.log(d);
+     
+    $.getJSON('jobAnalysis?queryType='+queryType+'&system='+system+'&query='+job.replace('#','%23').toUpperCase(), function (data) {
+       $("#loading").hide(0);
         // create the chart
        chart= $('#containerChart').highcharts('StockChart', {
             chart: {
@@ -73,6 +78,8 @@ function drawChart(){
                 type: 'column',
                 name: 'Cpu sec.',
                 data: data.data,
+                pointInterval:600*1000,
+                pointStart: d.getTime() ,
                 dataGrouping: {
                 groupPixelWidth:50,    
                     

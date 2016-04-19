@@ -37,7 +37,8 @@ public class ATMStatBySportelloServlet extends HttpServlet {
      */
        private static final String COD_ABI_PARAMETER="codAbi";
     private static final String PERIOD_PARAETER="period";//yyyy-MM
-    public static final String SELECT="SELECT atm,anno_mese,num_giorni,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2),(100-round(perc_ko_faro,2)) as perc_ok_faro,ko_sla7 \n" +
+    public static final String SELECT="SELECT atm,anno_mese,num_giorni,ore_totali_faro,ore_ko_faro,replace(round(perc_ko_faro,2),'.',','),"
+            + "replace((100-round(perc_ko_faro,2)),'.',',') as perc_ok_faro,ko_sla7 \n" +
                                       "from atm_stat.riepilogo_per_bancomat_credem where substr(atm,1,5)=? and anno_mese=?;";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

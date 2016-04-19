@@ -36,8 +36,12 @@ public class ATMStatServlet extends HttpServlet {
             "when dayofweek(date)=5 then concat('Giovedi, ',date)\n" +
             "when dayofweek(date)=6 then concat('Venerdi, ',date)\n" +
             "when dayofweek(date)=7 then concat('Sabato, ',date) end\n" +
-            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2) as perc_ko,round(100-perc_ko_faro,2) as perc_ok_faro"
-            + " ,ko_sla7,round(ko_sla7*100/ore_totali_faro,2) as perc_sla7,ko_sla8,round(ko_sla8*100/ore_totali_faro,2) as perc_sla8 from atm_stat.riepilogo_per_giorno_credem\n" +
+            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,replace(round(perc_ko_faro,2),'.',',') as perc_ko,"
+            + "replace(round(100-perc_ko_faro,2),'.',',') as perc_ok_faro"
+            + " ,replace(ko_sla7,'.',','),replace(round(ko_sla7*100/ore_totali_faro,2),'.',',') as perc_sla7,"
+            + "replace(ko_sla8,'.',','),"
+            + "replace(round(ko_sla8*100/ore_totali_faro,2),'.',',') as perc_sla8 "
+            + "from atm_stat.riepilogo_per_giorno_credem\n" +
             "where substr(date,1,7)=? and codAbi=? order by date;";
     public static final String SELECT="select CASE when dayofweek(date)=1 then concat('Domenica, ',date)\n" +
             "when dayofweek(date)=2 then concat('Lunedi, ',date)\n" +
@@ -46,9 +50,13 @@ public class ATMStatServlet extends HttpServlet {
             "when dayofweek(date)=5 then concat('Giovedi, ',date)\n" +
             "when dayofweek(date)=6 then concat('Venerdi, ',date)\n" +
             "when dayofweek(date)=7 then concat('Sabato, ',date) end\n" +
-            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,round(perc_ko_faro,2) as perc_ko,round(100-perc_ko_faro,2) as perc_ok_faro"
-            + " ,ko_sla7,round(ko_sla7*100/ore_totali_faro,2) as perc_sla7, '' , '' from atm_stat.riepilogo_per_giorno\n" +
-            " where substr(date,1,7)=? and codAbi=? order by date;";
+            "as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro,"
+            + "replace(round(perc_ko_faro,2),'.',',') as perc_ko,"
+            + "replace(round(100-perc_ko_faro,2),'.',',') as perc_ok_faro"
+            + " ,replace(ko_sla7,'.',','),"
+            + "replace(round(ko_sla7*100/ore_totali_faro,2),'.',',') as perc_sla7, '' , '' "
+            + "from atm_stat.riepilogo_per_giorno\n" +
+              " where substr(date,1,7)=? and codAbi=? order by date;";
     public final String CREDEM_ABI="03032";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

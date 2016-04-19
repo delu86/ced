@@ -20,8 +20,8 @@ public class WorkloadExporterServlet extends HttpServlet {
 	private static final String SYSTEM_PARAMETER = "system";
 	private static final String LIMIT_PARAMETER = "limit";
 	private static final String OFFSET_PARAMETER = "offset";
-    private static final String SELECT="SELECT substring(DATA_INT10,1,10)as giorno,substring(DATA_INT10,12,2) as ora ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
-                                       " and datediff(?,date(DATA_INT10))<=(?-1) and datediff(?,date(DATA_INT10))>-1  group by substring(DATA_INT10,1,13),WKLOADNAME order by 1,2 ASC";
+    private static final String SELECT="SELECT substring(DATA_INT10,1,10)as giorno,substring(DATA_INT10,12,2) as ora ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
+                                       "  datediff(?,date(DATA_INT10))<=(?-1) and datediff(?,date(DATA_INT10))>-1  group by substring(DATA_INT10,1,13),WKLOADNAME,SYSTEM order by 1,2 ASC";
 	private static final String SUFFIX_FILE_NAME = "workload";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = "datalayer.db";   
@@ -33,6 +33,7 @@ public class WorkloadExporterServlet extends HttpServlet {
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "realebis_ctrl.workload_view");
 		map.put("SIGE", "realebis_ctrl.workload_view");
+                map.put("ALL",  "realebis_ctrl.workload_view");
                 map.put("ASDN", "smfacc.workload_view_carige");
 		map.put("ASSV", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
@@ -73,6 +74,11 @@ public class WorkloadExporterServlet extends HttpServlet {
 					,new String[]{system,date,String.valueOf(limit),date});
                     }
                     else{
+                        if(system.equals("ALL"))
+                        ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,queryString.replace("SYSTEM=? and"
+                                , "")
+					,new String[]{date,String.valueOf(limit),date})    ;
+                        else
                         ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,queryString
 					,new String[]{system,date,String.valueOf(limit),date});}
 		} catch (Exception e) {

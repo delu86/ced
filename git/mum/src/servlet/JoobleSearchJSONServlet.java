@@ -1,4 +1,4 @@
-package servlet;
+ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,8 +48,9 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 			" SMF30PTY AS priority, SMF30RCN AS reportClass, SMF30SCN as serviceClass "+ 
 			" FROM CR00515.EPV30_5_JOBTERM"+
 			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN like ?  and CPUTIME>0";
-	private static final String SELECT_TOP_CONSUMER="SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME , ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "
-			+ "  SMF30PTY AS priority, SMF30RCN AS reportClass  from CR00515.EPV30_5_JOBTERM"
+	private static final String SELECT_TOP_CONSUMER="SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME , "
+                + "ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "
+			+ "  SMF30PTY AS priority, SMF30RCN AS reportClass, SMF30SCN as serviceClass  from CR00515.EPV30_5_JOBTERM"
 			+ " where SYSTEM=? ";
 			
     private static final String END_QUERY= " ORDER BY INITIALTIME DESC FETCH FIRST 2000 ROWS ONLY ";
@@ -225,7 +226,9 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 						UtilityDate.formatDateDatabase, UtilityDate.formatDateEpv));
 			
 			}
-			finalQuery=finalQuery.concat("order by CPUTIME DESC FETCH FIRST "+limit+" ROWS ONLY");
+                        
+			finalQuery=finalQuery.concat(" order by CPUTIME DESC FETCH FIRST "+limit+" ROWS ONLY");
+                        
 		
 		}
 		return finalQuery;

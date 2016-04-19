@@ -2,12 +2,10 @@ package servlet;
 
 import datalayer.DatabaseManager;
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import utility.UtilityDate;
 import exporter.ExcelExporter;
 import utility.MapUtility;
@@ -27,8 +25,10 @@ public class TransactionIntervalExcelExporterServlet extends HttpServlet {
 	//private static final String SELECT_STC="SELECT DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,"+
         //    "SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX,CONDCODE,ABEND FROM smfacc.epv030_23_intrvl_t10_rm_STC where  SYSTEM=? and DATET10=?";
 	
-        private static final String SELECT_TRANSACTION ="SELECT TRAN_001,USERID_089,TOT,truncate(CPUTIME,3) as CPUTIME,truncate(ELAPSED,3)as ELAPSED,truncate(J8CPUT_260TM,3) as J8CPUT,"
-                + "truncate(KY8CPUT_263TM,3) as KY8CPUT,truncate(L8CPUT_259TM,3) as L8CPUT,truncate(MSCPUT_258TM,3) as MSCPUT,SCUSRHWM_106,truncate(QRDISPT_255TM,3) as QRDISPT,truncate(S8CPUT_261TM,3) as S8CPUT,DB2REQCT_180,ABCODEO_113,ABCODEC_114 FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
+        private static final String SELECT_TRANSACTION ="SELECT TRAN_001,USERID_089,TOT,replace(truncate(CPUTIME,3),'.',',') as CPUTIME,"
+                + "replace(truncate(ELAPSED,3),'.',',') as ELAPSED,truncate(J8CPUT_260TM,3) as J8CPUT,"
+                + "truncate(KY8CPUT_263TM,3) as KY8CPUT,truncate(L8CPUT_259TM,3) as L8CPUT,truncate(MSCPUT_258TM,3) as MSCPUT,SCUSRHWM_106,truncate(QRDISPT_255TM,3) as QRDISPT,"
+                + "truncate(S8CPUT_261TM,3) as S8CPUT,DB2REQCT_180,ABCODEO_113,ABCODEC_114 FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
         private final static String SELECT_BATCH="SELECT DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,"+
 	                                                       " SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX, CONDCODE,ABEND "
                                                                + "FROM "+TABLE_PARAMETER_STRING+" where SYSTEM=? and DATET10=?";

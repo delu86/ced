@@ -37,9 +37,11 @@ public class DailyDetailExcelServlet extends HttpServlet {
         //    ",ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
 	//private static final String SELECT_STC="SELECT DATET10,SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"+
         //    " ,ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
-	private static final String SELECT_JES="SELECT substr(BEGINTIME,1,19) as datetime,"
-                + " SMF30JBN,SMF30STN,JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"
-                + ",ZIPTM,CPUTIME ,  "
+	private static final String SELECT_JES="SELECT concat(substr(BEGINTIME,1,15),'0') as datetime,"
+                + " SMF30JBN,SMF30STM as STEPNAME,SMF30STN as STEPNUM, SMF30PGM as PROGRAM_NAME,"
+                + " JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,replace(round(EXECTM,2),'.',',') as exectime"
+                + ",replace(ELAPSED,'.',',') as elapsed"
+                + ",replace(ZIPTM,'.',',') as ziptime,replace(CPUTIME,'.',',')   as cputime ,  "
                 + "CASE \n" +
                   "WHEN SMF30PGM='DFHSIP' THEN 'CICS'\n" +
                   "WHEN SMF30PGM='DSNYASCP'  THEN 'DB2'\n" +

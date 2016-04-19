@@ -109,8 +109,8 @@ public class DatabaseManager {
         private final static String SELECT_CPU_MF_BY_DAY_DATATABLES_REALE=
     		"SELECT SYSTEM,aaaammgg,CPU,CLASS,`sum(INTSEC)` as DURATION,MIPS,CPI,L1MP,RNI,L2P,L3P,L4LP,L4RP,MEMP,PRB_STATE,AVG_UTIL"+
                 " FROM smfacc.r113_resume_ctrl WHERE aaaammgg=? and (SYSTEM='SIES' or SYSTEM='SIGE') ORDER BY SYSTEM,CPU";
-        private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
-            " and datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
+        private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
+            "  datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
         //nella tabella di carige nella colonna CPUTIME ci sono i MIPS non i secondi di CPU
         private final static String SELECT_WKL_LAST_30_DAY_CARIGE="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME) from smfacc.workload_view_carige where SYSTEM=?"+
             " and datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
@@ -453,6 +453,7 @@ public class DatabaseManager {
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "realebis_ctrl.workload_view");
 		map.put("SIGE", "realebis_ctrl.workload_view");
+                map.put("ALL", "realebis_ctrl.workload_view");
                 map.put("ASSV", "smfacc.workload_view_carige");
 		map.put("ASDN", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
@@ -631,21 +632,30 @@ public class DatabaseManager {
 		String queryString;
                 if(!(system.equals("ASDN")||system.equals("ASSV"))){
                 queryString=SELECT_WKL_LAST_30_DAY.replace(TABLE_PARAMETER_STRING, mapSystemWorloadTableHashMap.get(system));
+                if(system.equals("ALL"))
+                    connection(EPV_DB_PROPERTIES,queryString.replace("SYSTEM=? and", ""));
+                else{
                 if(system.equals("SIES")||system.equals("SIGE"))   
                     connection(EPV_DB_PROPERTIES,queryString);
                 else
                     connection(queryString);
-                
+                }
                 }
                 else{
                     queryString=SELECT_WKL_LAST_30_DAY_CARIGE;
                     connection(queryString);
                 }
-                
-        st.setString(1, system);
-        st.setString(2, date);
-        st.setInt(3, limit);
-        st.setString(4, date);
+        if(!system.equals("ALL")){
+            st.setString(1, system);
+            st.setString(2, date);
+            st.setInt(3, limit);
+            st.setString(4, date);
+        }
+        else{
+            st.setString(1, date);
+            st.setInt(2, limit);
+            st.setString(3, date);
+        }
         rs=st.executeQuery();
 		Collection<WorkloadInterval> coll=new ArrayList<WorkloadInterval>();
 		while(rs.next()){
@@ -741,12 +751,19 @@ public class DatabaseManager {
             {if(system.equals("SIES")||system.equals("SIGE"))   
                     connection(EPV_DB_PROPERTIES,query);
                 else
-                    connection(query);
+                if(system.equals("ALL"))
+                    connection(EPV_DB_PROPERTIES,query.replace("SYSTEM=? and", ""));
+                    else
+                      connection(query);
                 
               
             }  
+            if(!system.equals("ALL")){
                 st.setString(1, system);
-		st.setString(2, day);
+		st.setString(2, day);}
+            else{
+                st.setString(1, day);
+            }
 		rs=st.executeQuery();
 		Collection<WorkloadInterval> coll=new ArrayList<WorkloadInterval>();
 		while(rs.next()){

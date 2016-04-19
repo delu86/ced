@@ -17,8 +17,8 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
 	private final static String TABLE_PARAMETER_STRING="$table_name";
 	private static final String SYSTEM_PARAMETER = "system";
 	private static final String DATE_PARAMETER = "date";
-    private static final String SELECT="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
-            " and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by DATA_INT10 ASC,WKLOADNAME ";
+    private static final String SELECT="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and" +
+            "  date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME,SYSTEM order by DATA_INT10 ASC,WKLOADNAME ";
 	private static final String SUFFIX_FILE_NAME = "workload";
 	private static final String EXCEL_EXTENSION = ".xls";
 	private static final String RESOURCE_DB_PATH = "datalayer.db";
@@ -30,6 +30,7 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("SIES", "realebis_ctrl.workload_view");
 		map.put("SIGE", "realebis_ctrl.workload_view");
+                map.put("ALL", "realebis_ctrl.workload_view");
                 map.put("ASDN", "smfacc.workload_view_carige");
 		map.put("ASSV", "smfacc.workload_view_carige");
 		map.put("GSY7", "smfacc.workload_view_sy7");
@@ -65,6 +66,10 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
 			ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,queryString
 					,new String[]{system,date});}
                     else{
+                        if(system.equals("ALL"))
+                            ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH_2,queryString.replace("SYSTEM=? and", "")
+					,new String[]{date});
+                        else
                         ExcelExporter.getExcelFromDbQuery(response.getOutputStream(),RESOURCE_DB_PATH,queryString
 					,new String[]{system,date});
                     }

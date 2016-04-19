@@ -214,7 +214,7 @@ var optionsGeneral={
              		optionsDrillDown.plotOptions.series.point={
              				events: {
                             	click: function (e) {
-                            		
+                            		if(!(system==='ALL')){
                             		$("a#excel-export-interval").attr("href","transactionIntervalExcel?system="+system+"&date="+e.point.category.toString());
                             		$("#container").hide(500);
                             		$("#expo").hide();
@@ -224,10 +224,9 @@ var optionsGeneral={
                             "<a href=\""+"transactionIntervalExcel?system="+system+"&date="+e.point.category.toString()+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>"
                                             	);
                                         console.log(e.point.category.toString());
-                            		tableBatch.ajax.url("batchDetail?type=job&system="+system+'&day='+e.point.category.toString()).load();
                             		tableSTC.ajax.url("batchDetail?type=stc&system="+system+'&day='+e.point.category.toString()).load();
                             		tableCics.ajax.url("transactionDetail?system="+system+'&day='+e.point.category.toString()).load();
-                                 	drillCount+=1;
+                                 	drillCount+=1;}
                             	}
                             	}};
                 	 chart = new Highcharts.Chart(optionsDrillDown);
