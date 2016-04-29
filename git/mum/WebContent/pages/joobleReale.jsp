@@ -69,6 +69,34 @@ response.setDateHeader ("Expires", 0);
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
+ <div class="panel panel-info panel-guida" style="display: none" >
+      <div class="panel-heading">
+        <h3 class="panel-title">Guida Jooble</h3>
+      </div>
+      <div class="panel-body">
+      <h3>Guida JOOBLE</h3>
+      
+        <b>Ricerca per jobname</b><br>
+        <p><i>jobname</i> [options] --> ricerca i job con quel nome;<br>
+          Options:<br> 
+          <b>-u</b>  <i>username</i>  --> ricerca per utente <br>
+          <b>-f </b><i>YYYYMMDD</i>   --> ricerca dalla data <br>
+		  <b>-t </b> <i>YYYYMMDD</i>  --> ricerca fino alla data <br>
+		  <b>-d </b> <i>YYYYMMDD</i>  --> ricerca nella data<br>
+		  <b>-a </b> <i>conditioncode</i> --> ricerca con conditioncode<br>
+		  <b>-c </b> <i>sec.</i><i>cputime</i> --> ricerca con cputime > sec. <br>
+          <b>Ricerca TOP consumer</b><br>
+          <b>TOP</b>   [options] --> ricerca 10 job che hanno consumato pi&ugrave CPUtime. Di default esegue la ricerca nel giorno precedente alla data corrente
+         <br>Options:<br>
+         <b>-d </b> <i>YYYYMMDD</i> -->ricerca top consumer nella data <br>
+         <b>-a </b> -->ricerca top consumer andati in abend <br>
+         <b>-m </b> <i>M</i> -->ricerca top consumer del mese indicato (formato numero) <br>
+         <b>-j </b> <i>jobname</i>  -->ricerca top consumer per jobname<br>
+         <b>-l </b> <i>num</i>  -->ricerca gl N jobs che hanno consumato pi&ugrave CPU <br>
+         </p>
+      </div>
+      </div>
+
                 <div class="col-lg-4">
                 </div>
                 <!-- /.col-lg-4 -->
@@ -109,9 +137,10 @@ response.setDateHeader ("Expires", 0);
                  <label class="radio-inline"><input type="radio" name="optradio" value="SIGE">SIGE</label>
                     </div>
                     <!-- /.col-lg-8 -->
-                    <div class="col-lg-3">
+                            <div class="col-lg-3">
+                    <a href="#" id="open-info"><i class="fa fa-question fa fw"></i></a>
                     </div>
-                    <!-- /.col-lg-2 -->
+                    <!-- /.col-lg-3 -->
                     </div>
                     <!-- /.row -->
                 <div class="row">
@@ -203,6 +232,13 @@ response.setDateHeader ("Expires", 0);
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
     <script src="../js/jooble.js"></script>
+    <script type="text/javascript">
+    $("#open-info").click(function(){
+    	$(".panel-guida").animate({
+            height: 'toggle'
+        });
+    });
+    </script>
 </body>
 <%} %>
 </html>

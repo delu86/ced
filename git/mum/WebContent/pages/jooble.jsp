@@ -76,7 +76,7 @@ response.setDateHeader ("Expires", 0);
         <h3 class="panel-title">Guida Jooble</h3>
       </div>
       <div class="panel-body">
-      <h3>ATTENZIONE: VERSIONE BETA TESTING</h3>
+      <h3>Guida JOOBLE</h3>
       
         <b>Ricerca per jobname</b><br>
         <p><i>jobname</i> [options] --> ricerca i job con quel nome;<br>

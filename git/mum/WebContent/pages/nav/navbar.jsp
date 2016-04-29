@@ -68,6 +68,9 @@ String profile=request.getParameter("profile");
                               <a href="http://10.99.252.22/datifs/html/cedacri/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                               </li>
                               <li> 
+                              <a href="doc.jsp?dir=cedacri"><i class="fa fa-book fa-fw"></i>Documents</a>
+                              </li>
+                              <li> 
                                <a href="#"><i class="fa  fa-code"></i>Workload<span class="fa arrow"></span></a>   
                               <ul class="nav nav-second-level">
                              <li>

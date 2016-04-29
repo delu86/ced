@@ -87,7 +87,7 @@ response.setDateHeader ("Expires", 0);
                  <div class="row">
                        <div class="col-lg-4">
                           <div title="Seleziona sistema" class="btn-group" role="group" aria-label="...">
-                              <button type="button"autofocus="true" class="btn btn-primary target" value="SIES"> SIES</button>
+                              <button type="button"autofocus="true" class="btn btn-default target" value="SIES"> SIES</button>
                               <button type="button" class="btn btn-default target" value="SIGE"> SIGE</button>
                               <button type="button" class="btn btn-default target" value="ALL"> ALL</button>
                         </div>

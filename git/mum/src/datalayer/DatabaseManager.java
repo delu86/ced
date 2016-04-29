@@ -239,8 +239,7 @@ public class DatabaseManager {
 		return coll;
 	}
 	
-	
-	public Collection<SondaWorkloadEmptySlot> isThereAnyEmptySlot(String date) throws ClassNotFoundException, SQLException{
+        public Collection<SondaWorkloadEmptySlot> isThereAnyEmptySlot(String date) throws ClassNotFoundException, SQLException{
 		 connection(SELECT_ERROR_COUNT_WKL);
 		st.setString(1, date);
 		rs=st.executeQuery();

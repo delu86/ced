@@ -23,7 +23,7 @@ $.ui.autocomplete.prototype._renderItem = function (ul, item) {
     });
 function drawChart(){
      var d = new Date();
-     d.setDate(d.getDate() - 35);
+     d.setDate(d.getDate() - 60);
      d.setUTCHours(0,0,0,0);
       $("#loading").show(0);
       console.log(d);

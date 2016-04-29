@@ -18,17 +18,17 @@ import exporter.ExcelExporter;
  */
 public class JoobleExcelExporterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String TOP_LIMIT_CHAR="l";
-	private static final String MONTH_CHAR="m";
-	private static final String JOBNAME_CHAR="j";
-	private static final String USER_CHAR="u";
-	private static final String FROM_CHAR="f";
-	private static final String TO_CHAR="t";
-	private static final String DAY_CHAR="d";
-	private static final String CONDCODE_CHAR="a";
-	private static final String CPUTIME_CHAR="c";
-	private static final String CONDCODE_ERROR_CHAR="e";
-	private static final String CONDCODE_WARNING_CHAR="w";
+	private static final String TOP_LIMIT_CHAR="L";
+	private static final String MONTH_CHAR="M";
+	private static final String JOBNAME_CHAR="J";
+	private static final String USER_CHAR="U";
+	private static final String FROM_CHAR="F";
+	private static final String TO_CHAR="T";
+	private static final String DAY_CHAR="D";
+	private static final String CONDCODE_CHAR="A";
+	private static final String CPUTIME_CHAR="C";
+	private static final String CONDCODE_ERROR_CHAR="E";
+	private static final String CONDCODE_WARNING_CHAR="W";
 	private static final String JOBNAME_TOKEN=" and SMF30JBN like ?";
 	private static final String CPU_TIME_TOKEN=" and CPUTIME>= ? ";
 	private static final String CONDCODE_ERROR_TOKEN=" and ABEND is not NULL ";
@@ -40,7 +40,7 @@ public class JoobleExcelExporterServlet extends HttpServlet {
 	private static final String USER_TOKEN_STRING=" and SMF30RUD=?";
 	private static final String MONTH_TOKEN_STRING=" and substr(INITIALTIME , 6 , 2)=? ";
 	private static final String SELECT_JOB_BY_NAME = "SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME ,"+
-			" ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "+
+			" ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, CONDCODE ,SMF30CL8 as class, "+
 			" SMF30PTY AS priority,SMF30SCN as serviceClass, SMF30RCN AS reportClass "+ 
 			" FROM CR00515.EPV30_5_JOBTERM"+
 			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN like ?  and CPUTIME>0";

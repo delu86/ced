@@ -22,17 +22,17 @@ public class JoobleSearchJSONServlet extends HttpServlet {
     
 	
 	private static final long serialVersionUID = 1L;
-	private static final String TOP_LIMIT_CHAR="l";
-	private static final String MONTH_CHAR="m";
-	private static final String JOBNAME_CHAR="j";
-	private static final String USER_CHAR="u";
-	private static final String FROM_CHAR="f";
-	private static final String TO_CHAR="t";
-	private static final String DAY_CHAR="d";
-	private static final String CONDCODE_CHAR="a";
-	private static final String CPUTIME_CHAR="c";
-	private static final String CONDCODE_ERROR_CHAR="e";
-	private static final String CONDCODE_WARNING_CHAR="w";
+	private static final String TOP_LIMIT_CHAR="L";
+	private static final String MONTH_CHAR="M";
+	private static final String JOBNAME_CHAR="J";
+	private static final String USER_CHAR="U";
+	private static final String FROM_CHAR="F";
+	private static final String TO_CHAR="T";
+	private static final String DAY_CHAR="D";
+	private static final String CONDCODE_CHAR="A";
+	private static final String CPUTIME_CHAR="C";
+	private static final String CONDCODE_ERROR_CHAR="E";
+	private static final String CONDCODE_WARNING_CHAR="W";
 	private static final String JOBNAME_TOKEN=" and SMF30JBN like ?";
 	private static final String CPU_TIME_TOKEN=" and CPUTIME>= ? ";
 	private static final String CONDCODE_ERROR_TOKEN=" and ABEND is not NULL ";

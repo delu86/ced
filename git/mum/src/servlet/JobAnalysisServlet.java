@@ -29,17 +29,19 @@ public class JobAnalysisServlet extends HttpServlet {
         private static final String TIME_TOKEN="$time";
         private static final String SMF30PGM="SMF30PGM";
         private static final String SMF30JBN="SMF30JBN";
-
+        
     private static final String RESOURCE_PATH = "datalayer.idaa";
     public static final String SELECT=
             "SELECT -(DAYS(begintime_date) - DAYS(CURRENT_DATE) ) as date , substr(begintime, 12 , 2) as hour,substr(begintime, 15 , 1) as minute , \n" +
             "round(sum($time), 2) as $time from CR00515.EPV30_23_INTRVL \n" +
             "where $column=? and SYSTEM=? \n" +
-            "	  and begintime_date BETWEEN DATE(DAYS(current_date)-35) and DATE(DAYS(current_date)-1)\n" +
+            "	  and begintime_date BETWEEN DATE(DAYS(current_date)-60) and DATE(DAYS(current_date)-1)\n" +
             "group by -(DAYS(begintime_date) - DAYS(CURRENT_DATE) ) , substr(begintime, 12 , 2) , substr(begintime, 15 , 1)";
-    private static final String ELAPSED_OPTIONS="-e";
+    private static final String ELAPSED_OPTIONS="-E";
+    private static final String DISKIO_OPTIONS="-D"; 
     private static final String ELAPSED="EXECTM";
     private static final String CPUTIME="cputime";
+    private static final String DISKIO="DISKIO";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods. 
@@ -51,7 +53,7 @@ public class JobAnalysisServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                float matrix [][]=new float[24*6][35];
+                float matrix [][]=new float[24*6][60];
                 PrintWriter out = response.getWriter();
 		String queryString=request.getParameter("query");
 		String system=request.getParameter("system");
@@ -64,6 +66,11 @@ public class JobAnalysisServlet extends HttpServlet {
                     select=select.replace(TIME_TOKEN, ELAPSED);
                 }
                 else{
+                    if(queryString.contains(DISKIO_OPTIONS)){
+                    queryString=queryString.replace(DISKIO_OPTIONS, "");
+                    select=select.replace(TIME_TOKEN, DISKIO);
+                }
+                else
                     select=select.replace(TIME_TOKEN, CPUTIME);
                 }
                 if(queryType.equals("job")){
@@ -71,6 +78,7 @@ public class JobAnalysisServlet extends HttpServlet {
                 }else{
                     select=select.replace(COLUMN_TOKEN,SMF30PGM);
                 }
+                System.out.println(select);
 		ResourceBundle rb =   ResourceBundle.getBundle(RESOURCE_PATH);
 		Connection conn=null;
 		PreparedStatement pStatement=null;
@@ -88,9 +96,9 @@ public class JobAnalysisServlet extends HttpServlet {
 		while(rSet.next()){
                     matrix[rSet.getInt(2)*6+rSet.getInt(3)][rSet.getInt(1)-1]= rSet.getFloat(4);
 		}
-                for(int k=34;k>=0;k--){
+                for(int k=59;k>=0;k--){
                     for(int j=0;j<144;j++){
-                        if(!(k==34&&j==0))
+                        if(!(k==59&&j==0))
                             json=json.concat(", "+matrix[j][k]);
                         else
                             json=json.concat(String.valueOf(matrix[j][k]));
