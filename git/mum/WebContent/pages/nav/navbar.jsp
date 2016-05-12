@@ -86,6 +86,9 @@ String profile=request.getParameter("profile");
 
                                </ul>
                                   </li>
+                                  <li>
+                                   <a href="programmiRichiamati.jsp"><i class="fa fa-search fa-fw"></i>Programmi richiamati</a>
+                                  </li>
                               <li>
                                <a href="#"><i class="fa  fa-code"></i>JOB<span class="fa arrow"></span></a>
                               <ul class="nav nav-second-level">
@@ -223,6 +226,9 @@ String profile=request.getParameter("profile");
                               <li>
                               <a href="joobleReale.jsp"><i class="fa fa-search fa-fw"></i>Jobs search</a>
                               </li>
+                              <!--<li> 
+                              <a href="analisiTransazioni.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Analisi Transazioni</a>
+                              </li> -->
                               <li> 
                               <a href="cicsAbendReale.jsp"><i class="fa fa-exclamation fa-fw"></i>Transactions ABEND</a>
                               </li>
@@ -335,8 +341,16 @@ String profile=request.getParameter("profile");
                             <%} %>
                             <%if(profile.equals("CED")){ %>
                             <li>
-                            <a href="atm.jsp"><i class="fa fa-money fa-fw"></i> ATM </a>
-                        </li>
+                            <a href="#"><i class="fa fa-money fa-fw"></i>ATM<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                            <li>
+                            <a href="atm.jsp"><i class="fa fa-table fa-fw"></i>Statistiche mensili</a>
+                            </li>
+                            <li>
+                            <a href="gestioneATM.jsp"><i class="fa fa-wrench fa-fw"></i>Gestione ATM</a>
+                            </li>
+                            </ul>
+                            
                          <li>
                             <a href="#"><i class="fa fa-wrench fa-fw"></i>Utility<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

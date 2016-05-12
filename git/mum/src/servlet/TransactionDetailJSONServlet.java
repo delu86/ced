@@ -61,13 +61,15 @@ public class TransactionDetailJSONServlet extends HttpServlet {
 				         	"\""+report.getJ8()+"\","+
 				         	"\""+report.getK8()+"\","+
 				         	"\""+report.getL8()+"\","+
-				         	"\""+report.getMs()+"\","+
-				         	"\""+report.getMem()+"\","+
+				         	"\""+report.getAbend1()+"\","+
+                                                "\""+report.getMem()+"\","+
 				         	"\""+report.getQr()+"\","+
 				         	"\""+report.getS8()+"\","+
                                                 "\""+report.getSuserID()+"\","+
                                                 "\""+report.getCmduserID()+"\","+
-                                                "\""+report.getOuserID()+"\""+
+                                                "\""+report.getOuserID()+"\","+
+                                                
+                                                "\""+report.getMs()+"\""+
 				         	"]");
 					i++;
 				}
@@ -82,13 +84,15 @@ public class TransactionDetailJSONServlet extends HttpServlet {
 				         	"\""+report.getJ8()+"\","+
 				         	"\""+report.getK8()+"\","+
 				         	"\""+report.getL8()+"\","+
-				         	"\""+report.getMs()+"\","+
-				         	"\""+report.getMem()+"\","+
+				         	"\""+report.getAbend1()+"\","+
+                                                "\""+report.getMem()+"\","+
 				         	"\""+report.getQr()+"\","+
 				         	"\""+report.getS8()+"\","+
                                                 "\""+report.getSuserID()+"\","+
                                                 "\""+report.getCmduserID()+"\","+
-                                                "\""+report.getOuserID()+"\""+
+                                                "\""+report.getOuserID()+"\","+
+                                                
+                                                "\""+report.getMs()+"\""+
 							"]");
 									}
 			}

@@ -1,0 +1,8 @@
+{
+"database":{
+  "query":"SELECT * from support.epv110_stat_25 where LDRPNAME = ? and system= ?;",
+  "resource_name": "epvDB" ,
+  "parameters":["prgName","system"]
+  },
+  "admitted_users":["CED"]
+}

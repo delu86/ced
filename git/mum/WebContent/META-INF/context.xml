@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path=""/>
+<Context antiJARLocking="true" path="">
   <Resource name="cedDB" auth="Container" type="javax.sql.DataSource"
                maxActive="-1" maxIdle="-1" maxWait="-1"
-               username="cedacri" password="cedacri" driverClassName="com.mysql.jdbc.Driver"
+               username="cedacri" password="" driverClassName="com.mysql.jdbc.Driver"
                url="jdbc:mysql://10.99.252.23:3306/"/>
   <Resource name="epvDB" auth="Container" type="javax.sql.DataSource"
                maxActive="-1" maxIdle="-1" maxWait="-1"

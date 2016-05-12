@@ -1,0 +1,8 @@
+{
+"database":{
+  "query":"SELECT SMF30JBN,JESNUM,SMF30STM,SMF30STN,SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX, CONDCODE,ABEND FROM realebis_ctrl.epv030_23_intrvl_sies_job where tData=?",
+  "resource_name": "epvDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED","REALE"]
+}

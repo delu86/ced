@@ -151,13 +151,14 @@ response.setDateHeader ("Expires", 0);
                                             <th>J8</th>
                                             <th>K8</th>
                                             <th>L8</th>
-                                            <th>MS</th>
+                                            <th>ABEND</th> 
                                             <th>Memoria</th>
                                             <th>Qr</th>
                                             <th>S8</th>
                                             <th>SUSERID</th>
                                             <th>CMDUSER</th>
                                             <th>OUSERID</th>
+                                            <th>MS</th>
                                          </tr>
                                     </thead>
                                     </table>

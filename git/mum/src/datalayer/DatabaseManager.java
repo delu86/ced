@@ -677,8 +677,10 @@ public class DatabaseManager {
 		st.setString(1, date);
 		rs=st.executeQuery();
 		Collection<StepReport> collection=new ArrayList<StepReport>();
+                int i=0;
 		while(rs.next()){
-			StepReport report=new StepReport();
+			i++;
+                        StepReport report=new StepReport();
 			 //DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,
 	                 //SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX,CONDCODE,ABEND
 			report.setSystem(system);
@@ -697,6 +699,7 @@ public class DatabaseManager {
                         report.setAbend(rs.getString(13));
                         collection.add(report);
 		}
+                System.out.println("Record totali: "+i);
 		disconnect();
 		return collection;
 	}

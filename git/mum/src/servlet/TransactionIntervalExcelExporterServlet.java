@@ -28,7 +28,7 @@ public class TransactionIntervalExcelExporterServlet extends HttpServlet {
         private static final String SELECT_TRANSACTION ="SELECT TRAN_001,USERID_089,TOT,replace(truncate(CPUTIME,3),'.',',') as CPUTIME,"
                 + "replace(truncate(ELAPSED,3),'.',',') as ELAPSED,truncate(J8CPUT_260TM,3) as J8CPUT,"
                 + "truncate(KY8CPUT_263TM,3) as KY8CPUT,truncate(L8CPUT_259TM,3) as L8CPUT,truncate(MSCPUT_258TM,3) as MSCPUT,SCUSRHWM_106,truncate(QRDISPT_255TM,3) as QRDISPT,"
-                + "truncate(S8CPUT_261TM,3) as S8CPUT,DB2REQCT_180,ABCODEO_113,ABCODEC_114 FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
+                + "truncate(S8CPUT_261TM,3) as S8CPUT,DB2REQCT_180,ABCODEO_113 as ABEND FROM "+TABLE_PARAMETER_STRING+" where system=? and START_010=? order by TOT DESC";
         private final static String SELECT_BATCH="SELECT DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,"+
 	                                                       " SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX, CONDCODE,ABEND "
                                                                + "FROM "+TABLE_PARAMETER_STRING+" where SYSTEM=? and DATET10=?";

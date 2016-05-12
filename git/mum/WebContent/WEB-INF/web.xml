@@ -46,11 +46,18 @@
         <servlet-name>CommandServlet</servlet-name>
         <servlet-class>servlet.CommandServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>JsonQueryResolver</servlet-name>
+        <servlet-class>servlet.JsonQueryResolver</servlet-class>
+    </servlet>
         <servlet-mapping>
+        <servlet-name>JsonQueryResolver</servlet-name>
+        <url-pattern>/queryResolver</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>CommandServlet</servlet-name>
         <url-pattern>/pages/command</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>ATMStatBySportelloServlet</servlet-name>
         <url-pattern>/pages/atmSportello</url-pattern>

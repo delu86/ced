@@ -225,6 +225,7 @@ var optionsGeneral={
                                             	);
                                         console.log(e.point.category.toString());
                             		tableSTC.ajax.url("batchDetail?type=stc&system="+system+'&day='+e.point.category.toString()).load();
+                                        tableBatch.ajax.url("batchDetail?type=job&system="+system+'&day='+e.point.category.toString()).load();
                             		tableCics.ajax.url("transactionDetail?system="+system+'&day='+e.point.category.toString()).load();
                                  	drillCount+=1;}
                             	}

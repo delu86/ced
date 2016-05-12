@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT concat(date,' ',HH_MM) as date  , slot_rt1 , slot_rt2 , slot_rt3 , slot_rt4 , slot_rt5 , slot_rt6 , slot_rt7 , abend FROM realebis_ctrl.analisi_transazioni where tran_001=? and SYSTEM=? and date=? order by 1;",
+  "resource_name": "epvDB" ,
+  "parameters":["tranName","system","date"]
+  },
+  "admitted_users":["CED","REALE"],
+  "yAxis":["#transazioni","#abend"]
+}

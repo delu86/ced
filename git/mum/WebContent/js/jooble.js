@@ -100,15 +100,10 @@ function searchJobs(){
     	    	$.getJSON("getSuggest?system="+system+"&query="+request.term.replace("#","%23"),function (data){
     	    		response(data);})},
     	       select: function( event, ui ) {
-    	    	   $("#excelExporter").show(1000);
-    	    	   $(".hidden").show(0);
-    	       $(".dataTable_wrapper").show(1000);
-    	       $(".dataTable_wrapper_step").hide(0);
-    		   $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+ui.item.value.replace("#","%23"));
+    	    	   $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+ui.item.value.replace("#","%23"));
     		   job=ui.item.value;
     		   var parameter=ui.item.value.replace("#","%23");
-    		   tableBatch.ajax.url("getJobByName?system="+system+"&jobname="+parameter).load();
-    		   tableBatch.columns.adjust().responsive.recalc();    	}
+    		   }
     	});
     };
     $("#autocomplete").keyup(function(){
