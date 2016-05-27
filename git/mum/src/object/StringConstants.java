@@ -64,4 +64,5 @@ public class StringConstants {
     //attributes and parameters name
     public static final String EXPORTER_TYPE="exporter";
     public static final String USER_ATTRIBUTE="user";
+    public static String INTEGER_PATTERN_STRING="^-?\\d+$";
 }

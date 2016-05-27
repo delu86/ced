@@ -1,3 +1,4 @@
+<%@page import="datalayer.DatabaseManager"%>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Cache-Control","no-store");
@@ -19,9 +20,9 @@ response.setDateHeader ("Expires", 0);
     	if(!profile.equals("CED")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
-    
+  datalayer.DatabaseManager db=new DatabaseManager();  
 %>
-<%Collection<String> systems=(Collection<String>) request.getAttribute("systems"); %>
+<%Collection<String> systems=db.getSystems(); %>
 
 <head>
 
@@ -150,7 +151,9 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/mips113.js" charset="utf-8"></script>
+    <script src="../js/ced/dateJS.js"></script>
+    <script> var type='mips';</script>
+    <script src="../js/charts/charts113.js" charset="utf-8"></script>
  </body>
 <%} %>
 </html>

@@ -112,7 +112,173 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/mqChart.js" charset="utf-8"></script>
+    <script>
+        $(function () {
+	var date=new Date();
+	var year=date.getFullYear();
+	var month=date.getMonth();
+	var system=$( "button[autofocus='true']" ).val();
+	Highcharts.setOptions({
+        lang: {
+            numericSymbols: null,
+            thousandsSep: '\''
+        }
+    });
+	var optionsDrillDown={ chart: {
+        renderTo:'container',
+		type: 'column'
+    },
+    exporting: {
+        buttons: {
+            backButton: {
+                text: '< <b>Back',
+                onclick: function () {
+                	chart = new Highcharts.Chart(options);
+           	   	 return true;
+             	
+                }}}},
+    title: {
+        text: ''
+    },
+   
+    xAxis: {
+    	categories: [ ],
+        crosshair: true,
+        title:{
+        	text:'Ore'
+        }
+    },
+    yAxis: {
+    	 title: {
+    	        text: 'Total'
+    	    },	
+        min: 0
+        
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.0f} </b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{name:'put',data:[]},{name:'get',data:[]}]
+};
+	var options={ chart: {
+        renderTo:'container',
+		type: 'column'
+    },
+    title: {
+        text: ''
+    },
+    
+    xAxis: {
+    	labels: {
+            rotation: -45},
+        categories: [ ],
+        crosshair: true,
+        title:{
+        	text:'Giorni'
+        }
+    },
+    yAxis: {
+    	 title: {
+    	        text: 'Total'
+    	    },	
+        min: 0
+        
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.0f} </b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        
+        column: {
+        	  events: {
+              	click: function (e) {
+              		$('#loading').show();
+              		var monthPar=month+1;
+                        var date=year+'-'+pad(monthPar,2,0)+'-'+pad(e.point.category.split(",")[0],2,0);
+                        //console.log(date);
+            		$.getJSON('../queryResolver?id=mqByDaySystem&date='+date+'&system='+system,function(json){
+            		json.data.forEach(function(element){
+                            optionsDrillDown.xAxis.categories.push(element[0]);
+                            optionsDrillDown.series[0].data.push(Number(element[1]));
+                            optionsDrillDown.series[1].data.push(Number(element[2]));
+                        });
+                chart = new Highcharts.Chart(optionsDrillDown);
+            		$('#loading').hide(); 
+            		return true;
+              	
+            		});
+              	}},
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{name:'put',data:[]},{name:'get',data:[]}]
+};
+	drawChart();
+//	$("#selMonth").change(function(){
+//	month=$(this).val();
+//		drawChart();
+//	});
+	$(".target").click(function(){
+		system=$(this).val();
+		drawChart();
+	});
+	$( "#date-interval" ).datepicker({
+		changeMonth: true,
+	        changeYear: true,
+	        showButtonPanel: true,
+	        dateFormat: 'MM yy',
+	        onClose: function(dateText, inst) { 
+	            month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+	            year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+	            
+	            $(this).datepicker('setDate', new Date(year, month, 1));
+	            drawChart();
+	        }
+	});
+	$( "#date-interval" ).datepicker('setDate',new Date(year, month, 1));
+	
+	function drawChart(){
+		$('#loading').show();
+		var monthPar=month+1;
+		$.getJSON('../queryResolver?id=mqByMonthSystem&year='+year+'&month='+monthPar+'&system='+system,function(json){
+		options.xAxis.categories=[];
+                options.series[0].data=[];
+                options.series[1].data=[];
+                json.data.forEach(function(element){
+                     options.xAxis.categories.push(element[0]+","+element[3]);
+		     options.series[0].data.push(Number(element[1]));
+                     options.series[1].data.push(Number(element[2]));
+                });
+                
+		options.title.text=system+" (only CICS)";
+		chart = new Highcharts.Chart(options);
+		$('#loading').hide(); 
+		return true;
+	});}
+	function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+});
+    </script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 </body>

@@ -74,7 +74,11 @@ public class JsonQueryResolver extends HttpServlet {
             if(parameters!=null){
             Iterator iterator=parameters.iterator();
             while(iterator.hasNext()){
-                    ps.setString(indexParam++,request.getParameter(iterator.next().toString().replace("\"", "")));
+                    String parameter=request.getParameter(iterator.next().toString().replace("\"", ""));
+                    if(parameter.matches(StringConstants.INTEGER_PATTERN_STRING))
+                       ps.setInt(indexParam++,Integer.parseInt(parameter));
+                    else
+                       ps.setString(indexParam++,parameter);
                 }}
              rs=ps.executeQuery();
             JsonArrayBuilder builderDataArray= Json.createArrayBuilder();

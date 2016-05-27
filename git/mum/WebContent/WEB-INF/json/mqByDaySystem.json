@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT EPVHOUR, SUM( TOTALPUTS ) AS PUT , SUM( TOTALGETS) AS GET FROM mtrnd13.mqmdayh WHERE SYSTEM = ? and date(epvdate)=? and SMF30WID='CICS' GROUP BY EPVHOUR order by EPVHOUR",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admitted_users":["CED"]
+}

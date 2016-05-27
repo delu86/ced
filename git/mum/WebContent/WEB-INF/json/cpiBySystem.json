@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT date , round(CPI,2) as CPI FROM(SELECT SYSTEM,date,SM113CPT,SUM(B0)/SUM(B1) as CPI FROM smfacc.r113_view where SYSTEM=? and SM113CPT=? and date<=? group by SYSTEM,date,SM113CPT order by date DESC LIMIT ?) sub order by date ASC",
+  "resource_name": "cedDB" ,
+  "parameters":["system","cpuType","date","limit"]
+  },
+  "admitted_users":["CED","REALE"]
+}
+

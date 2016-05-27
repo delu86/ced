@@ -13,12 +13,6 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
-        <description/>
-        <display-name>ChartDispatcherServlet</display-name>
-        <servlet-name>ChartDispatcherServlet</servlet-name>
-        <servlet-class>servlet.ChartDispatcherServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>TopConsumerCicsJSONServlet</servlet-name>
         <servlet-class>servlet.TopConsumerCicsJSONServlet</servlet-class>
     </servlet>
@@ -50,7 +44,7 @@
         <servlet-name>JsonQueryResolver</servlet-name>
         <servlet-class>servlet.JsonQueryResolver</servlet-class>
     </servlet>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>JsonQueryResolver</servlet-name>
         <url-pattern>/queryResolver</url-pattern>
     </servlet-mapping>
@@ -77,10 +71,6 @@
     <servlet-mapping>
         <servlet-name>TopConsumerCicsJSONServlet</servlet-name>
         <url-pattern>/pages/topCics</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ChartDispatcherServlet</servlet-name>
-        <url-pattern>/pages/chartsDispatcher</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ATMStatServlet</servlet-name>
@@ -179,16 +169,6 @@
     <servlet-mapping>
         <servlet-name>TablesMFCountersServlet</servlet-name>
         <url-pattern>/pages/tablesMFCounters</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <description/>
-        <display-name>LastDayCpuServlet</display-name>
-        <servlet-name>LastDayCpuServlet</servlet-name>
-        <servlet-class>servlet.LastDayCpuServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LastDayCpuServlet</servlet-name>
-        <url-pattern>/pages/lastDayCpu</url-pattern>
     </servlet-mapping>
     <servlet>
         <description/>
@@ -389,16 +369,6 @@
     <servlet-mapping>
         <servlet-name>StepByJesnumServlet</servlet-name>
         <url-pattern>/pages/getStep</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <description/>
-        <display-name>TapeReportJSONServlet</display-name>
-        <servlet-name>TapeReportJSONServlet</servlet-name>
-        <servlet-class>servlet.TapeReportJSONServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TapeReportJSONServlet</servlet-name>
-        <url-pattern>/pages/tapeReport</url-pattern>
     </servlet-mapping>
     <servlet>
         <description/>

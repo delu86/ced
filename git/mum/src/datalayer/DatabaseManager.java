@@ -21,9 +21,7 @@ import object.SondaWorkloadEmptySlot;
 import object.SondaWorkloadInterval;
 import object.StepReport;
 import object.SystemConsumptionsReport;
-import object.SystemHourReport;
 import object.SystemReport;
-import object.TapeReport;
 import object.TransactionReport;
 import object.User;
 import object.VolumeSMF;
@@ -57,42 +55,42 @@ public class DatabaseManager {
 	private final static String SELECT_WLC_BY_MONTH=" SELeCT EPVDATE,SERIAL,MAX(CAST(MSU4hra AS unsigned INTEGER)) FROM("
 			+ " SELECT EPVDATE,SERIAL,EPVHOUR,SUM(MSU4hra) as MSU4hra from("
 			+ " SELECT EPVDATE,EPVHOUR,SERIAL,SMF70GNM,SMF70GMU, ((CASE"
-			+ " WHEN SMF70GAU<=0 then SMF70GMU else SUM(SMF70LAC) end )) as MSU4hra from mtrnd.lparcpu"
+			+ " WHEN SMF70GAU<=0 then SMF70GMU else SUM(SMF70LAC) end )) as MSU4hra from mtrnd13.lparcpu"
 			+ " where EPVDATE>? and EPVDATE<=?"
 			+ " group by EPVDATE,EPVHOUR,SERIAL,SMF70GNM) as derived"
 			+ " group by EPVDATE,SERIAL,EPVHOUR) AS DERIVED GROUP BY EPVDATE,SERIAL order by SERIAL, EPVDATE ASC";
 	private final static String SELECT_SYSTEM_CONSUMPTION_LAST30_DAY=
                           "SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2),TRUNCATE(t1.SMF70LAC,2)"
-			+ " FROM mtrnd.lparcpu as t1 "
+			+ " FROM mtrnd13.lparcpu as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
         private final static String SELECT_LPAR_CONSUMPTION_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR,sum( TRUNCATE(t1.MIPLPAR,2)),sum(TRUNCATE(t1.SMF70LAC,2))"
-			+ " FROM mtrnd.lparcpu as t1 "
+			+ " FROM mtrnd13.lparcpu as t1 "
 			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
 			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
 	private final static String SELECT_SYSTEM_CONSUMPTION_LAST30_DAY_CARIGE="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.SMF70LAC,2)"
-			+ " FROM mtrnd.lparcpu as t1 "
+			+ " FROM mtrnd13.lparcpu as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.EPVDATE)<=30 and t1.epvdate>'2015-09-11'"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
         private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
-			+ " FROM mtrnd.lpariip as t1 "
+			+ " FROM mtrnd13.lpariip as t1 "
 			+ " where t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30"
 			+ " order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
         private final static String SELECT_SYSTEM_CONSUMPTION_ZIIP_LAST30_DAY_CARIGE="SELECT date(DATA_INT10),substr(DATA_INT10,12,2), "
                 + " TRUNCATE(sum(CPUTIME),2),TRUNCATE(sum(ZIPTM),2) from smfacc.workload_view_carige where SYSTEM=? and datediff(current_date,date(DATA_INT10))<=30 "
                 + " and date(DATA_INT10)>'2015-09-11' group by date(DATA_INT10),substr(DATA_INT10,12,2) order by DATA_INT10;";
 	private final static String SELECT_LPAR_CONSUMPTION_ZIIP_LAST30_DAY="SELECT t1.EPVDATE,t1.EPVHOUR, TRUNCATE(t1.MIPLPAR,2)"
-			+ " FROM mtrnd.lpariip as t1 "
+			+ " FROM mtrnd13.lpariip as t1 "
 			+ " where (t1.RSYSTEM='SIES' or t1.RSYSTEM='SIGE') and datediff(current_date,t1.epvdate)<=30"
 			+ " group by t1.EPVDATE,t1.EPVHOUR order by t1.EPVDATE ASC, t1.EPVHOUR ASC;";
-        private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd.cicsdayh"
+        private final static String SELECT_VOLUME_TIMES_DAILY="SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd13.cicsdayh"
 			+ " WHERE SYSTEM=? and EPVDATE=?"
 			+ " GROUP BY EPVDATE,APPLVTNAME ORDER BY EPVDATE ASC, APPLVTNAME ASC;";
-	private final static String SELECT_VOLUME_TIMES_BY_DAY="SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd.cicsdayh "
+	private final static String SELECT_VOLUME_TIMES_BY_DAY="SELECT EPVHOUR,TRUNCATE(SUM(TOTCPUTM),4),SUM(CTRANS) from mtrnd13.cicsdayh "
 			+ " WHERE SYSTEM=? and EPVDATE=? and APPLVTNAME=?"
 			+ " GROUP BY EPVHOUR HAVING SUM(CTRANS)>0 ORDER BY EPVHOUR ASC;";
 	private final static String SELECT_DISTINCT_SYSTEM="SELECT DISTINCT SYSTEM FROM smfacc.r113_2_hour";
-	private final static String SELECT_DISTINCT_SYSTEM_MQ="SELECT DISTINCT(SYSTEM) FROM  mtrnd.mqmdayh where system<>'FSYC' and system<>'CSY3'";
+	private final static String SELECT_DISTINCT_SYSTEM_MQ="SELECT DISTINCT(SYSTEM) FROM  mtrnd13.mqmdayh where system<>'FSYC' and system<>'CSY3'";
         private final static String SELECT_BATCH_INTERVAL="SELECT DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,"+
 	                                                          " SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX, CONDCODE,ABEND "
                                                                + "FROM "+TABLE_PARAMETER_STRING+" where DATET10=? and SYSTEM=?";
@@ -123,18 +121,12 @@ public class DatabaseManager {
         private final static String SELECT_WKL_BY_DAY_CARIGE="SELECT CONCAT(substring(DATA_INT10,1,13),\":00\") ,SYSTEM,WKLOADNAME, sum(CPUTIME) from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
             " and date(DATA_INT10)=? group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,substring(DATA_INT10,1,13) ASC ";
         
-        private static final String SELECT_CPI_MIPS_LAST_N_DAYS = "SELECT * FROM("+
-            "SELECT SYSTEM,aaaammgg,SM113CPT,SUM(B0)/SUM(B1),SUM(B1)/(1000000*24*3600) as MIPS FROM smfacc.r113_2_hour "+
-            " where SYSTEM=? and SM113CPT=? and aaaammgg<=?"+
-            " group by SYSTEM,aaaammgg,SM113CPT order by aaaammgg DESC LIMIT ?) sub "+
-            " order by aaaammgg ASC";
+      
 
         private static final String SELECT_YESTERDAY_MIPS="SELECT SERIAL,SYSTEM,EPVDATE,EPVHOUR,MIPS,cast(MIPLPAR as UNSIGNED) as MIPLPAR FROM support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) and EPVHOUR=(SELECT EPVHOUR from support.merge_cecmips_lparcpu where EPVDATE=DATE(current_date-1) group by EPVHOUR order by SUM(MIPLPAR) DESC LIMIT 1) order by SERIAL";
 	private static final String SELECT_YESTERDAY_CPI="SELECT SYSTEM,(SUM(B0)/(SUM(B1)))  as CPI FROM smfacc.r113_2_hour"+
             " where SM113CPT='Standard CP' and aaaammgg=? group by SYSTEM,aaaammgg,SM113CPT";
-        private static final String SELECT_SYSTEM_HOURLY_REPORT = "SELECT h as ora,SUM(B0)/SUM(B1) as CPI,SUM(B1)/1000000/3600 as MIPS,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SYSTEM=? and SM113CPT=? group by SM113CPT,h";
-	private static final String SELECT_CPU_NUMBER_YESTERDAY="SELECT SYSTEM,aaaammgg,h,count(distinct SM113CPU) as numberCpu  FROM smfacc.r113_2_hour  where aaaammgg=? and SM113CPT='Standard CP' group by SYSTEM,h order by SYSTEM,h";
-	private static final String SELECT_BATCH_ABEND_WINDOWS_TIME = "SELECT date,count(*),sum(cputim) from(  "
+        private static final String SELECT_BATCH_ABEND_WINDOWS_TIME = "SELECT date,count(*),sum(cputim) from(  "
                 + "SELECT date(tData) as date,SMF30JBN,JESNUM,truncate(sum(CPUTIME), 3) as cputim  FROM "+TABLE_PARAMETER_STRING+" where "
                 +" SYSTEM=? and datediff(current_date, date(tData) )<=? and datediff(current_date, date(tData) )>? and CONDCODE>=8"
                 + "  group by date(tData),SMF30JBN,JESNUM) as derived  group by date order by date;";
@@ -155,14 +147,6 @@ public class DatabaseManager {
                                              " SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>\"\""+
     		                             " group by date(START_010) order by date(START_010)";
         
-        private static final String SELECT_VIRTUAL_TAPE_MOUNT_TIME="SELECT EPVDATE , CASE "
-    		+ " WHEN VTCS13VMT='mount sl scratch VTV' or VTCS13VMT='mount existing VTV as scratch' then 'SCRATCH'"
-    		+ " WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted after a recall' then 'EXISTING-N'"
-    		+ " WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted without a recall' then 'EXISTING-Y' end as TYPE"
-    		+ " ,sum(VTCS13MTM)/sum(NMOU) as AVG_MOUNT  FROM mresa.vsmmount"
-    		+ " where (VTID='VSMA' or VTID='VSMA1' or VTID='VSMA2')  and datediff(current_date,EPVDATE)>=1 "
-    		+ " group by SITE,EPVDATE,TYPE  order by TYPE,EPVDATE ASC";
-	
         private static final String SELECT_VOLUMES_TIMES_TRANSACTION_STRING="SELECT START_010,sum(CPUTIME),sum(TOT)"
     		+ " from "+TABLE_PARAMETER_STRING
     		+ " where TRAN_001=? and datediff( current_date,date(START_010))=? "
@@ -171,17 +155,6 @@ public class DatabaseManager {
         private static final String SELECT_JOB_INTERVAL_BY_JOBNAME_MONTH="SELECT substr(INITIALTIME, 1 , 16),substr(ENDTIME, 1 , 16) from CR00515.EPV30_5_JOBTERM "
                                                +    "WHERE SMF30JBN=? AND MONTH(INITIALTIME)=? AND CPUTIME>0";
     
-        private static final String SELECT_MQ_BY_MONTH_SYSTEM="SELECT day(EPVDATE), SUM( TOTALPUTS ) AS PUT , SUM( TOTALGETS)   AS GET,case "+ 
-    		"when dayOfWeek(EPVDATE)=1 then 'DOM' "+
-    		"when dayOfWeek(EPVDATE)=2 then 'LUN' "+
-    		"when dayOfWeek(EPVDATE)=3 then 'MAR' "+
-    		"when dayOfWeek(EPVDATE)=4 then 'MER' "+
-    		"when dayOfWeek(EPVDATE)=5 then 'GIO' "+
-    		"when dayOfWeek(EPVDATE)=6 then 'VEN' "+
-    		"when dayOfWeek(EPVDATE)=7 then 'SAB' "+
-    		"end as dayWeek"+
-    		" 	FROM mtrnd.mqmdayh WHERE SYSTEM = ? and month(EPVDATE)=? and year(EPVDATE)=? and SMF30WID='CICS' GROUP BY day(EPVDATE),dayWeek order by EPVDATE";
-    private static final String SELECT_MQ_BY_DAY_SYSTEM="SELECT EPVHOUR, SUM( TOTALPUTS ) AS PUT , SUM( TOTALGETS)    AS GET 	FROM mtrnd.mqmdayh WHERE SYSTEM = ? and day(EPVDATE)=? and month(EPVDATE)=? and year(EPVDATE)=? and SMF30WID='CICS' GROUP BY EPVHOUR order by EPVHOUR";
     private Connection conn=null;
 	private PreparedStatement st=null;
 	private ResultSet rs=null;
@@ -196,7 +169,6 @@ public class DatabaseManager {
 			" FROM CR00515.EPV30_23_intrvl"+
 			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN= ? AND JESNUM= ?"+
 			" ORDER BY SMF30STN, BEGINTIME ";
-	private static final String SELECT_MQ_BY_DAY_STRING="SELECT Intervallo,nGet,LATENZAMSG FROM smfacc.epv116_qa_LXECG100 where datediff( current_date,date(INTERVALLO))=? order by INTERVALLO asc;";
 	private final static String SELECT_LOGIN="SELECT password,profilo,email,lastAccess FROM smfacc.users WHERE abilitato=1 and email=?";
 	private final static String SELECT_ACTIVATION="SELECT count(*) FROM smfacc.users WHERE abilitato=0 and email=? and activationCode=?";
 	private static final String ACTIVATION_UPDATE = "UPDATE smfacc.users SET abilitato=1 where email=?";
@@ -355,21 +327,7 @@ public class DatabaseManager {
 		disconnect();
 		return coll;//}
 	}
-	public Collection<MQQuequeReport> getMqByDay(int offset) throws ClassNotFoundException, SQLException{
-		connection(SELECT_MQ_BY_DAY_STRING);
-		st.setInt(1, offset);
-		rs=st.executeQuery();
-		Collection<MQQuequeReport> collection=new ArrayList<MQQuequeReport>();
-		while(rs.next()){
-			MQQuequeReport el=new MQQuequeReport();
-			el.setDate(rs.getString(1));
-			el.setCountOperations(rs.getLong(2)); //nGet
-			el.setLatencyMSG(rs.getFloat(3));
-			collection.add(el);
-		}
-		disconnect();
-		return collection;
-	}
+	
 	public Collection<VolumeTimeInformation> getDailyVolumesTimesInformation(String system,String date) throws ClassNotFoundException, SQLException{
 		connection(EPV_DB_PROPERTIES,SELECT_VOLUME_TIMES_DAILY);
 		st.setString(1, system);
@@ -489,20 +447,7 @@ public class DatabaseManager {
 		}
 		return collection;
 	}
-	public Collection<TapeReport> getTapeMountTimes() throws ClassNotFoundException, SQLException{
-		connection(EPV_DB_PROPERTIES,SELECT_VIRTUAL_TAPE_MOUNT_TIME);
-		rs=st.executeQuery();
-		Collection<TapeReport> collection=new ArrayList<TapeReport>();
-		while(rs.next()){
-			TapeReport el=new TapeReport();
-			el.setEpvdate(rs.getString(1));
-			el.setType(rs.getString(2));
-			el.setAvg_mount_time(rs.getFloat(3));
-			collection.add(el);
-		}
-		disconnect();
-		return collection;
-	}
+	
 	public Collection<StepReport> getStepByJesnum(String system,String jobname,String jesnum) throws ClassNotFoundException, SQLException{
 		connectionIDAA(SELECT_STEP_BY_JESNUM);
 		st.setString(1, system);
@@ -811,45 +756,7 @@ public class DatabaseManager {
 		if(st!=null)st.close();
 		if(conn!=null)conn.close();
 	}
-	public Collection<SystemReport> getLastdaysSystemReport(int limit,
-			String system, String cpuClass, int offset) throws ClassNotFoundException, SQLException {
-		String dateStart=UtilityDate.conversionToDBformat(UtilityDate.getDate(offset));
-		connection(SELECT_CPI_MIPS_LAST_N_DAYS);
-		st.setString(1, system);
-		st.setString(2, cpuClass);
-		st.setString(3, dateStart);
-		st.setInt(4, limit);
-		rs=st.executeQuery();
-		Collection <SystemReport> coll=new ArrayList<SystemReport>();
-		while(rs.next()){
-			SystemReport el=new SystemReport();
-			el.setSystem(rs.getString(1));
-			el.setDate(rs.getString(2));
-			el.setCpuClass(rs.getString(3));
-			el.setCpi(rs.getFloat(4));
-			el.setMips(rs.getInt(5));
-			coll.add(el);
-		}
-		disconnect();
-		return coll;
-	}
-	public Collection<SystemHourReport> getYesterdaySystemsCPUnumbers() throws ClassNotFoundException, SQLException{
-		connection(SELECT_CPU_NUMBER_YESTERDAY);
-		st.setString(1, UtilityDate.conversionToDBformat(UtilityDate.getDate(-1)));
-		rs=st.executeQuery();
-		Collection <SystemHourReport> coll=new ArrayList<SystemHourReport>();
-		while(rs.next()){
-			SystemHourReport el=new SystemHourReport();
-			el.setSystem(rs.getString(1));
-			el.setNumberCPU(rs.getInt(4));
-			el.setFrom_hour(rs.getString(3));
-			coll.add(el);
-		
-		}
-		disconnect();
-		return coll;
-		
-	}
+	
 	public Collection<SystemReport> getYesterdayMips() throws ClassNotFoundException, SQLException {
 		connection(EPV_DB_PROPERTIES,SELECT_YESTERDAY_MIPS);
 		rs=st.executeQuery();
@@ -877,28 +784,7 @@ public class DatabaseManager {
 		disconnect();
 		return coll;
 	}
-	public Collection<SystemHourReport> getSystemReportByDate(String date,
-			String system, String cpuClass) throws ClassNotFoundException, SQLException {
-		connection(SELECT_SYSTEM_HOURLY_REPORT);
-		st.setString(2, system);
-		st.setString(3, cpuClass);
-		st.setString(1, date);
-		rs=st.executeQuery();
-		Collection<SystemHourReport> coll=new ArrayList<SystemHourReport>();
-		while(rs.next()){
-			SystemHourReport el=new SystemHourReport();
-			el.setSystem(system);
-			el.setDate(date);
-			el.setCpuClass(cpuClass);
-			el.setCpi(rs.getFloat(2));
-			el.setMips(rs.getInt(3));
-			el.setNumberCPU(rs.getInt(4));
-			el.setFrom_hour(rs.getString(1));
-			coll.add(el);
-		}
-		disconnect();
-		return coll;
-	}
+	
 	public Collection<CPUReport> getCPUReportsByDay(String day,String profile) throws ClassNotFoundException, SQLException {
 		ArrayList<CPUReport> reports=new ArrayList<CPUReport>();
 		if(!profile.equals("REALE"))
@@ -1066,42 +952,6 @@ public class DatabaseManager {
 		disconnect();
 		return systems;
 	}
-	public Collection<MQQuequeReport> getMqByMonthSystem(int year,int month, String system) throws ClassNotFoundException, SQLException{
-		connection(EPV_DB_PROPERTIES,SELECT_MQ_BY_MONTH_SYSTEM);
-		Collection<MQQuequeReport> coll=new ArrayList<MQQuequeReport>();
-		st.setString(1, system);
-		st.setInt(2,month);
-		st.setInt(3,year);
-		rs=st.executeQuery();
-		while(rs.next()){
-			MQQuequeReport el=new MQQuequeReport();
-			el.setDate(rs.getString(1));;
-			el.setPutBytes(rs.getLong(2));
-			el.setGetBytes(rs.getLong(3));
-			el.setDayOfWeek(rs.getString(4));
-			coll.add(el);
-		}
-		disconnect();
-		return coll;
-	}
-	public Collection<MQQuequeReport> getMqByDaySystem(int year,int month,int day, String system) throws ClassNotFoundException, SQLException{
-		connection(EPV_DB_PROPERTIES,SELECT_MQ_BY_DAY_SYSTEM);
-		Collection<MQQuequeReport> coll=new ArrayList<MQQuequeReport>();
-		st.setString(1, system);
-		st.setInt(2,day);
-		st.setInt(3,month);
-		st.setInt(4,year);
-		rs=st.executeQuery();
-		while(rs.next()){
-			MQQuequeReport el=new MQQuequeReport();
-			el.setHour(rs.getInt(1));
-			el.setPutBytes(rs.getLong(2));
-			el.setGetBytes(rs.getLong(3));
-			coll.add(el);
-		}
-		disconnect();
-		return coll;
-	}
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		//File f1=new File("C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\ottobre\\LOGATM.20151001.020049.NCH.txt"); 
                 //System.out.println(f1.renameTo(new File("C:\\Users\\cre0260\\Desktop\\ATM\\ATMNEW\\ottobre\\LOGATM.20151001.020049.NCH.txt"+".FATTO")));
@@ -1113,7 +963,4 @@ public class DatabaseManager {
             System.out.println(f.getName()+".FATTO");      
         }
 		 }
-
-
-	
 }

@@ -10,6 +10,10 @@ function shiftDate(amount,date,callback,params){
  }
  function dateToUTC(date){
      switch(date.length){
+         case 10:return new Date(Date.UTC(date.substring(0,4),//year
+                                                parseInt(date.substring(5,7))-1,//month
+                                                date.substring(8,10)
+                                                ));
          case 13:return new Date(Date.UTC(date.substring(0,4),//year
                                                 parseInt(date.substring(5,7))-1,//month
                                                 date.substring(8,10),//day

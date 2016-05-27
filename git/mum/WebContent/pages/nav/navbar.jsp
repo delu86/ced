@@ -65,7 +65,7 @@ String profile=request.getParameter("profile");
                             <a href="#"><i class="fa fa-institution fa-fw"></i> Cedacri<span class="fa arrow"></span></a>
                              <ul class="nav nav-second-level">
                               <li>
-                              <a href="http://10.99.252.22/datifs/html/cedacri/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                              <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CED/COMMON/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                               </li>
                               <li> 
                               <a href="doc.jsp?dir=cedacri"><i class="fa fa-book fa-fw"></i>Documents</a>
@@ -137,10 +137,10 @@ String profile=request.getParameter("profile");
                               <a href="tablesMFCounters?profile=CED"><i class="fa fa-table fa-fw"></i>CPU Metrics by hour</a>
                               </li>
                                <li>
-                                    <a href="chartsDispatcher?page=CPI"><i class="fa fa-bar-chart-o fa-fw"></i>CPI</a>
+                                    <a href="cpiCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CPI</a>
                                 </li>
                                <li>
-                                    <a href="chartsDispatcher?page=MIPS"><i class="fa fa-bar-chart-o fa-fw"></i>MIPS</a>
+                                    <a href="mipsCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>MIPS</a>
                                 </li>
                             </ul>
                                <!-- /.nav-third-level -->
@@ -181,7 +181,7 @@ String profile=request.getParameter("profile");
                               <a href="doc.jsp?dir=reale"><i class="fa fa-book fa-fw"></i>Documents</a>
                               </li>   
                              <li>
-                             <a href="http://10.99.252.22/datifs/html/reale/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                             <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/REALE/COMMON/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                              </li>
                              <li> 
                               <a href="realeCharts"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
@@ -245,7 +245,7 @@ String profile=request.getParameter("profile");
                             <a href="#"><i class="fa fa-institution fa-fw"></i>Credem <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="http://10.99.252.22/datifs/html/credem/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                                    <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CRED/COMMON/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                                 </li> 
                                 <li>
                                     <a href="consumiCREDEM.jsp"><i class="fa fa-table fa-fw"></i>JOB Trend batch</a>
@@ -268,7 +268,7 @@ String profile=request.getParameter("profile");
                               <a href="doc.jsp?dir=carige"><i class="fa fa-book fa-fw"></i>Documents</a>
                               </li>
                                 <li>
-                                    <a target="_blank" href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
+                                    <a target="_blank" href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CARIGEASS/COMMON/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                                 </li>
                                 <li> 
                               <a href="carigeCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>

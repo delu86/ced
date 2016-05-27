@@ -153,8 +153,10 @@ response.setDateHeader ("Expires", 0);
     <script src="../dist/js/sb-admin-2.js"></script>    
     <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
+    <script src="../js/ced/dateJS.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/cpi113Reale.js" charset="utf-8">
+    <script>var type="cpi";</script>
+    <script src="../js/charts/charts113.js" charset="utf-8">
 	
     </script>
     

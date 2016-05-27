@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT Intervallo,nGet,ifnull(LATENZAMSG,0) FROM smfacc.epv116_qa_LXECG100 where datediff(current_date,date(INTERVALLO))=? order by INTERVALLO asc;",
+  "resource_name": "cedDB" ,
+  "parameters":["offset"]
+  },
+  "admitted_users":["CED"]
+}

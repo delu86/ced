@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT EPVDATE , CASE  WHEN VTCS13VMT='mount sl scratch VTV' or VTCS13VMT='mount existing VTV as scratch' then 'SCRATCH' WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted after a recall' then 'EXISTING-N' WHEN VTCS13VMT='mount existing VTV' and VTCS13RCI='mounted without a recall' then 'EXISTING-Y' end as TYPE ,round(sum(VTCS13MTM)/sum(NMOU),2) as AVG_MOUNT  FROM mresa13.vsmmount where (VTID='VSMA' or VTID='VSMA1' or VTID='VSMA2')  and datediff(current_date,EPVDATE)>=1  group by SITE,EPVDATE,TYPE  order by TYPE,EPVDATE ASC",
+  "resource_name": "epvDB" ,
+  "parameters":[]
+  },
+  "admitted_users":["CED"]
+}
+

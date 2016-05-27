@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT day(EPVDATE), SUM( TOTALPUTS ) AS PUT , SUM( TOTALGETS)   AS GET,case when dayOfWeek(EPVDATE)=1 then 'DOM' when dayOfWeek(EPVDATE)=2 then 'LUN' when dayOfWeek(EPVDATE)=3 then 'MAR' when dayOfWeek(EPVDATE)=4 then 'MER' when dayOfWeek(EPVDATE)=5 then 'GIO' when dayOfWeek(EPVDATE)=6 then 'VEN' when dayOfWeek(EPVDATE)=7 then 'SAB' end as dayWeek FROM mtrnd13.mqmdayh WHERE SYSTEM = ? and month(EPVDATE)=? and year(EPVDATE)=? and SMF30WID='CICS' GROUP BY day(EPVDATE),dayWeek order by EPVDATE",
+  "resource_name": "epvDB" ,
+  "parameters":["system","month","year"]
+  },
+  "admitted_users":["CED"]
+}
+

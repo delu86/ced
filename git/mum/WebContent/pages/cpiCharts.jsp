@@ -1,3 +1,4 @@
+<%@page import="datalayer.DatabaseManager"%>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Cache-Control","no-store");
@@ -11,6 +12,7 @@ response.setDateHeader ("Expires", 0);
 <!DOCTYPE html>
 <html lang="en">
 <%
+        datalayer.DatabaseManager db=new DatabaseManager();
 	User user=(User)request.getSession().getAttribute("user");
     if(user==null)
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
@@ -21,7 +23,7 @@ response.setDateHeader ("Expires", 0);
     	}
     
 %>
-<%Collection<String> systems=(Collection<String>) request.getAttribute("systems");%>
+<%Collection<String> systems=db.getSystems();%>
 <head>
 
     <meta charset="utf-8">
@@ -157,7 +159,9 @@ response.setDateHeader ("Expires", 0);
     <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/cpi113.js" charset="utf-8">
+    <script src="../js/ced/dateJS.js"></script>
+    <script> var type='cpi';</script>
+    <script src="../js/charts/charts113.js" charset="utf-8">
 	
     </script>
     

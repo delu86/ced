@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT date , round(MIPS,2) as MIPS FROM(SELECT SYSTEM,date,SM113CPT,SUM(B1)/(1000000*24*3600) as MIPS FROM smfacc.r113_view where SYSTEM=? and SM113CPT=? and date<=? group by SYSTEM,date,SM113CPT order by date DESC LIMIT ?) sub order by date ASC",
+  "resource_name": "cedDB" ,
+  "parameters":["system","cpuType","date","limit"]
+  },
+  "admitted_users":["CED","REALE"]
+}

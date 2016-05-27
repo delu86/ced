@@ -90,8 +90,73 @@ response.setDateHeader ("Expires", 0);
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
         <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
+    <script src="../js/ced/dateJS.js"></script>
     <script src="../js/exporting.js"></script>
-    <script src="../js/charts/virtualTape.js" charset="utf-8"></script>
+    <script>$(function () {
+	var options={
+			chart: {
+				 renderTo: 'container'
+			},
+			title: {
+	            text: 'Virtual Tapes: tempo medio di mount',
+	            x: -20 //center
+	        },
+	        subtitle: {
+	            text: 'VSMA, VSMA1, VSMA2',
+	            x: -20
+	        },
+	        xAxis: {
+	            type:'datetime'
+	        },
+	        yAxis: {
+	            title: {
+	                text: 'Average mount time (sec.)'
+	            },
+	            plotLines: [{
+	                value: 0,
+	                width: 1,
+	                color: '#808080'
+	            }]
+	        },
+	        tooltip: {
+	            valueSuffix: ' sec'
+	        },
+	        legend: {
+	            layout: 'vertical',
+	            align: 'right',
+	            verticalAlign: 'middle',
+	            borderWidth: 0
+	        },
+	        series: []
+	    	
+	};
+	$('#loading').show();
+   $.getJSON('../queryResolver?id=virtualTape', function(json){
+	 
+	 var serie={name:'',data:[]};
+         json.data.forEach(function(element){
+        if(serie.name===''){
+                 serie.name=element[1];
+                 serie.data.push([dateToUTC(element[0]).getTime(),Number(element[2])]);
+             }else{
+                 if(serie.name===element[1]){
+                     serie.data.push([dateToUTC(element[0]).getTime(),Number(element[2])]);
+                 }
+                 else{
+                     options.series.push(serie);
+                     serie={name:element[1],data:[]};
+                     serie.data.push([dateToUTC(element[0]).getTime(),Number(element[2])]);
+                 }
+             }
+             
+         });
+         options.series.push(serie);
+	 chart = new Highcharts.Chart(options);
+	 $('#loading').hide();
+	 return true;
+   });
+        
+});</script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 
