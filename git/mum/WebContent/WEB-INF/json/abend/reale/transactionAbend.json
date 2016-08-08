@@ -1,0 +1,10 @@
+{
+  "database":{
+  "query":"SELECT TRAN_001,SUBSTRING(START_010,12) AS hour,TOT,truncate(CPUTIME,3)as cputm,truncate(ELAPSED,3)as resptm,DB2REQCT_180,ABCODEC_114,USERID_089,SUSERID, CMDUSER, OUSERID_364 FROM realebis_ctrl.epv110_1_trxacct_t10_rm where ABCODEC_114<>'' and SYSTEM=? and date(START_010)=? order by CPUTIME desc",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admitted_users":["CED","REALE"]
+ }
+
+

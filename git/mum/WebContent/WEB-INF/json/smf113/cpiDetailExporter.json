@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT `epv113_2_hdcap`.`SYSTEM`,  `epv113_2_hdcap`.`EPVDATE` as data,  `epv113_2_hdcap`.`EPVHOUR` as ora ,  MINUTE( SM113STM ) AS min,  SM113CPU AS CPU , SM113CPT AS TIPO, round(  BASIC00  /  BASIC01    , 3)   AS CPI, `epv113_2_hdcap`.`DURTIME`,`epv113_2_hdcap`.`EFFGHZ` FROM `smfacc`.`epv113_2_hdcap`  where substr(EPVDATE,1,7)=?  AND SYSTEM=?  ORDER BY 1,2,3,4 ,5",
+  "resource_name": "cedDB" ,
+  "parameters":["date","system"]
+  },
+  "admitted_users":["CED","REALE"]
+}

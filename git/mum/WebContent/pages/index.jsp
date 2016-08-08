@@ -257,8 +257,6 @@ response.setDateHeader ("Expires", 0);
      <!-- Charts  JavaScript -->
      <script src="../js/charts/lastDayMips.js" charset="utf-8"></script>
      <script src="../js/charts/lastDayCpi.js"></script>
-     <script src="../js/charts/lastDayCpu.js"> </script>
-
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 

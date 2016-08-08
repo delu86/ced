@@ -1,0 +1,12 @@
+{
+  "database":{
+  "query":"SELECT CASE when SYSTEM='ESYA' THEN 'TEST' WHEN SYSTEM='GSY7' THEN '^^^' else 'PROD' end as AMBIENTE, SYSTEM, TYPETASK as Tipo_task, date(ENDTIME) as data,concat(substr(ENDTIME,12,4),'0') as ORA, SMF30JBN as JOBNAME,SMF30JNM as JOBNUMBER,SMF30STM as STEPNAME,SMF30STN as STEPNUMBER,SMF30PSN as PROC_STEP,SMF30PGM as PROGRAM_NAME,SMF30RUD as USER,CPUTIME ,CPUTIME*1007/600 as MIPS,SMF30SRV as SERVICE_UNITS,SMF30TEX as NUM_EXCP from smfacc.epv030_4_step_accenture where date(ENDTIME)=? order by 4 , 1, 2 ",
+  "resource_name": "cedDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED"]
+ }
+ 
+ 
+ 
+ 

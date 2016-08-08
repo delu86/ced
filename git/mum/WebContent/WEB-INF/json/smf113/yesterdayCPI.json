@@ -1,0 +1,11 @@
+{
+  "database":{
+  "query":"SELECT SYSTEM,round((SUM(B0)/(SUM(B1))),2)  as CPI FROM smfacc.r113_view where SM113CPT='Standard CP' and datediff(date,current_date)=-1 group by SYSTEM,aaaammgg,SM113CPT",
+  "resource_name": "cedDB" ,
+  "parameters":[]
+  },
+  "admitted_users":["CED"]
+}
+
+
+

@@ -20,7 +20,7 @@ public class WorkloadExporterServlet extends HttpServlet {
 	private static final String SYSTEM_PARAMETER = "system";
 	private static final String LIMIT_PARAMETER = "limit";
 	private static final String OFFSET_PARAMETER = "offset";
-    private static final String SELECT="SELECT substring(DATA_INT10,1,10)as giorno,substring(DATA_INT10,12,2) as ora ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1007.6/3600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
+    private static final String SELECT="SELECT substring(DATA_INT10,1,10)as giorno,substring(DATA_INT10,12,2) as ora ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1102.4/3600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
                                        "  datediff(?,date(DATA_INT10))<=(?-1) and datediff(?,date(DATA_INT10))>-1  group by substring(DATA_INT10,1,13),WKLOADNAME,SYSTEM order by 1,2 ASC";
 	private static final String SUFFIX_FILE_NAME = "workload";
 	private static final String EXCEL_EXTENSION = ".xls";

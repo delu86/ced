@@ -112,6 +112,7 @@ response.setDateHeader ("Expires", 0);
                                 
                                     <thead>
                                         <tr>
+                                            <th>Data </th>
                                             <th>Giorno</th>
                                             <th>TotAtm</th>
                                             <th>Ore faro</th>
@@ -203,42 +204,16 @@ response.setDateHeader ("Expires", 0);
                 
         var codAbi='03032';
         var meseAnno=year.toString()+"-"+pad(month+1,2).toString();;
-        var tableDay = $('#dataTablesByDay').DataTable({    
-             bSort: false,
-                 paging: false,
-    processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             { "data": "DATA" },
-             { "data": "TotaleATM" },
-             { "data": "ORE_OK_FARO" },
-             { "data": "ORE_KO_FARO" },
-             { "data": "PERC_KO" },
-             { "data": "PERC_OK" },
-             { "data": "KO_SLA7" },
-             { "data": "PERC_SLA7" },
-             { "data": "KO_SLA8" },
-             { "data": "PERC_SLA8" }
-             ]
-                });
-        var tableATM = $('#dataTablesByAtm').DataTable({    
-             bSort: false,
-                 paging: true,
-    processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             { "data": "ATM" },
-             { "data": "ANNO_MESE" },
-             { "data": "GIORNI_FARO" },
-             { "data": "ORE_TOTALI" },
-             { "data": "ORE_KO" },
-             { "data": "PERC_KO" },
-             { "data": "PERC_OK" },
-             { "data": "KO_SLA7" }
-             ]
-                });
+        var tableDay = $('#dataTablesByDay').DataTable( {
+            paging: true,
+            processing:true,
+            responsive: true
+        });
+        var tableATM = $('#dataTablesByAtm').DataTable( {
+            paging: true,
+            processing:true,
+            responsive: true
+        });
 $( "#date-interval" ).datepicker({
 		 "aaSorting": [],   
 		changeMonth: true,
@@ -264,10 +239,10 @@ $( "#date-interval" ).datepicker({
             function setUpPage(){
         $( "#date-interval" ).datepicker('setDate',new Date(year, month, 1));   
             meseAnno=year.toString()+"-"+pad(month+1,2).toString();
-            $("#excelExporter").attr("href","atmExcel?type=day&codAbi="+codAbi+"&period="+meseAnno);
-            $("#excelExporter2").attr("href","atmExcel?type=atm&codAbi="+codAbi+"&period="+meseAnno);
-            tableATM.ajax.url("atmSportello?codAbi="+codAbi+"&period="+meseAnno).load();
-            tableDay.ajax.url("atmStat?codAbi="+codAbi+"&period="+meseAnno).load();
+            $("#excelExporter").attr("href","exporter?title=atmStat&id=atm/atmCredemPerGiorno&codAbi="+codAbi+"&period="+meseAnno);
+            $("#excelExporter2").attr("href","exporter?title=atmStat&id=atm/atmCredemPerSportello&codAbi="+codAbi+"&period="+meseAnno);
+            tableATM.ajax.url("../queryResolver?id=atm/atmCredemPerSportello&codAbi="+codAbi+"&period="+meseAnno).load();
+            tableDay.ajax.url("../queryResolver?id=atm/atmCredemPerGiorno&codAbi="+codAbi+"&period="+meseAnno).load();
        };
        setUpPage();
    });

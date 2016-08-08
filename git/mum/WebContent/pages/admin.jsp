@@ -35,8 +35,6 @@ Collection<DiskInformation> disksInfo=(Collection<DiskInformation>)request.getAt
 @SuppressWarnings("unchecked")
 Collection<ProcessInformation> processInfo=  (Collection<ProcessInformation>)request.getAttribute("process");
 String datastage=(String) request.getAttribute("datastage");
-@SuppressWarnings("unchecked")
-Collection<SondaWorkloadEmptySlot> coll=(Collection<SondaWorkloadEmptySlot>) request.getAttribute("emptySlot");
 %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -140,43 +138,7 @@ Collection<SondaWorkloadEmptySlot> coll=(Collection<SondaWorkloadEmptySlot>) req
                 </div>
                 <!-- /.row -->
                                 <!-- /.row -->
-              <div class="row">
-                    <div class="col-lg-12">
-                              <div class="panel panel-default">
-                        <div class="panel-heading">
-                           Sonda Workload <%out.print(UtilityDate.conversionToVisulaformat(UtilityDate.getDate(-1)));%>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <%if(coll.isEmpty()){%>
-                           <img alt="green" src="img/b_green.png"> Nessuno slot vuoto
-                            <%}else{%>
-                    <div class="table-responsive">
-                     <table class="table table-hover">
-                         
-                         <thead>
-                             <tr>
-						<th>System</th>
-						<th>#Empty slots</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                         <%for(SondaWorkloadEmptySlot s:coll){%>
-                         <tr>
-                             <td><a href="sondaWorkload?system=<%= s.getSystem()%>&date=<%=UtilityDate.conversionToEpvformat(UtilityDate.getDate(-1)) %>"> <img alt="red" src="img/b_alert.png"><%out.print(s.getSystem());%></a></td>
-                         <td><%out.print(s.getCountEmptySlot());%></td>
-                         </tr>
-                         <%}%>
-				</tbody>
-				</table>   
-				    </div>
-                    <%}%>
-				    </div>
-				    </div>
-				    
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+             
                 <!-- /.row -->
                 
                 <div class="row">

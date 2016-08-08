@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT APPLVTNAME,TRUNCATE(SUM(TOTCPUTM),4)as cputm,SUM(CTRANS) as tot_trans from mtrnd13.cicsdayh WHERE SYSTEM=? and EPVDATE=? GROUP BY EPVDATE,APPLVTNAME ORDER BY EPVDATE ASC, APPLVTNAME ASC;",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admitted_users":["CED","REALE","CARIGE"]
+}

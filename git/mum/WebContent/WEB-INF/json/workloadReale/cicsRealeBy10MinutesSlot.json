@@ -1,0 +1,10 @@
+{
+"database":{
+  "query":"SELECT TRAN_001,USERID_089,TOT,truncate(CPUTIME,3) as CPUTIME,truncate(ELAPSED,3) as ELAPSED,DB2REQCT_180,truncate(J8CPUT_260TM,3) as J8,truncate(KY8CPUT_263TM,3)as K8,truncate(L8CPUT_259TM,3)as L8,ABCODEO_113,SCUSRHWM_106 as memory,truncate(QRDISPT_255TM,3) as qr,truncate(S8CPUT_261TM,3)as S8,SUSERID,CMDUSER,OUSERID_364,truncate(MSCPUT_258TM,3) as MS FROM realebis_ctrl.epv110_1_trxacct_t10_rm where system=? and START_010=? order by TOT DESC",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date"]
+  },
+  "admitted_users":["CED","REALE"]
+}
+
+ 

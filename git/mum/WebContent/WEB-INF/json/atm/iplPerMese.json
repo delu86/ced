@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT * FROM atm_stat.ipl where substr(dateStart,1,7)=?;",
+  "resource_name": "cedDB" ,
+  "parameters":["annoMese"]
+  },
+  "admitted_users":["CED"]
+}

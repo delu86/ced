@@ -103,8 +103,19 @@ function drawChart(){
     		minlength:0,
     	    delay:0,
     	    source:function(request,response){
-    	    	$.getJSON("jobAnalisysSuggest?queryType="+queryType+"&system="+system+"&query="+request.term.replace("#","%23"),function (data){
-    	    		response(data);
+                var url;
+                if(queryType==="job"){
+                    url="../queryResolver?id=jobanalisys/suggestJobName&system="+system+"&query="+request.term.replace("#","%23")+'%25';
+                }else{
+                    url="../queryResolver?id=jobanalisys/suggestProgramName&system="+system+"&query="+request.term.replace("#","%23")+'%25';
+                }
+                console.log(url);
+    	    	$.getJSON(url,function (json){
+    	    	     var data=[];
+                     json.data.forEach(function(el){
+                         data.push(el[0]);
+                     });
+                     response(data);
                 });},
     	       select: function( event, ui ) {
     	    	   job=ui.item.value;

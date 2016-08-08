@@ -9,6 +9,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableCell;
@@ -18,8 +24,12 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 public class ExcelExporter {
+
 
 
 	public ExcelExporter() {
@@ -149,6 +159,85 @@ public class ExcelExporter {
 		conn.close();
 		return sheet;
 	}
+         public static void writeXlsx(OutputStream outputStream, String dbResource,String queryString,String... args) 
+            throws NamingException{
+        Context initContext = null;
+        try {
+            initContext = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(ExcelExporter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                Context envContext  = (Context)initContext.lookup("java:/comp/env/");  
+                DataSource datasource=(DataSource) envContext.lookup(dbResource);
+        try {
+            PreparedStatement ps=
+                    datasource.getConnection().prepareStatement(queryString);
+                int i=1;
+                for(String par:args){
+                    ps.setString(i++,par);
+                }
+                ResultSet rSet = ps.executeQuery();
+                ResultSetMetaData rsMetaData=rSet.getMetaData();
+		int columnCount=rsMetaData.getColumnCount();
+                SXSSFWorkbook workBook = new  SXSSFWorkbook();
+                SXSSFSheet sheet = (SXSSFSheet) workBook.createSheet();
+                String currentLine=null;
+                int rowNum=0;
+                int types[]=new int[columnCount];
+                Row intestazione=sheet.createRow(rowNum);
+               for( i=0;i<columnCount;i++){
+                   intestazione.createCell(i).setCellValue(rsMetaData.getColumnLabel(i+1));
+                   types[i]=rsMetaData.getColumnType(i+1);
+                }
+            rowNum++;
+            while (rSet.next()) {
+            rowNum++;
+            Row currentRow=sheet.createRow(rowNum);
+            for(int k=0;k<columnCount;k++){
+                setRowValue(currentRow,rSet,k,types[k]);
+
+            }
+        }
+            try {
+                workBook.write(outputStream);
+            } catch (IOException ex) {
+                Logger.getLogger(ExcelExporter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ExcelExporter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+    }
+             private static void setRowValue(Row currentRow, ResultSet rSet,int index, int type) throws SQLException {
+                switch (type){
+                       case Types.INTEGER: currentRow.createCell(index).setCellValue(rSet.getInt(index+1));
+                                           break;
+                       case Types.FLOAT: currentRow.createCell(index).setCellValue(rSet.getFloat(index+1));
+                                           break;
+                       case Types.BIGINT:
+			currentRow.createCell(index).setCellValue(rSet.getInt(index+1));
+			break;
+		
+		case Types.DOUBLE:
+                    currentRow.createCell(index).setCellValue(rSet.getDouble(index+1));
+                                           break;
+		case Types.DATE:
+			currentRow.createCell(index).setCellValue(rSet.getDate(index+1));
+                        break;
+
+		case Types.TIMESTAMP:
+			currentRow.createCell(index).setCellValue(rSet.getTimestamp(index+1))
+                                ;break;
+
+	
+		default:
+			currentRow.createCell(index).setCellValue(rSet.getString(index+1))
+                                ;break;
+
+                           
+
+                }
+                currentRow.createCell(index).setCellValue(rSet.getString(index+1));    }
     private static WritableCell getWritableCell(ResultSet rSet, int type,int row,int column) throws SQLException {
 		jxl.write.WritableCell writableCell;
     	switch (type) {

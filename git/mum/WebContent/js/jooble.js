@@ -27,23 +27,7 @@ var tableStep = $('#dataTables-step').DataTable( {
 	"dom": '<"top"i>rt<"bottom"flp><"clear">',
 	paging: true,
     processing:true,
-    responsive: true,
-    columns:[
-             { "data": "JOBname" },
-             { "data": "JESNUM" },
-             { "data": "SMF30STM" },
-             { "data": "SMF30STN" },
-             { "data": "SMF30PGM" },
-             { "data": "USER" },
-             { "data": "READTIME" },
-             { "data": "ENDTIME" },
-             { "data": "CPUTIME" },
-             { "data": "ZIPTIME" },
-             { "data": "ELAPSED" },
-             { "data": "DISKIO" },
-             { "data": "DISKIOTM" },
-             { "data": "CLASS" }
-       ]
+    responsive: true
 });
 $('#dataTables-batch tbody').on('click', 'td', function () {
 	 var index = $(this).index();
@@ -55,8 +39,8 @@ $('#dataTables-batch tbody').on('click', 'td', function () {
 	   $(".dataTable_wrapper").hide(500);
 	   $(".dataTable_wrapper_step").show(1000);
 	   jobname=jobname.replace("#","%23");
-	   $("#excelExporter").attr("href","joobleStepExcel?system="+system+"&jobname="+jobname.replace(" ","%20")+"&jesnum="+jesnum);
-	   tableStep.ajax.url("getStep?system="+system+"&jobname="+jobname+"&jesnum="+jesnum).load();
+	   $("#excelExporter").attr("href","exporter?id=jooble/stepByJesnum&title=step&system="+system+"&jobname="+jobname.replace(" ","%20")+"&jesnum="+jesnum);
+	   tableStep.ajax.url("../queryResolver?id=jooble/stepByJesnum&system="+system+"&jobname="+jobname.replace(" ","%20")+"&jesnum="+jesnum).load();
 	   tableStep.columns.adjust().responsive.recalc();
 	 }
 });
@@ -97,8 +81,12 @@ function searchJobs(){
     		minlength:0,
     	    delay:0,
     	    source:function(request,response){
-    	    	$.getJSON("getSuggest?system="+system+"&query="+request.term.replace("#","%23"),function (data){
-    	    		response(data);})},
+    	    	$.getJSON("../queryResolver?id=jooble/suggest&system="+system+"&query="+request.term.replace("#","%23")+'%25',function (json){
+    	    	    var data=[];
+                    json.data.forEach(function(element){
+                       data.push(element[0]); 
+                    });
+                    response(data);});},
     	       select: function( event, ui ) {
     	    	   $("#excelExporter").attr("href","joobleExcel?system="+system+"&jobname="+ui.item.value.replace("#","%23"));
     		   job=ui.item.value;

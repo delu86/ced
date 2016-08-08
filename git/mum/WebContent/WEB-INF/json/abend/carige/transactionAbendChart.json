@@ -1,0 +1,13 @@
+{
+  "database":{
+  "query":"SELECT date(START_010) as date,sum(TOT) as TOT,truncate(sum(CPUTIME), 3) as cputm  FROM smfacc.epv110_1_trxacct_t10_carige where  SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>'' group by date(START_010) order by date(START_010)",
+  "resource_name": "cedDB" ,
+  "parameters":["system","windowLength","offset"]
+  },
+  "admitted_users":["CED","CARIGE"]
+ }
+ 
+ 
+ 
+ 
+ 

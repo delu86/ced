@@ -1,0 +1,8 @@
+{
+"database":{
+  "query":"SELECT SMF30PGM FROM smfacc.r30pgmname WHERE SYSTEM=? and SMF30PGM like ?  order by SMF30PGM LIMIT 20",
+  "resource_name": "cedDB" ,
+  "parameters":["system","query"]
+  },
+  "admitted_users":["CED"]
+}

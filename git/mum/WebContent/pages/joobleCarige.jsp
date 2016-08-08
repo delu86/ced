@@ -163,6 +163,7 @@ response.setDateHeader ("Expires", 0);
                                             <th class="desktop ">CPUTIME</th>
                                             <th class="desktop ">ZIPTIME</th>
                                             <th class="desktop ">Elapsed</th>
+                                            <th class="desktop ">CONDCODE</th>
                                             <th >DISKIO</th>
                                             <th >DISKIOTM</th>
                                             <th>CLASS</th>

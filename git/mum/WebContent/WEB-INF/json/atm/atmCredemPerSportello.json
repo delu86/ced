@@ -1,0 +1,10 @@
+{
+  "database":{
+  "query":"SELECT atm,anno_mese,num_giorni,ore_totali_faro,ore_ko_faro,replace(round(perc_ko_faro,2),'.',',') as perc_ko_faro,replace((100-round(perc_ko_faro,2)),'.',',') as perc_ok_faro,ko_sla7 from atm_stat.riepilogo_per_bancomat_credem where substr(atm,1,5)=? and anno_mese=?  and certified=1;",
+  "resource_name": "cedDB" ,
+  "parameters":["codAbi","period"]
+  },
+  "admitted_users":["CED","CREDEM"]
+}
+
+

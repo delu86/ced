@@ -89,6 +89,7 @@ response.setDateHeader ("Expires", 0);
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
         <script src="../js/highcharts.js"></script>
     <script src="../js/data.js"></script>
+    <script src="../js/ced/dateJS.js"></script>
     <script src="../js/exporting.js"></script>
     <script type="text/javascript">
     $(function () {
@@ -134,8 +135,12 @@ response.setDateHeader ("Expires", 0);
     		                	 name:'Volumi SMF',
     		                	 data:[]
     		                 }]}
-    	$.getJSON('volumiSMF',function(json){
-    		options.series[0].data=json;
+    	$.getJSON('../queryResolver?id=volumiSMF',function(json){
+    		json.data.forEach(function(element){
+                    console.log(dateToUTC(element[0]));
+                    options.series[0].data.push([dateToUTC(element[0]).getTime(),Number(element[1])]);
+                });
+                
     		var chart = new Highcharts.Chart(options);
         	$('#loading').hide();
         	return true;

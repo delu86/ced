@@ -44,6 +44,22 @@
         <servlet-name>JsonQueryResolver</servlet-name>
         <servlet-class>servlet.JsonQueryResolver</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ExporterServlet</servlet-name>
+        <servlet-class>servlet.ExporterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GenerateReportAtmServlet</servlet-name>
+        <servlet-class>servlet.GenerateReportAtmServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetATMReportCertification</servlet-name>
+        <servlet-class>servlet.SetATMReportCertification</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateATMListServlet</servlet-name>
+        <servlet-class>servlet.UpdateATMListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>JsonQueryResolver</servlet-name>
         <url-pattern>/queryResolver</url-pattern>
@@ -629,5 +645,21 @@
     <servlet-mapping>
         <servlet-name>SystemConsumptionExporterServlet</servlet-name>
         <url-pattern>/pages/consumptionsExporter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExporterServlet</servlet-name>
+        <url-pattern>/pages/exporter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GenerateReportAtmServlet</servlet-name>
+        <url-pattern>/pages/generateReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetATMReportCertification</servlet-name>
+        <url-pattern>/pages/setCertification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateATMListServlet</servlet-name>
+        <url-pattern>/pages/updateAtmList</url-pattern>
     </servlet-mapping>
 </web-app>

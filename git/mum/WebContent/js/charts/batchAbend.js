@@ -6,36 +6,10 @@ var offset=0;
 var wind=15;
 var system=$( "button[autofocus='true']" ).val();
 var limit='10';
-var table = $('#dataTables-top10').DataTable( {
-	        paging: false,
-	        bInfo: false,
-	        processing:true,
-	        searching:false,
-	        order: [[ 3, "desc" ]],
-		    responsive: true,
-		    columns:[
-	            { "data": "hour" },
-	            { "data": "condcode" },
-	            { "data": "job" },
-	            { "data": "cpu_sec" },
-	            { "data": "count" },
-	            { "data": "ziptime" }
-		    ]
-			});
 var tableDrill=$('#dataTables-drill').DataTable({
 	processing:true,
 	responsive: true,
 	order: [[ 1, "asc" ]],
-    columns:[
-        { "data": "job" },
-        { "data": "hour" },
-        { "data": "count" },
-        { "data": "cpu_sec" },
-        { "data": "response" },
-        { "data": "ziptime" },
-        { "data": "condcode" },
-        { "data": "user" }
-    ]
 });
 var optionsChart={
             chart: {
@@ -116,21 +90,42 @@ var optionsChart={
   	    	        }]
    };
 function drilldown(date){
-	$("#heading-detail").html("BATCH abend "+system+" "+date+ 
-	"<a href=\""+"batchAbendExcel?system="+system+"&date="+date+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>");
+var url_table,url_exporter;
+    if(system==="SIES" || system==="SIGE"){
+        url_table="../queryResolver?id=abend/reale/batchAbend"+system+"&date="+date;
+        url_exporter="exporter?title=batchAbend&id=abend/reale/batchAbend"+system+"&date="+date;}
+    else{
+        url_table="../queryResolver?id=abend/carige/batchAbend&date="+date+"&system="+system;
+        url_exporter="exporter?title=batchAbend&id=abend/carige/batchAbend&date="+date+"&system="+system;
+    }
+    $("#heading-detail").html("BATCH abend "+system+" "+date+ 
+	"<a href=\""+url_exporter+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>");
     $(".goUp").show();
     $(".target").hide();
     $("#first-level").hide();
     $("#second-level").show();
-    tableDrill.ajax.url( 'batchAbendTable?system='+system +'&date='+date+"&limit=0").load();
+    
+    tableDrill.ajax.url(url_table).load();
     tableDrill.columns.adjust().responsive.recalc();
 };
 function drawChart(){
+    var url_chart;
+    if(system==="SIES" || system==="SIGE")
+        url_chart="../queryResolver?id=abend/reale/batchAbend"+system+"Chart&offset="+offset+"&windowLength="+wind;
+    else
+        url_chart="../queryResolver?id=abend/carige/batchAbendChart&offset="+offset+"&windowLength="+wind+"&system="+system;
 	   $('#loading').show();
-	    $.getJSON('batchAbendJSON?system='+system+'&offset='+offset+"&window="+wind, function(data){
-		 optionsChart.xAxis.categories=data[0];
-		 optionsChart.series[0].data=data[1][0];
-		 optionsChart.series[1].data=data[1][1];
+           //console.log(url_chart);
+	    $.getJSON(url_chart, function(json){
+                  
+		 optionsChart.xAxis.categories=[];
+		 optionsChart.series[0].data=[];
+		 optionsChart.series[1].data=[];
+                 json.data.forEach(function(element){
+                     optionsChart.xAxis.categories.push(element[0]);
+                     optionsChart.series[0].data.push(Number(element[1]));
+                     optionsChart.series[1].data.push(Number(element[2]));
+                 });
 		 var chart2 = new Highcharts.Chart(optionsChart);
   	    $('#loading').hide();
 

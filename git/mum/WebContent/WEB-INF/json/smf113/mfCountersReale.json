@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT SYSTEM,concat(substr(aaaammgg,1,4),'-',substr(aaaammgg,5,2),'-',substr(aaaammgg,7,2)) as date,CPU,CLASS,`sum(INTSEC)` as DURATION,MIPS,CPI,L1MP,RNI,L2P,L3P,L4LP,L4RP,MEMP,PRB_STATE,AVG_UTIL FROM smfacc.r113_resume_ctrl WHERE aaaammgg=? and system in ('SIES','SIGE') ORDER BY SYSTEM,CPU",
+  "resource_name": "cedDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED","REALE"]
+}

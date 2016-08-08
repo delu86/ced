@@ -5,68 +5,18 @@ var i=0;
 var offset=0;
 var wind=15;
 var system=$( "button[autofocus='true']" ).val();
-var limit='10';
-var table = $('#dataTables-top10').DataTable( {
-	        paging: false,
-	        bInfo: false,
-	        processing:true,
-	        searching:false,
-	        order: [[ 3, "desc" ]],
-		    responsive: true,
-		    columns:[
-	            { "data": "hour" },
-	            { "data": "abend" },
-	            { "data": "trans" },
-	            { "data": "cpu_sec" },
-	            { "data": "count" },
-	            { "data": "db2" }
-		    ]
-			});
-var tableDrill;
-if(system==='ASSV' || system==='ASDN'){
-    tableDrill=$('#dataTables-drill').DataTable({
+
+var   tableDrill=
+    $('#dataTables-drill').DataTable({
 	responsive: true,
 	processing:true,
-	order: [[ 1, "asc" ]],
-    columns:[
-        { "data": "cics" },
-        { "data": "trans" },
-        { "data": "hour" },
-        { "data": "count" },
-        { "data": "cpu_sec" },
-        { "data": "response" },
-        { "data": "db2" },
-        { "data": "abend" },
-        { "data": "user" },
-        
-    ]
-});
-}
-else{
-      tableDrill=$('#dataTables-drill').DataTable({
-	responsive: true,
-	processing:true,
-	order: [[ 1, "asc" ]],
-    columns:[
-        { "data": "trans" },
-        { "data": "hour" },
-        { "data": "count" },
-        { "data": "cpu_sec" },
-        { "data": "response" },
-        { "data": "db2" },
-        { "data": "abend" },
-        { "data": "user" },
-        { "data": "suser" },
-        { "data": "cmduser" },
-        { "data": "ouser" }
-    ]
+	order: [[ 1, "asc" ]]
 }); 
-}
 
 var optionsChart={
             chart: {
             	zoomType: 'x',
-   	        renderTo: 'container',
+   	        renderTo: 'container'
    	        	     },yAxis: [{
    	            min: 0,
    	            title: {
@@ -144,22 +94,40 @@ var optionsChart={
   	    	        }]
    };
 function drilldown(date){
+    if(system==="SIES"||system==="SIGE"){
+               urlTable="../queryResolver?id=abend/reale/transactionAbend&system="+system+'&date='+date;
+               urlExporter="exporter?title=cicsAbend&id=abend/reale/transactionAbend&system="+system+'&date='+date;
+           }   
+        else{
+               urlTable="../queryResolver?id=abend/carige/transactionAbend&system="+system+'&date='+date;
+               urlExporter="exporter?title=cicsAbend&id=abend/carige/transactionAbend&system="+system+'&date='+date;
+        }
 	$("#heading-detail").html("CICS abend "+system+" "+date+ 
-	"<a href=\""+"transactionAbendExcel?system="+system+"&date="+date+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>");
+	"<a href=\""+urlExporter+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>");
     $(".goUp").show();
     $(".target").hide();
     $("#first-level").hide();
     $("#second-level").show();
-    tableDrill.ajax.url( 'transactionAbendJSON?system='+system +'&date='+date+"&limit=0").load();
+    tableDrill.ajax.url(urlTable).load();
     tableDrill.columns.adjust().responsive.recalc();
 };
 function drawChart(){
 	   $('#loading').show();
-
-	 $.getJSON('abendJSON?system='+system+'&offset='+offset+"&window="+wind, function(data){
-		 optionsChart.xAxis.categories=data[0];
-		 optionsChart.series[0].data=data[1][0];
-		 optionsChart.series[1].data=data[1][1];
+           var url;
+           if(system==="SIES"||system==="SIGE")
+               url="../queryResolver?id=abend/reale/transactionAbendChart&system="+system+'&offset='+offset+"&windowLength="+wind;
+           else
+               url="../queryResolver?id=abend/carige/transactionAbendChart&system="+system+'&offset='+offset+"&windowLength="+wind;
+           
+	 $.getJSON(url, function(json){
+		 optionsChart.xAxis.categories=[];
+		 optionsChart.series[0].data=[];
+		 optionsChart.series[1].data=[];
+                 json.data.forEach(function(element){
+                     optionsChart.xAxis.categories.push(element[0]);
+                     optionsChart.series[0].data.push(Number(element[1]));
+                     optionsChart.series[1].data.push(Number(element[2]));
+                 });
 		 var chart2 = new Highcharts.Chart(optionsChart);
   	   $('#loading').hide();
 

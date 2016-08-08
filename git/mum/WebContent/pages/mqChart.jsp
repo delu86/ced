@@ -1,3 +1,4 @@
+<%@page import="datalayer.DatabaseManager"%>
 <%@page import="java.util.Collection"%>
 <%
 response.setHeader("Cache-Control","no-cache");
@@ -12,7 +13,8 @@ response.setDateHeader ("Expires", 0);
 <%
 	User user=(User)request.getSession().getAttribute("user");
     	String profile=user.getProfile();
-    	Collection<String> systems=(Collection<String>) request.getAttribute("systems");  
+        datalayer.DatabaseManager db=new DatabaseManager();
+    	Collection<String> systems=db.getMQSystems();  
 %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -212,7 +214,7 @@ response.setDateHeader ("Expires", 0);
               		var monthPar=month+1;
                         var date=year+'-'+pad(monthPar,2,0)+'-'+pad(e.point.category.split(",")[0],2,0);
                         //console.log(date);
-            		$.getJSON('../queryResolver?id=mqByDaySystem&date='+date+'&system='+system,function(json){
+            		$.getJSON('../queryResolver?id=mq/mqByDaySystem&date='+date+'&system='+system,function(json){
             		json.data.forEach(function(element){
                             optionsDrillDown.xAxis.categories.push(element[0]);
                             optionsDrillDown.series[0].data.push(Number(element[1]));
@@ -257,7 +259,7 @@ response.setDateHeader ("Expires", 0);
 	function drawChart(){
 		$('#loading').show();
 		var monthPar=month+1;
-		$.getJSON('../queryResolver?id=mqByMonthSystem&year='+year+'&month='+monthPar+'&system='+system,function(json){
+		$.getJSON('../queryResolver?id=mq/mqByMonthSystem&year='+year+'&month='+monthPar+'&system='+system,function(json){
 		options.xAxis.categories=[];
                 options.series[0].data=[];
                 options.series[1].data=[];

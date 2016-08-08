@@ -32,45 +32,16 @@ $("#baseline_value").on('keyup change', function(e){
 });
 
 
-//DATET10,SMF30JBN,JESNUM,SMF30STM,SMF30STN,
-//SMF30PSN,SMF30PGM,SMF30RUD,CPUTIME,SMF30SRV_L,SMF30TEX,CONDCODE,ABEND
 var tableBatch = $('#dataTables-batch').DataTable( {
     paging: true,
     processing:true,
-    responsive: true,
-    columns:[
-             { "data": "SMF30JBN" },
-             { "data": "JESNUM" },
-             { "data": "SMF30STM" },
-             { "data": "SMF30STN" },
-             { "data": "SMF30PSN" },
-             { "data": "SMF30PGM" },
-             { "data": "SMF30RUD" },
-             { "data": "CPUTIME" },
-             { "data": "SMF30SRV_L" },
-             { "data": "SMF30TEX" },
-             { "data": "CONDCODE" },
-             { "data": "ABEND" }
-             ]});
+    responsive: true
+});
 var tableSTC = $('#dataTables-stc').DataTable( {
     paging: true,
     processing:true,
-    responsive: true,
-    columns:[
-             { "data": "SMF30JBN" },
-             { "data": "JESNUM" },
-             { "data": "SMF30STM" },
-             { "data": "SMF30STN" },
-             { "data": "SMF30PSN" },
-             { "data": "SMF30PGM" },
-             { "data": "SMF30RUD" },
-             { "data": "CPUTIME" },
-             { "data": "SMF30SRV_L" },
-             { "data": "SMF30TEX" },
-             { "data": "CONDCODE" },
-             { "data": "ABEND" }
-             
-             ]});
+    responsive: true
+});;
 var tableCics = $('#dataTables-cics').DataTable( {
     paging: true,
     processing:true,
@@ -223,10 +194,16 @@ var optionsGeneral={
                             		$("#heading").html(system+" "+Highcharts.dateFormat("%A, %b %e, %H:%M",e.point.category)+
                             "<a href=\""+"transactionIntervalExcel?system="+system+"&date="+e.point.category.toString()+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>"
                                             	);
-                                        console.log(e.point.category.toString());
-                            		tableSTC.ajax.url("batchDetail?type=stc&system="+system+'&day='+e.point.category.toString()).load();
-                                        tableBatch.ajax.url("batchDetail?type=job&system="+system+'&day='+e.point.category.toString()).load();
-                            		tableCics.ajax.url("transactionDetail?system="+system+'&day='+e.point.category.toString()).load();
+                                        //console.log(Highcharts.dateFormat("%Y-%m-%d %H:%M",e.point.category).replace(' ','%20').replace(':','%3A'));
+                            		tableSTC.ajax.url('../queryResolver?id=workloadReale/stc'+system+'By10MinutesSlot&date='
+                                                +Highcharts.dateFormat("%Y-%m-%d %H:%M",e.point.category).replace(' ','%20').replace(':','%3A'))
+                                                .load();
+                                        tableBatch.ajax.url('../queryResolver?id=workloadReale/batch'+system+'By10MinutesSlot&date='
+                                                +Highcharts.dateFormat("%Y-%m-%d %H:%M",e.point.category).replace(' ','%20').replace(':','%3A'))
+                                                .load();
+                            		tableCics.ajax.url('../queryResolver?id=workloadReale/cicsRealeBy10MinutesSlot&system='+system+'&date='
+                                                +Highcharts.dateFormat("%Y-%m-%d %H:%M",e.point.category).replace(' ','%20').replace(':','%3A'))
+                                                .load();
                                  	drillCount+=1;}
                             	}
                             	}};

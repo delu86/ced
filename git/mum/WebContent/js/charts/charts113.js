@@ -6,7 +6,7 @@
 var offset=0; 
 var limit=7;
 var system=$( "button[autofocus='true']" ).val();
-var url="../queryResolver?id="+type+"BySystem&";
+var url="../queryResolver?id=smf113/"+type+"BySystem&";
 var url_drilldown="../queryResolver?id=113BySystemDate&system=";
 //opzioni per il grafico primario
 var optionsChart={

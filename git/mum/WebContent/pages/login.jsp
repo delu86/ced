@@ -30,6 +30,9 @@ response.setDateHeader ("Expires", 0);
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <style type="text/css">
+        #error_mail_msg{
+      color: #d60000      
+        }   
     .message{
     color: #d60000
     }
@@ -40,9 +43,9 @@ response.setDateHeader ("Expires", 0);
  <script type="text/javascript">
     function controlPwd() {
         if($('#pwd').val().length>=6){
-        	$('#submit').prop('disabled',false);}
+        	$('#submit_registration').prop('disabled',false);}
         else{
-        	$('#submit').prop('disabled',true);
+        	$('#submit_registration').prop('disabled',true);
         }
     	}
     
@@ -55,6 +58,8 @@ response.setDateHeader ("Expires", 0);
     <div class="page-header text-center" >
            <h1 class="title">Portale Statistiche Cedacri </h1>
            <h1 class="subtitle"><small class="subtitle">Login</small></h1>
+           <h1 class="subtitle"><small class="subtitle">Sito ottimizzato per Google Chrome , Firefox & Safari (No IE8)</small></h1>
+            <h1 class="subtitle"><small class="subtitle"></small></h1>
            </div>
         <%if(message!=null){ %><h3 class="message"><%out.print(message); %></h3><%} %>
         <%if(messageOK!=null){ %><h3 class="messageOK"><%out.print(messageOK); %></h3><%} %>
@@ -78,10 +83,13 @@ response.setDateHeader ("Expires", 0);
 						</div>
 						<div class="tab-pane" id="register">
                                                     <h5>Utilizzare email aziendale per registrarsi  </h5>
-							<form class="form-signin" action="CreateNewAccountServlet" method="POST">
-								<input type="email" name="email" class="form-control" placeholder="Email Address ..." required autofocus>
-								<input type="password" id="pwd" name="password" class="form-control" placeholder="Password ...(min. 6 chars)" required onkeyup="controlPwd()">
-								<input type="submit" id="submit" disabled="disabled" class="btn btn-lg btn-default btn-block" value="Sign Up" />
+                                                    <div id="error_mail_msg" hidden="true"><h5>Mail inserita non valida o dominio sconosciuto</h5></div>
+							<form class="form-signin" id="form_registration" action="CreateNewAccountServlet" method="POST" autocomplete="false">
+								<input 
+                                                                       id="user_email" type="text"  name="email" class="form-control" placeholder="Email Address ..." required autofocus />
+								<input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
+                                                                <input type="password" value="" id="pwd" name="password" class="form-control" placeholder="Password ...(min. 6 chars)" required onkeyup="controlPwd()" />
+								<input type="submit" id="submit_registration" disabled="disabled" class="btn btn-lg btn-default btn-block" value="Sign Up" />
 							</form>
 							<div id="tabs" data-tabs="tabs">
                			<p class="text-center"><a href="#login" data-toggle="tab">Login</a></p>
@@ -111,14 +119,31 @@ response.setDateHeader ("Expires", 0);
       </div>
     </div>
     <script >
+   var email_regex=new RegExp("^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@(consulenti\.cedacri\.it|cedacri\.it|realeites\.com|carigeassicurazioni\.it|carige\.it|credem\.it|consultants\.realeites\.com|amissima\.it|c-global\.it|bancadelpiemonte\.it)?$");
+   //variabile che contiene l'email che viene usata in fase di registrazione
+   var registration_email;
+    $("#user_email").on('change',function(){
+       registration_email=$(this).val();
+       
+            
+    });
+   
+    $("#form_registration").submit(function(){
+        if(!email_regex.test(registration_email)){
+            event.preventDefault();
+            $("#error_mail_msg").show();
+            ;
+        }
+    });
+   
+    
     //placeholder su internet Explorer
    var isExplorer= false || !!document.documentMode;
    if(isExplorer){
    $('input[placeholder]').each(function(){ 
     	 
         var input = $(this);        
- 
-        $(input).val(input.attr('placeholder'));
+ $(input).val(input.attr('placeholder'));
  
         $(input).focus(function(){
              if (input.val() == input.attr('placeholder')) {
@@ -132,6 +157,8 @@ response.setDateHeader ("Expires", 0);
             }
         });
     });}
+
+    
     </script>
 </body>
 </html>

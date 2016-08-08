@@ -197,16 +197,23 @@
 	         	  events: {
 	               	click: function (e) {
 	               		$('#loading').show();
-	               		$.getJSON('volumesTimesByDay?date='+date+'&applvtname='+e.point.category+'&system='+system,function(json){
+	               		$.getJSON('../queryResolver?id=cicsEfficienza/cicsEfficienzaBySystemDateId&date='+date+'&applvtname='+e.point.category+'&system='+system,function(json){
 	               	    optionsDrillDown.title.text=system+": "+e.point.category;
-	               		optionsDrillDown.xAxis.categories=json[0];
-	               	    optionsDrillDown.series[0].data=json[1][0];
-	               	    optionsDrillDown.series[1].data=json[1][1];   
-	               	    optionsDrillDown.series[2].data=json[1][2];   
+	               	data=[[],[],[],[]];
+                        json.data.forEach(function(el){
+                            data[0].push(el[0]);
+                            data[1].push(Number(el[2]));
+                            data[2].push(Number(el[1]));
+                            data[3].push(Number(el[2])/Number(el[1]));
+                        });
+                        optionsDrillDown.xAxis.categories=data[0];
+  			optionsDrillDown.series[0].data=data[1];
+  			optionsDrillDown.series[1].data=data[2];
+  			optionsDrillDown.series[2].data=data[3];   
 	             		chart = new Highcharts.Chart(optionsDrillDown);
 	             		$('#loading').hide(); 
 	             		return true;
-	             		})
+	             		});
 	               	}}},
 	             pointPadding: 0.2,
 	             borderWidth: 0
@@ -244,17 +251,24 @@
      	var d1=new Date();
       	d1.setDate(d1.getDate()-offset);
       	
-      	date=$.datepicker.formatDate('yy-mm-dd', d1)
+      	date=$.datepicker.formatDate('yy-mm-dd', d1);
       	$("#date-interval").text($.datepicker.formatDate('dd/mm/yy', d1));
      };
      function createChart(){
      	$('#loading').show();
-     $.getJSON('volumesTimesDaily?system='+system+'&date='+date, function(data){
+     $.getJSON('../queryResolver?id=cicsEfficienza/cicsEfficienzaBySystemDate&system='+system+'&date='+date, function(json){
      	
-			options.xAxis.categories=data[0];
-  			options.series[0].data=data[1][0];
-  			options.series[1].data=data[1][1];
-  			options.series[2].data=data[1][2];
+                        data=[[],[],[],[]];
+                        json.data.forEach(function(el){
+                            data[0].push(el[0]);
+                            data[1].push(Number(el[2]));
+                            data[2].push(Number(el[1]));
+                            data[3].push(Number(el[2])/Number(el[1]));
+                        });
+                        options.xAxis.categories=data[0];
+  			options.series[0].data=data[1];
+  			options.series[1].data=data[2];
+  			options.series[2].data=data[3];
   			options.title.text=system;
   			chart = new Highcharts.Chart(options);
         	$('#loading').hide();

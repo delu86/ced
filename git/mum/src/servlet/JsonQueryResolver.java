@@ -45,7 +45,7 @@ public class JsonQueryResolver extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
+     * @throws javax.servlet.ServletException
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -75,7 +75,8 @@ public class JsonQueryResolver extends HttpServlet {
             Iterator iterator=parameters.iterator();
             while(iterator.hasNext()){
                     String parameter=request.getParameter(iterator.next().toString().replace("\"", ""));
-                    if(parameter.matches(StringConstants.INTEGER_PATTERN_STRING))
+                    if(parameter.matches(StringConstants.INTEGER_PATTERN_STRING)&&
+                       !parameter.equals(StringConstants.JESNUMBER_PARAMETER))
                        ps.setInt(indexParam++,Integer.parseInt(parameter));
                     else
                        ps.setString(indexParam++,parameter);
@@ -159,5 +160,7 @@ public class JsonQueryResolver extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+
 
 }

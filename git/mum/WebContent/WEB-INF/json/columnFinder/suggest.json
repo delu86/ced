@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT column_name from information_schema.COLUMNS where concat(column_name,column_comment) like ? LIMIT 20",
+  "resource_name": "epvDB" ,
+  "parameters":["query"]
+  },
+  "admitted_users":["CED"]
+}

@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":" SELECT date,count(*) as tot,sum(cputim) as CPUTM from(  SELECT date(tData) as date,SMF30JBN,JESNUM,truncate(sum(CPUTIME), 3) as cputim  FROM realebis_ctrl.epv030_23_intrvl_sige_job where  datediff(current_date, date(tData) )<=? and datediff(current_date, date(tData) )>? and CONDCODE>=8  group by date(DATET10),SMF30JBN,JESNUM) as derived  group by date order by date;",
+  "resource_name": "epvDB" ,
+  "parameters":["windowLength","offset"]
+  },
+  "admitted_users":["CED","REALE"]
+ }

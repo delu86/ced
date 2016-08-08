@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT `cicshour`.`APPLVTNAME`,`cicshour`.`TRANSACTNAME`,`cicshour`.`EPVDATE` as DATE, `cicshour`.`EPVHOUR` as HOUR,`cicshour`.`CTRANS` as TOT_TRANS, round(`cicshour`.`TOTCPUTM`,2) as CPUTIME, round(`cicshour`.`TOTELAP`,2) as ELAPSED, round(`cicshour`.`TOTIRESP`,2) as TOTIRESP, round(`cicshour`.`TOTL8CPU`,2) as TOTL8CPU, `cicshour`.`TOTDB2RQ` as TOTDB2RQ FROM `mthru13`.`cicshour` WHERE SYSTEM = ?   AND EPVDATE  = ? AND EPVHOUR=? AND (`TRANSACTNAME` NOT LIKE 'C%' OR `TRANSACTNAME` IN ('CSMI','CPMI','CVMI')) ORDER BY TRANSACTNAME DESC ;",
+  "resource_name": "epvDB" ,
+  "parameters":["system","date","hour"]
+  },
+  "admitted_users":["CED","CARIGE"]
+ }
+ 

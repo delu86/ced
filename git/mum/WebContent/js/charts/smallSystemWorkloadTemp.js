@@ -1,4 +1,4 @@
-/**
+ /**
  * Codice per la creazione dei grafici di workload di Reale Mutua 
  * 
  */
@@ -36,21 +36,7 @@ $("#baseline_value").on('keyup change', function(e){
 var tableCics = $('#dataTables-cics').DataTable( {
     paging: true,
     processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             
-                { "data": "APPLVTNAME" },
-                { "data": "TRANSACTNAME" },
-                { "data": "EPVDATE" },
-                { "data": "EPVHOUR" },
-                { "data": "CTRANS" },
-                { "data": "TOTCPUTM" },
-                { "data": "TOTELAP" },
-                { "data": "TOTIRESP" },
-                { "data": "TOTL8CPU" },
-                { "data": "TOTDB2RQ" }
-             ]
+    responsive: true
 });
 var optionsDrillDown={
 		chart: {
@@ -197,10 +183,10 @@ var optionsGeneral={
                             		$("#baseline_value").hide();
                             		$(".panel-table").show(500);
                             		$("#heading").html(system+" "+Highcharts.dateFormat("%A, %b %e, %H:%M",e.point.category)+
-                            "<a href=\""+"topCicsExcel?system="+system+'&date='+Highcharts.dateFormat("%Y-%m-%d",e.point.category)+
+                            "<a href=\""+"exporter?title=topConsumerByHour&id=cics/topConsumer&system="+system+'&date='+Highcharts.dateFormat("%Y-%m-%d",e.point.category)+
                                               '&hour='+Highcharts.dateFormat("%Y-%m-%d %H",e.point.category).substring(11,13)+"\" id=\"excel-export-interval\"><img alt=\"excel\" src=\"img/xls-48.png\" height=\"24\" width=\"24\"></a>"
                                             	);
-                            		tableCics.ajax.url("topCics?system="+system+'&date='+Highcharts.dateFormat("%Y-%m-%d",e.point.category)+
+                            		tableCics.ajax.url("../queryResolver?id=cics/topConsumerByHour&system="+system+'&date='+Highcharts.dateFormat("%Y-%m-%d",e.point.category)+
                                               '&hour='+Highcharts.dateFormat("%Y-%m-%d %H",e.point.category).substring(11,13)  ).load();
                                         
                            	         console.log(Highcharts.dateFormat("%Y-%m-%d %H",e.point.category).substring(11,13));

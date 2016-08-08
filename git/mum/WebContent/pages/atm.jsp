@@ -172,31 +172,19 @@ response.setDateHeader ("Expires", 0);
         var meseAnno;
         function setUpPage(){
             meseAnno=year.toString()+"-"+(pad(month+1,2)).toString();
-            tableDay.ajax.url("atmStat?codAbi="+codAbi+"&period="+meseAnno).load();
+            tableDay.ajax.url("../queryResolver?id=atm/atmStat&codAbi="+codAbi+"&period="+meseAnno).load();
             
         $('.panel-heading')
                 .html('<a  title="Esporta  in excel" id="excelExporter" href="'+
-                "atmExcel?type=day&codAbi="+codAbi+"&period="+meseAnno
+                "exporter?title=atmStat&id=atm/atmStat&codAbi="+codAbi+"&period="+meseAnno
                 +'"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>'+
                 'Riepilogo disponibilità per giorno: istituto  '+codAbi);}
        
-        var tableDay = $('#dataTablesByDay').DataTable({    
-             bSort: false,
-                 paging: false,
-    processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             { "data": "DATA" },
-             { "data": "TotaleATM" },
-             { "data": "ORE_OK_FARO" },
-             { "data": "ORE_KO_FARO" },
-             { "data": "PERC_KO" },
-             { "data": "PERC_OK" },
-             { "data": "KO_SLA7" },
-             { "data": "PERC_SLA7" }
-             ]
-                });
+        var tableDay = $('#dataTablesByDay').DataTable( {
+            paging: true,
+            processing:true,
+            responsive: true
+        });
        $( "#date-interval" ).datepicker({
 		 "aaSorting": [],   
 		changeMonth: true,

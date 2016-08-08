@@ -69,12 +69,10 @@ response.setDateHeader ("Expires", 0);
                 <!-- /.row -->
                  <div class="row">
                     <div class="col-lg-12">
-                        <form action="detailAccenture" method="GET">
                         <div class="form-inline">
                         <input type="text" name="date" class="form-control"  placeholder="Seleziona giorno" size="12" id="datepicker">
                         </div>
-                        <input type="submit" value="Download .xls">
-                        </form>
+                        <button  id="download" value="Download .xls">Download .xls</button>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -99,11 +97,23 @@ response.setDateHeader ("Expires", 0);
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
     <script type="text/javascript">
+    var date;
     $(function() {
+        
+        
     	
         $( "#datepicker" ).datepicker({
-        	    dateFormat: 'yy-mm-dd'});
-    })
+        	    dateFormat: 'yy-mm-dd',
+                onSelect: function () {
+                    date=$(this).val();
+                    
+                }});
+            
+         $("#download").click(function(){
+             console.log(date);
+             document.location.href="exporter?title=stepAccenture_"+date+"&id=accenture/detailStep&date="+date; 
+         });
+    });
     </script>
 
 </body>

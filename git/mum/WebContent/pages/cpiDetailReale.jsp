@@ -73,11 +73,13 @@ response.setDateHeader ("Expires", 0);
                 <!-- /.row -->
                  <div class="row">
                     <div class="col-lg-12">
-                        <form action="cpiDailyDetail" method="POST">
+                        <form action="exporter" method="GET">
                         <div class="form-inline">
                         <input type="text" id="datepicker" name="date" size="22" readonly='true'>
                         <input type="radio" name="system" value="SIES" checked="checked" >SIES
                         <input type="radio" name="system" value="SIGE">SIGE
+                        <input type="hidden" name="id" value="smf113/cpiDetailExporter">
+                        <input type="hidden" name="title" value="cpiDetail">
                         </div>
                         <input type="submit" value="Download .xls">
                         </form>
@@ -113,7 +115,7 @@ response.setDateHeader ("Expires", 0);
         	changeMonth: true,
 	        changeYear: true,
 	        showButtonPanel: true,     
-        	dateFormat: 'mm-yy',
+        	dateFormat: 'yy-mm',
         	 onClose: function(dateText, inst) { 
  	            month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
  	            year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
@@ -122,7 +124,7 @@ response.setDateHeader ("Expires", 0);
         	});
     	  $( "#datepicker" ).datepicker('setDate',new Date(year, month, 1));
     		
-    })
+    });
     </script>
 
 </body>

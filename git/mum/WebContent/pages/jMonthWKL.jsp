@@ -162,7 +162,7 @@ out.print("</select>");
 			}
 		Connection connection = null; 
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mtrnd","epv", "epv");		 
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mtrnd13","epv", "epv");		 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			out.print(e.getMessage()); 
@@ -183,7 +183,7 @@ out.print("</select>");
 
 		try {
 			
-			String	sql0 = " select  distinct WKL  from mtrnd.workdayh " +			
+			String	sql0 = " select  distinct WKL  from mtrnd13.workdayh " +			
 			" where SYSTEM = '" + CodSys + "' " ; 
 			stmt0 = connection.createStatement(); 
 						 rs0 = stmt0.executeQuery(sql0);
@@ -202,7 +202,7 @@ out.print("</select>");
 			stmt = connection.createStatement(); 
 				  
 			String	sql = " select  EPVDATE, UNIX_TIMESTAMP( CONCAT(EPVDATE,\" 12:00:00\") )*1000  as DDay" +
-			" , ROUND( AVG(MIP) , 2) as AVGDay , ROUND( MIN(MIP) ,2)  as MINDay , ROUND( MAX(MIP) ,2)  as MaxDay from mtrnd.workdayh  "  +
+			" , ROUND( AVG(MIP) , 2) as AVGDay , ROUND( MIN(MIP) ,2)  as MINDay , ROUND( MAX(MIP) ,2)  as MaxDay from mtrnd13.workdayh  "  +
 			" where SYSTEM = '" + CodSys + "' and WKL='"+ Workload + "'  "  ;
 			if (Workload.equals("CICS"))
 				sql = sql + " AND CAST( EPVHOUR AS UNSIGNED) BETWEEN 9 AND 17 " ;

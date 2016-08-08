@@ -7,7 +7,6 @@ response.setDateHeader ("Expires", 0);
 <!DOCTYPE html>
 <%@page import="object.User"%>
 <%@page import="utility.UtilityDate"%>
-<%@page import="object.CPUReport"%>
 <%@page import="java.util.Collection"%>
 <html lang="en">
 <%
@@ -97,7 +96,7 @@ response.setDateHeader ("Expires", 0);
                        Date: <input type="text" id="datepicker" placeholder="aaaa-MM-gg" name="data">
                        <label class="radio-inline"><input type="radio" name="optradio" value="ASDN" checked="checked">ASDN</label>
                        <label class="radio-inline"><input type="radio" name="optradio" value="ASSV">ASSV</label>
-</p>
+                            </p>
                       
                         <div class="dataTable_wrapper">
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-example">
@@ -138,64 +137,46 @@ response.setDateHeader ("Expires", 0);
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="../js/jquery-ui.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/jquery-ui.js"></script>
+<!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
     <!-- DataTables JavaScript -->
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
-
+    <script src="../js/ced/dateJS.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 
     
     <script>
-  		$(document).ready(function() {            
         var system= $("input[type='radio'][name='optradio']:checked").val();
         var date=new Date();
-        var dateform=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
-        
-        $("a#excel").attr("href","topCicsExcel?system="+system+"&date="+dateform);
-        var table = $('#dataTables-example').DataTable( {
-    paging: true,
-    processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             
-                { "data": "APPLVTNAME" },
-                { "data": "TRANSACTNAME" },
-                { "data": "EPVDATE" },
-                { "data": "EPVHOUR" },
-                { "data": "CTRANS" },
-                { "data": "TOTCPUTM" },
-                { "data": "TOTELAP" },
-                { "data": "TOTIRESP" },
-                { "data": "TOTL8CPU" },
-                { "data": "TOTDB2RQ" }
-             ]
-});
-                table.ajax.url("topCics?system="+system+"&date="+dateform).load();
-    		$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', 
+        var dateform=date.yyyymmdd().substr(0,10);
+  	var table = $('#dataTables-example').DataTable( {
+                    paging: true,
+                    processing:true,
+                    responsive: true
+        });
+        function updatePage(){
+            $("a#excel").attr("href","exporter?title=topConsumer&id=cics/topConsumer&system="+system+"&date="+dateform);
+            table.ajax.url("../queryResolver?id=cics/topConsumer&system="+system+"&date="+dateform).load();
+        }
+        $(function() {
+               updatePage();
+               
+               $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', 
     			onSelect: function (selection) {
                             dateform=selection;
-                            
-                       $("a#excel").attr("href","topCicsExcel?system="+system+"&date="+dateform);
-  	                    table.ajax.url("topCics?system="+system+"&date="+dateform).load();
-
-    	    } });
-                $("input[type='radio']").click(function(){
-                system= $("input[type='radio'][name='optradio']:checked").val();
-                
-                $("a#excel").attr("href","topCicsExcel?system="+system+"&date="+dateform);
-                table.ajax.url("topCics?system="+system+"&date="+dateform).load();    	
-                });
+                            updatePage();} });
+                    
+                $("input[type='radio']").click(
+                        function(){
+                            system= $("input[type='radio'][name='optradio']:checked").val();
+                            updatePage();
+    });
                 
   				});
   	</script>

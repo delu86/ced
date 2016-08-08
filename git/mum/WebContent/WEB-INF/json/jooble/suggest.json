@@ -1,0 +1,10 @@
+{
+"database":{
+  "query":"SELECT SMF30JBN FROM smfacc.r30jbn WHERE SYSTEM=? and SMF30JBN like ?  order by SMF30JBN LIMIT 20",
+  "resource_name": "cedDB" ,
+  "parameters":["system","query"]
+  },
+  "admitted_users":["CED","REALE","CREDEM"]
+}
+
+

@@ -105,6 +105,7 @@ response.setDateHeader ("Expires", 0);
     <script type="text/javascript">
     $(function() {
     	var start_date;
+        var end_date;
         $( "#datepicker-start" ).datepicker({
         	    dateFormat: 'yy-mm-dd',
         		onSelect: function (dateText, inst) {
@@ -124,6 +125,7 @@ response.setDateHeader ("Expires", 0);
         $( "#datepicker-end" ).datepicker({
     	dateFormat: 'yy-mm-dd',
     	onSelect: function (dateText, inst) {
+                 end_date=dateText;
     		$( "#submit" ).prop('disabled',false);
     	},
         beforeShowDay:

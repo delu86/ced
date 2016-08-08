@@ -14,6 +14,7 @@ public class StringConstants {
     public final static String CED_DB="cedDB";
     public final static String EPV_DB="epvDB";
     public final static String IDAA_DB="idaaDB";
+    public final static String TEST_DB="testDB";
     //permission
     public final static String CEDACRI="CED";
     public final static String REALE="REALE";
@@ -33,6 +34,8 @@ public class StringConstants {
     public final static String DRIVER_JSON_KEY_NAME="driver";
     public final static String CHART_VIEW_PAGE="chart.jsp";
     public static final String TITLE_PARAMETER="title";
+    public static final String ANNOMESE_PARAMETER="annoMese";
+    
     //Systems Facilities
     public final static String SYSTEM_REALE_PRODUZIONE="SIES";
     public final static String SYSTEM_REALE_SVILUPPO="SIEGE";
@@ -64,5 +67,9 @@ public class StringConstants {
     //attributes and parameters name
     public static final String EXPORTER_TYPE="exporter";
     public static final String USER_ATTRIBUTE="user";
-    public static String INTEGER_PATTERN_STRING="^-?\\d+$";
+    public static String JESNUMBER_PARAMETER="jesnum";
+    
+    public static final String INTEGER_PATTERN_STRING="^-?\\d+$";
+    public static final String ERROR_PAGE="no_authorization.jsp";
+    
 }

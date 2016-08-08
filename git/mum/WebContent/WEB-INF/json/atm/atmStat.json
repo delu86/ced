@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"select CASE when dayofweek(date)=1 then concat('Domenica, ',date) when dayofweek(date)=2 then concat('Lunedi, ',date) when dayofweek(date)=3 then concat('Martedi, ',date) when dayofweek(date)=4 then concat('Mercoledi, ',date) when dayofweek(date)=5 then concat('Giovedi, ',date) when dayofweek(date)=6 then concat('Venerdi, ',date) when dayofweek(date)=7 then concat('Sabato, ',date) end as giorno  ,tot_atm,ore_totali_faro,ore_ko_faro, replace(round(perc_ko_faro,2),'.',',') as perc_ko, replace(round(100-perc_ko_faro,2),'.',',') as perc_ok_faro ,replace(ko_sla7,'.',',') as ko_sla7, replace(round(ko_sla7*100/ore_totali_faro,2),'.',',') as perc_sla7, '' , '' from atm_stat.riepilogo_per_giorno where substr(date,1,7)=? and codAbi=? order by date;",
+  "resource_name": "cedDB" ,
+  "parameters":["period","codAbi"]
+  },
+  "admitted_users":["CED"]
+}
+

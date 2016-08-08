@@ -23,6 +23,4 @@ public class JSONUtility {
     public static JsonObject getJsonObject(String fullPath) throws FileNotFoundException{
         JsonReader reader=Json.createReader(new FileReader(fullPath));
         return (JsonObject) reader.read();
-    }
-    
-}
+    }}

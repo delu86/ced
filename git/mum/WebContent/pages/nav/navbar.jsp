@@ -87,7 +87,7 @@ String profile=request.getParameter("profile");
                                </ul>
                                   </li>
                                   <li>
-                                   <a href="programmiRichiamati.jsp"><i class="fa fa-search fa-fw"></i>Programmi richiamati</a>
+                                   <a href="programmiRichiamati.jsp"><i class="fa fa-search fa-fw"></i>Routine CICS</a>
                                   </li>
                               <li>
                                <a href="#"><i class="fa  fa-code"></i>JOB<span class="fa arrow"></span></a>
@@ -117,7 +117,7 @@ String profile=request.getParameter("profile");
                                     <a href="#"><i class="fa fa-tasks fa-fw"></i>MQ  <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                    <a href="mqChart"><i class="fa fa-tasks fa-fw"></i>Volumi MQ</a>
+                                    <a href="mqChart.jsp"><i class="fa fa-tasks fa-fw"></i>Volumi MQ</a>
                                        </li>
                                         
                                         <li>
@@ -134,7 +134,7 @@ String profile=request.getParameter("profile");
                             <a href="#"> <i class="fa fa-gears fa-fw"></i>CPU MF<span class="fa arrow"></span></a>
                              <ul class="nav nav-third-level">
                              <li>
-                              <a href="tablesMFCounters?profile=CED"><i class="fa fa-table fa-fw"></i>CPU Metrics by hour</a>
+                              <a href="tablesMF.jsp"><i class="fa fa-table fa-fw"></i>CPU Metrics by hour</a>
                               </li>
                                <li>
                                     <a href="cpiCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CPI</a>
@@ -190,7 +190,7 @@ String profile=request.getParameter("profile");
                               <a href="volumeTimesReale.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CICS eff.</a>
                               </li>
                               <li> 
-                              <a href="test.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
+                              <a href="rmfReale.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
                               </li>
                               <li> 
                              <li><a href="#"><i class="fa fa-file-excel-o fa-fw"></i>Export data<span class="fa arrow"></span></a>
@@ -221,14 +221,14 @@ String profile=request.getParameter("profile");
                               <a href="cpiDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>CPI exporter</a>
                               </li>
                               <li>
-                              <a href="tablesMFCounters?profile=REALE"><i class="fa fa-table fa-fw"></i>CPU Metrics by hour</a>
+                              <a href="tablesMFReale.jsp"><i class="fa fa-table fa-fw"></i>CPU Metrics by hour</a>
                               </li>
                               <li>
                               <a href="joobleReale.jsp"><i class="fa fa-search fa-fw"></i>Jobs search</a>
                               </li>
-                              <!--<li> 
+                              <li> 
                               <a href="analisiTransazioni.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Analisi Transazioni</a>
-                              </li> -->
+                              </li> 
                               <li> 
                               <a href="cicsAbendReale.jsp"><i class="fa fa-exclamation fa-fw"></i>Transactions ABEND</a>
                               </li>
@@ -280,7 +280,7 @@ String profile=request.getParameter("profile");
                               <a href="topConsumerCics.jsp"><i class="fa fa-table fa-fw"></i>Top consumer CICS</a>
                               </li>
                               <li> 
-                              <a href="testCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
+                              <a href="rmfCarige.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>RMF e R4H</a>
                               </li>
                               <li> 
                               <a href="dailyDetailCarige.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Export data</a>

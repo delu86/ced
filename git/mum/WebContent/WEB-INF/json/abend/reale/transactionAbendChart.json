@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"SELECT date(START_010) as date,sum(TOT) as TOT,truncate(sum(CPUTIME), 3) as cputm  FROM realebis_ctrl.epv110_1_trxacct_t10_rm where SYSTEM=? and datediff(current_date, date(START_010) )<=? and datediff(current_date, date(START_010) )>? and ABCODEC_114<>'' group by date(START_010) order by date(START_010)",
+  "resource_name": "epvDB" ,
+  "parameters":["system","windowLength","offset"]
+  },
+  "admitted_users":["CED","REALE"]
+ }

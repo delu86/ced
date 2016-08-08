@@ -1,0 +1,12 @@
+{
+  "database":{
+  "query":"SELECT SMF30JBN,SUBSTRING(DATET10,12) AS hour,1 as tot,truncate(CPUTIME,3) as CPUTM,truncate(ELAPSED,3) AS ELAPSED,truncate(ZIPTM,3) as ZIPTM,CONDCODE,SMF30RUD AS USER FROM smfacc.epv030_5_jobterm_t10_carige where CONDCODE>=8  and SYSTEM=? and date(DATET10)=? order by CPUTIME desc",
+  "resource_name": "cedDB" ,
+  "parameters":["system","date"]
+  },
+  "admitted_users":["CED","CARIGE"]
+ }
+ 
+ 
+
+ 

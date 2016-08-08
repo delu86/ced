@@ -5,15 +5,8 @@
 var table=$('#dataTable').DataTable( {
     paging: true,
     processing:true,
-    responsive: true,
-    "dom": '<"top"i>rt<"bottom"flp><"clear">',
-    columns:[
-             { "data": "schema" },
-             { "data": "table" },
-             { "data": "column" },
-             { "data": "datatype" },
-             { "data": "description" }
-             ]});
+    responsive: true
+    });
     $.ui.autocomplete.prototype._renderItem = function (ul, item) {
         item.label = item.label.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" 
                 + $.ui.autocomplete.escapeRegex(this.term) + 
@@ -26,7 +19,7 @@ var table=$('#dataTable').DataTable( {
         $('.input-search').on('keyup', function(e) {
         if (e.keyCode === 13) {
         	 $(".dataTable").show(1000);
-        	 table.ajax.url("getColumns?query="+$('.input-search').val().replace("#","%23")).load();
+        	 table.ajax.url("../queryResolver?id=columnFinder/column&query="+$('.input-search').val().replace("#","%23")+'%25').load();
         	 }
         });
         function searchColumns(){
@@ -34,17 +27,20 @@ var table=$('#dataTable').DataTable( {
     	    minlength:4,
     	    delay:0,
     	    source:function(request,response){
-                if(request.term.length>20){
-    	    	$.getJSON("getSuggestedColumn?query="+request.term,function (data){
-                        console.log(data);
-    	    		response(data);
-                    }
+                if(request.term.length>2){
+    	    	$.getJSON("../queryResolver?id=columnFinder/column&query="
+                        +request.term.replace("#","%23")+'%25',function (json){
+                    var data=[];    
+                    json.data.forEach(function(element){
+                       data.push(element[0]); 
+                    });
+                    response(data);}
                             );}},
     	       select: function( event, ui ) {
     	    	   
     	       $(".dataTable").show(1000);
     		   var parameter=ui.item.value.replace("#","%23");
-                 table.ajax.url("getColumns?query="+$('.input-search').val().replace("#","%23")).load();}
+                 table.ajax.url("../queryResolver?id=columnFinder/column&query="+$('.input-search').val().replace("#","%23")+'%25').load();}
 
     	});}
     $("#autocomplete").keyup(function(){

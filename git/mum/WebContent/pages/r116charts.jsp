@@ -224,7 +224,7 @@ response.setDateHeader ("Expires", 0);
     };
     function createChart(){
     	$('#loading').show();
-    $.getJSON('../queryResolver?id=mqMediolanum&offset='+offset, function(json){
+    $.getJSON('../queryResolver?id=mq/mqMediolanum&offset='+offset, function(json){
     	options.series[0].data=[];
         options.series[1].data=[];
         json.data.forEach(function(element){

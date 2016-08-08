@@ -6,9 +6,6 @@ response.setDateHeader ("Expires", 0);
 %>
 <!DOCTYPE html>
 <%@page import="object.User"%>
-<%@page import="utility.UtilityDate"%>
-<%@page import="object.CPUReport"%>
-<%@page import="java.util.Collection"%>
 <html lang="en">
 <%
 	User user=(User)request.getSession().getAttribute("user");
@@ -16,17 +13,14 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("REALE")){
+    	if(!profile.equals("CED")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
     	String prof=request.getParameter("profile");
     
 %>
 <head>
-<% 
-Collection<CPUReport> results=(Collection<CPUReport>) request.getAttribute("results");
-String date=(String) request.getAttribute("date");
-%>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,17 +86,13 @@ String date=(String) request.getAttribute("date");
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             DataTables CPU MF counters                           
-                        <a href="113Excel?date=<%=date%>"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a>
+                        <a href=""><img alt="excel" src="img/xls-48.png" height="24" width="24"></a>
                         </div>
                         <!-- /.panel-heading -->   
                         <div class="panel-body">
-                      <p><form  id="form" data-ajax='false' action="tablesMFCounters" method="POST">
-                       Date: <input type="text" id="datepicker" placeholder="aaaaMMgg" name="data"></p>
-                       <input type="hidden" id="profile"  name="profile" value="<%=prof%>"></p>
-                              </form>
-        
-                        <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTables-example">
+                     Date: <input type="text" id="datepicker" placeholder="aaaaMMgg" name="data"></p>
+                       <div class="dataTable_wrapper">
+                                <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="tableMF">
                                     <thead>
                                         <tr>
                                             <th>System</th>
@@ -112,39 +102,17 @@ String date=(String) request.getAttribute("date");
                                             <th>Duration</th>
                                             <th>MIPS</th>
                                             <th>CPI</th>
-                                            <th>PRB%</th>
-                                            <th>UTIL%</th>
-                                            <th>L1MP</th>
+                                            <th>L1MP%</th>
                                             <th>RNI</th>
                                             <th>L2P</th>
                                             <th>L3P</th>
                                             <th>L4LP</th>
                                             <th>L4RP</th>
                                             <th>MEMP</th>
+                                            <th>PRB_STATE</th>
+                                            <th>AVG_UTIL</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    <%for(CPUReport c:results){ %>
-                                        <tr class="odd gradeX">
-                                        <td><%out.print(c.getSystem()); %></td>
-                                        <td><%out.print(UtilityDate.conversionFromDBformatToVisualFormat(c.getDate())); %></td>
-                                        <td><%out.print(c.getCpuID()); %></td>
-                                        <td><%out.print(c.getCpuClass()); %></td>
-                                        <td><%out.print(Math.round(c.getDurationTime())); %></td>
-                                        <td><%out.print(c.getMips()); %></td>
-                                        <td><%out.print(c.getCpi()); %></td>
-                                        <td><%out.print(c.getProblemStatePercent()+"%"); %></td>
-                                        <td><%out.print(c.getAverageUtil()+"%"); %></td>                                        
-                                        <td><%out.print(c.getL1mp()); %></td>
-                                        <td><%out.print(String.format("%.2f", c.getRNI())); %></td>
-                                        <td><%out.print(c.getL2p()); %></td>
-                                        <td><%out.print(c.getL3p()); %></td>
-                                        <td><%out.print(c.getL4lp()); %></td>
-                                        <td><%out.print(c.getL4rp()); %></td>
-                                        <td><%out.print(c.getMemp()); %></td>
-                                       </tr>
-                                       <%}%>
-                                    </tbody>
                                     </table>
                                     </div>
                         
@@ -179,23 +147,33 @@ String date=(String) request.getAttribute("date");
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap.js"></script>
     <script src="../js/dataTables.responsive.js"></script>
-
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
-
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script src="../js/ced/dateJS.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-                responsive: true
+  	$(function() {
+                    var date=new Date();
+                    date.setDate(date.getDate()-1);
+                    var d=date.yyyymmdd().replace("-","").replace("-","").substr(0,9);
+                    var table = $('#tableMF').DataTable( {
+                    paging: true,
+                    processing:true,
+                    responsive: true
         });
-    });
-    </script>
-    <script>
-  		$(function() {
-    		$( "#datepicker" ).datepicker({ dateFormat: 'yymmdd', 
+        $('.panel-heading')
+                .html('<a  title="Esporta  in excel" id="excelExporter" href="'+
+                "exporter?title=cpuMf&id=smf113/mfCounters&date="+d
+                +'"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>'+
+                'CPU MF counters');
+                table.ajax.url("../queryResolver?id=smf113/mfCounters&date="+d).load();
+        	$( "#datepicker" ).datepicker({ dateFormat: 'yymmdd', 
     			onSelect: function () {
-  				$('#form').submit();
+                            $('.panel-heading')
+                .html('<a  title="Esporta  in excel" id="excelExporter" href="'+
+                "exporter?title=cpuMf&id=smf113/mfCounters&date="+d
+                +'"><img alt="excel" src="img/xls-48.png" height="24" width="24"></a></h5>'+
+                'CPU MF counters');
+  				table.ajax.url("../queryResolver?id=smf113/mfCounters&date="+$(this).val()).load();
 
     	    } }
 );

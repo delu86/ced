@@ -86,7 +86,7 @@ response.setDateHeader ("Expires", 0);
                            <img src=img/Cedacri.jpg width=240 height=90> 
                         </div>
                         <div class="panel-footer">
-                              <a href="http://10.99.252.22/datifs/html/cedacri/HTM/START.HTML" > Report & Graph  </a>  
+                              <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CED/COMMON/HTM/START.HTML" > Report & Graph  </a>  
                         </div>
               		      </div>
                     </div>
@@ -102,7 +102,7 @@ response.setDateHeader ("Expires", 0);
                          <img src=img/Credem.png width=90 height=90>
                        </div>
                         <div class="panel-footer">
-                              <a href="http://10.99.252.22/datifs/html/credem/HTM/START.HTML" > Report & Graph  </a>  
+                              <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CRED/COMMON/HTM/START.HTML" > Report & Graph  </a>  
                         </div>
                     	</div>
                     </div>
@@ -118,7 +118,7 @@ response.setDateHeader ("Expires", 0);
                      	   <img src=img/reale.gif width=90 height=90>
                             </div>
                         <div class="panel-footer">
-                                <a href="http://10.99.252.22/datifs/html/reale/HTM/START.HTML" > Report & Graph  </a>  
+                                <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/REALE/COMMON/HTM/START.HTML" > Report & Graph  </a>  
                         </div>
                     </div>
                     </div>
@@ -134,7 +134,7 @@ response.setDateHeader ("Expires", 0);
                          <img src=img/carige_ass.jpg width=90 height=90>
                        </div>
                         <div class="panel-footer">
-                              <a href="http://10.99.252.22/datifs/html/carigeass/HTM/START.HTML" > Report & Graph  </a>  
+                              <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/CARIGEASS/COMMON/HTM/START.HTML" > Report & Graph  </a>  
                         </div>
                     	</div>
                     </div>

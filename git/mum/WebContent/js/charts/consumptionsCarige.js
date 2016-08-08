@@ -52,7 +52,7 @@
                 }
                
             }],
-            series: []
+            series: [{name:"MSU4HRA",data:[]}]
         };
                 var optionsMIPS={
             chart: {
@@ -77,29 +77,33 @@
                 },
                 min: 0
             }],
-            series: []
+            series: [{name:"MIPS Cpu",data:[]},{name:"MIPS zIIP",data:[]}]
         };
         $('#loading').show();
         drawChart();
         $( ".target" ).click(function() {
  		   system=$(this).val();
- 		   $("#excelExporter").attr("href","consumptionsExporter?system="+system);
+ 		   $("#excelExporter").attr("href","exporter?id=smf70/smf70bySystem&system="+system);
                    drawChart();
  		   chart.yAxis[0].addPlotLine(optionsPlotline);
  	});
         function drawChart(){
          	$('#loading').show();
-            $.getJSON('systemComsumptions?system='+system, function(data){
-        	options.series=[];
-                optionsMIPS.series=[];
-                options.series.push(data.series[2]);
+            $.getJSON('../queryResolver?id=smf70/smf70bySystem&system='+system, function(json){
+        	options.series[0].data=[];
+                optionsMIPS.series[0].data=[];
+                optionsMIPS.series[1].data=[];
                 options.series[0].yAxis=0;
-                optionsMIPS.series.push(data.series[0]);
-                optionsMIPS.series.push(data.series[1]);
-        	optionsMIPS.series[1].color=Highcharts.getOptions().colors[1];
-                
-        	options.series[0].color=Highcharts.getOptions().colors[3];
+                optionsMIPS.series[1].color=Highcharts.getOptions().colors[1];
+                options.series[0].color=Highcharts.getOptions().colors[3];
         	options.title.text='Consumi '+system;
+        	json.data.forEach(function(element){
+                    var date=dateToUTC(element[0]+" "+element[1]).getTime();
+                    options.series[0].data.push([date,Number(element[4])]);
+                    optionsMIPS.series[0].data.push([date,Number(element[2])]);
+                    optionsMIPS.series[1].data.push([date,Number(element[3])]);
+                });
+                
         	chart = new Highcharts.Chart(options);
                  chartMIPS = new Highcharts.Chart(optionsMIPS);
         	$('#loading').hide();

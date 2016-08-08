@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT SMF30JBN,SUBSTRING(tData,12) AS hour,1 as count,truncate(CPUTIME,3) as cputm,truncate(ELAPSED,3) as ELAPSED,truncate(ZIPTM,3) as ziptm,CONDCODE,SMF30RUD FROM realebis_ctrl.epv030_23_intrvl_sies_job where CONDCODE>=8  and  date(tData)=? order by CPUTIME desc",
+  "resource_name": "epvDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED","REALE"]
+ }
+

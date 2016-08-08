@@ -1,0 +1,11 @@
+{
+  "database":{
+  "query":"SELECT t1.EPVDATE,lpad(t1.EPVHOUR,2,'0') as hour, TRUNCATE(t1.MIPLPAR,2) as MIPS_CPU,TRUNCATE(t2.MIPLPAR,2) MIPS_ZIIP,TRUNCATE(t1.SMF70LAC,2) as  MSU_4HRA FROM mtrnd13.lparcpu as t1 LEFT JOIN mtrnd13.lpariip as t2 ON t1.RSYSTEM=t2.RSYSTEM and t1.EPVDATE=t2.EPVDATE and t1.EPVHOUR=t2.EPVHOUR WHERE t1.RSYSTEM=? and datediff(current_date,t1.epvdate)<=30 order by t1.EPVDATE ASC, t1.EPVHOUR ASC;",
+  "resource_name": "epvDB" ,
+  "parameters":["system"]
+  },
+  "admitted_users":["CED","REALE","CARIGE"]
+}
+
+
+

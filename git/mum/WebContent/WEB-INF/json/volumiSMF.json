@@ -1,0 +1,10 @@
+{
+  "database":{
+  "query":"SELECT date(DataLoadUTC) as date , CAST(sum(SIZE) / 1000000000 as UNSIGNED INTEGER) as size FROM support.nfstransfer where date(DataLoadUTC)<=current_date and date(DataLoadUTC)>current_date-180 GROUP BY date(DataLoadUTC)  ORDER BY date(DataLoadUTC);",
+  "resource_name": "epvDB" ,
+  "parameters":[]
+  },
+  "admitted_users":["CED"]
+}
+
+

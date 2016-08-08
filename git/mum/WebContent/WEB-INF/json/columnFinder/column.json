@@ -1,0 +1,9 @@
+{
+  "database":{
+  "query":"SELECT table_schema,table_name,column_name,data_type,column_comment from information_schema.COLUMNS where column_name LIKE ? or column_comment like ? order by column_comment;",
+  "resource_name": "epvDB" ,
+  "parameters":["query","query"]
+  },
+  "admitted_users":["CED"]
+}
+

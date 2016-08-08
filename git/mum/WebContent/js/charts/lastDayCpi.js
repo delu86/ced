@@ -15,7 +15,8 @@
     	        xAxis: {
     	            title: {
     	                text: null
-    	            }
+    	            },
+                        categories:[]
     	        },
     	        yAxis: {
     	            min: 0,
@@ -44,14 +45,17 @@
     	        series: [{
     	        	showInLegend:false,
     	            name: 'Yesterday CPI',
+                    data:[]
     	            
     	        }]
     	    };
     	  
-    	  $.getJSON('lastDayCpi', function(data) {
-    		 options.xAxis.categories=data[0];
-    		 options.series[0].data=data[1];
-    		 chart = new Highcharts.Chart(options);
+    	  $.getJSON('../queryResolver?id=smf113/yesterdayCPI', function(json) {
+    		 json.data.forEach(function(el){
+                    options.xAxis.categories.push(el[0]);
+                    options.series[0].data.push(Number(el[1]));
+    		 });
+                 chart = new Highcharts.Chart(options);
  		    return true;
     	  });
     	  
