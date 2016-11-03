@@ -1,0 +1,10 @@
+{
+  "database":{
+  "query":"SELECT substr(termtime,12,5) as MIN,count(*) as occurrence,substr(ora_cutoff,1,5)as cutoff from support.jobterm_cutoff_credem a left join support.lista_cutoff_credem b on a.jobname=b.jobname where a.jobname=?  and substr(termtime,1,7)=? group by substr(termtime,12,5);",
+  "resource_name": "epvDB" ,
+  "parameters":["jobname","period"]
+  },
+  "admitted_users":["CED","CREDEM"]
+}
+
+

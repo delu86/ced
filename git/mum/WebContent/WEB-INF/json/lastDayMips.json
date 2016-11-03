@@ -1,0 +1,8 @@
+{
+  "database":{
+  "query":"select * from support.yesterday_mips order by SERIAL;",
+  "resource_name": "epvDB" ,
+  "parameters":[]
+  },
+  "admitted_users":["CED"]
+}

@@ -33,10 +33,6 @@ public class DailyDetailExcelServlet extends HttpServlet {
                 + " FROM "+TABLE_PARAMETER_STRING+" where system=? and date(START_010)=? "
                 + "order by START_010 ASC, TOT DESC";   
 	
-        //private static final String SELECT_BATCH="SELECT DATET10, SMF30JBN,SMF30STN,JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"+
-        //    ",ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
-	//private static final String SELECT_STC="SELECT DATET10,SMF30JBN,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,EXECTM,ELAPSED"+
-        //    " ,ZIPTM,CPUTIME FROM "+TABLE_PARAMETER_STRING+" where  SYSTEM=? and date(DATET10)=? order by DATET10 asc";
 	private static final String SELECT_JES="SELECT concat(substr(BEGINTIME,1,15),'0') as datetime,"
                 + " SMF30JBN,SMF30STM as STEPNAME,SMF30STN as STEPNUM, SMF30PGM as PROGRAM_NAME,"
                 + " JESNUM,CONDCODE,SMF30CLS,SMF30JPT,SMF30RUD,replace(round(EXECTM,2),'.',',') as exectime"
@@ -78,7 +74,7 @@ public class DailyDetailExcelServlet extends HttpServlet {
 "    `cicsdayh`.`CPUDSU`,\n" +
 "    `cicsdayh`.`TOTIIPTM`,\n" +
 "    `cicsdayh`.`TOTELGTM`\n" +
-"FROM `mtrnd`.`cicsdayh` WHERE SYSTEM=? AND EPVDATE=?;";
+"FROM `mtrnd13`.`cicsdayh` WHERE SYSTEM=? AND EPVDATE=?;";
         private static final String SELECT_JOB_CARIGE="SELECT `epv030_23_intrvl`.`READTIME`,\n" +
 "    `epv030_23_intrvl`.`SMF30JBN`,\n" +
 "    `epv030_23_intrvl`.`JESNUM`,\n" +
@@ -123,7 +119,7 @@ public class DailyDetailExcelServlet extends HttpServlet {
 "    `epv030_23_intrvl`.`SMF30VPO`,\n" +
 "    `epv030_23_intrvl`.`GROUP1`,\n" +
 "    `epv030_23_intrvl`.`GROUP2`\n" +
-"FROM `mdeta`.`epv030_23_intrvl` WHERE SYSTEM=? AND DATE(BEGINTIME)=?;";
+"FROM `mdeta13`.`epv030_23_intrvl` WHERE SYSTEM=? AND DATE(BEGINTIME)=?;";
         private static final String SELECT_RMF_CARIGE="SELECT `lparcpu`.`SERIAL`,\n" +
 "    `lparcpu`.`GMTOFF`,\n" +
 "    `lparcpu`.`EPVDATE` as Date,\n" +
@@ -162,7 +158,7 @@ public class DailyDetailExcelServlet extends HttpServlet {
 "    `lparcpu`.`PCTAAPCP`,\n" +
 "    `lparcpu`.`PCTIIPCP`,\n" +
 "    `lparcpu`.`RDATE`\n" +
-"FROM `mtrnd`.`lparcpu` WHERE RSYSTEM=? AND EPVDATE=?;";
+"FROM `mtrnd13`.`lparcpu` WHERE RSYSTEM=? AND EPVDATE=?;";
         
     
 	/**

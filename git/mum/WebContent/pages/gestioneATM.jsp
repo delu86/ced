@@ -97,7 +97,7 @@ response.setDateHeader ("Expires", 0);
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge" id="sla7-value">--</div>
-                                    <div>Sla7: Indisponibilità HW</div>
+                                    <div>Sla7: Indisponibilit? HW</div>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ response.setDateHeader ("Expires", 0);
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge" id="unavailable-value">--</div>
-                                    <div>Indisponibilità faro</div>
+                                    <div>Indisponibilit? faro</div>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@ response.setDateHeader ("Expires", 0);
                             <div class="col-lg-12">
                             <div class="panel panel-default">
                         <div class="panel-heading">
-                             Indisponibilità per giorno  Credem
+                             Indisponibilit? per giorno  Credem
                         </div>
                          <div class="dataTable_wrapper">
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTablesByDay">
@@ -154,7 +154,7 @@ response.setDateHeader ("Expires", 0);
                         <div class="col-lg-12">
                             <div class="panel panel-default">
                         <div class="panel-heading">
-                            Indisponibilità per ATM  Credem
+                            Indisponibilit? per ATM  Credem
                         </div>
                          <div class="dataTable_wrapper">
                                 <table class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" id="dataTablesByAtm">
@@ -261,16 +261,16 @@ response.setDateHeader ("Expires", 0);
                 updateTable();
                 $("#generateReport").click(function(){
                      alert("Riceverai una mail appena i report saranno calcolati");
-                     $.ajax({url: "/pages/generateReport?annoMese="+annoMese, success: function(){}});
+                     $.ajax({url: "generateReport?annoMese="+annoMese, success: function(){}});
                 });
                 $("#certificateReport").click(function(){
-                     $.ajax({url: "/pages/setCertification?annoMese="+annoMese, success: function(){
+                     $.ajax({url: "setCertification?annoMese="+annoMese, success: function(){
                              updateTable();
                      }}
                      );
                 });
                 $("#updateAtmActive").click(function(){
-                    $.getJSON("/pages/updateAtmList",function(json){
+                    $.getJSON("updateAtmList",function(json){
                         alert(json.message);
                     }); 
                 });

@@ -129,6 +129,7 @@ response.setDateHeader ("Expires", 0);
                  <label class="radio-inline"><input type="radio" name="optradio" value="ESYA">ESYA</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="MVSA">MVSA</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="MVSB">MVSB</label>
+                 <label class="radio-inline"><input type="radio" name="optradio" value="ICT1">ICT1</label>
                     </div>
                     <!-- /.col-lg-10 -->
                     </div>

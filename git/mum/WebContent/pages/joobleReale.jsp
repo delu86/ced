@@ -163,6 +163,7 @@ response.setDateHeader ("Expires", 0);
                                             <th class="desktop ">ZIPTIME</th>
                                             <th class="desktop ">Elapsed</th>
                                             <th class="desktop ">CONCODE</th>
+                                            <th class="desktop ">ABEND</th>
                                             <th>CLASS</th>
                                             <th>PRIORITY</th>
                                             <th>REPORT_CLASS</th>

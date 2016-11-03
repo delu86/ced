@@ -1,0 +1,10 @@
+{
+"database":{
+  "query":"SELECT jobname from support.lista_cutoff_credem  where jobname like ? limit 20 ",
+  "resource_name": "epvDB" ,
+  "parameters":["query"]
+  },
+  "admitted_users":["CED","CREDEM"]
+}
+
+

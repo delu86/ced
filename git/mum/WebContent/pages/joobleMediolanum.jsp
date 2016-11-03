@@ -19,7 +19,7 @@ response.setDateHeader ("Expires", 0);
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")&&!profile.equals("CREDEM")){
+    	if(!profile.equals("CED")&&!profile.equals("MEDIOLANUM")){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}
     
@@ -98,6 +98,7 @@ response.setDateHeader ("Expires", 0);
          </p>
       </div>
       </div>
+                <div class='row'>
                 <div class="col-lg-4">
                 </div>
                 <!-- /.col-lg-4 -->
@@ -108,7 +109,7 @@ response.setDateHeader ("Expires", 0);
                <a id="lastUpdate"></a>
                 </div>
                     <!-- /.col-lg-4 -->
-                </div>
+               </div>
                 <!-- /.row -->
                 <div class="row">
                 <div class="col-lg-2">
@@ -136,9 +137,8 @@ response.setDateHeader ("Expires", 0);
                     <!-- /.col-lg-2 -->
                     <div class="col-lg-5">
                     Cerca in: 
-                 <label class="radio-inline"><input type="radio" name="optradio" value="MVSA" checked="checked">MVSA</label>
-                 <label class="radio-inline"><input type="radio" name="optradio" value="MVSB">MVSB</label>
                  
+                 <label class="radio-inline"><input type="radio" checked="checked" name="optradio" value="ICT1">ICT1</label>
                     </div>
                     <!-- /.col-lg-8 -->
                     <div class="col-lg-3">
@@ -171,7 +171,7 @@ response.setDateHeader ("Expires", 0);
                                             <th>CLASS</th>
                                             <th>PRIORITY</th>
                                             <th>REPORT_CLASS</th>
-                                             <th>SERVICE_CLASS</th>
+                                            <th>SERVICE_CLASS</th>
                                          </tr>
                                     </thead>
                                     </table>
@@ -214,7 +214,7 @@ response.setDateHeader ("Expires", 0);
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-    </div>
+     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>

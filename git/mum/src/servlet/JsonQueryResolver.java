@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import object.JSONUtility;
 import object.StringConstants;
+import object.User;
 
 /**
  *
@@ -55,6 +56,7 @@ public class JsonQueryResolver extends HttpServlet {
         response.setContentType("application/json;");
         try  {
             PrintWriter out = response.getWriter();
+            User user=(User)request.getSession().getAttribute("user");
             //get the full path of the json file
             JsonObject json= JSONUtility.getJsonObject(getServletContext().getRealPath(
                                     StringConstants.JSON_FOLDER
@@ -63,7 +65,12 @@ public class JsonQueryResolver extends HttpServlet {
             JsonObject dbObject = json.getJsonObject(StringConstants.DATABASE_JSON_KEY_NAME);
             JsonArray parameters = dbObject.getJsonArray(StringConstants.PARAMETER_JSON_KEY_NAME);
             JsonArray admittedUsers = json.getJsonArray(StringConstants.ADMITTED_USERS);
-            
+            boolean isAdmitted=false;
+            int counter=admittedUsers.size()-1;
+            while(isAdmitted==false&&counter>=0){
+                isAdmitted=user.getProfile().equals(admittedUsers.getString(counter--));
+                            }
+            if(isAdmitted){
             Context initContext = new InitialContext();
             Context envContext  = (Context)initContext.lookup("java:/comp/env/");  
             DataSource datasource=(DataSource) envContext.lookup(
@@ -74,12 +81,16 @@ public class JsonQueryResolver extends HttpServlet {
             if(parameters!=null){
             Iterator iterator=parameters.iterator();
             while(iterator.hasNext()){
-                    String parameter=request.getParameter(iterator.next().toString().replace("\"", ""));
+                    String paramName=iterator.next().toString().replace("\"", "");
+                    String parameter=request.getParameter(paramName);
                     if(parameter.matches(StringConstants.INTEGER_PATTERN_STRING)&&
-                       !parameter.equals(StringConstants.JESNUMBER_PARAMETER))
+                       (!paramName.equals(StringConstants.JESNUMBER_PARAMETER))){
                        ps.setInt(indexParam++,Integer.parseInt(parameter));
-                    else
+                    }
+                    else{
+                       System.out.println(paramName+" "+parameter);
                        ps.setString(indexParam++,parameter);
+                    }
                 }}
              rs=ps.executeQuery();
             JsonArrayBuilder builderDataArray= Json.createArrayBuilder();
@@ -92,7 +103,10 @@ public class JsonQueryResolver extends HttpServlet {
             while(rs.next()){
                    JsonArrayBuilder builderData= Json.createArrayBuilder();
                    for(int i=1;i<=columnCount;i++){
-                       builderData.add(rs.getString(i));
+                       if(rs.getString(i)!=null)
+                        builderData.add(rs.getString(i));
+                       else
+                           builderData.add("null");
                    }
                    builderDataArray.add(builderData.build());
                }
@@ -104,6 +118,10 @@ public class JsonQueryResolver extends HttpServlet {
             JsonWriter jsonWriter = Json.createWriter(out);
             jsonWriter.write(buildJSON.build());
             }
+            else{
+                request.getRequestDispatcher("pages/no_authorization.jsp").forward(request, response);
+            }
+        }
         catch (NamingException ex) {
                 Logger.getLogger(JsonQueryResolver.class.getName()).log(Level.SEVERE, null, ex);
             } 

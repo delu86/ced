@@ -32,7 +32,9 @@
     	response.sendRedirect("login.jsp?url_req="+request.getRequestURL());
     else{
     	String profile=user.getProfile();
-    	if(!profile.equals("CED")){
+        String username=user.getUser();
+    	if(!(username.equals("andrea.poli@cedacri.it")||username.equals("simone.deluca@consulenti.cedacri.it")
+                ||username.equals("marco.pani@cedacri.it"))){
     		request.getRequestDispatcher("no_authorization.jsp").forward(request, response);
     	}else{
     

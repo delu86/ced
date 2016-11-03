@@ -1,6 +1,5 @@
 package datalayer;
 
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
@@ -126,10 +125,11 @@ public class DatabaseManager {
 			el.setDiskio(rs.getDouble(9));
 			el.setDiskioTime(rs.getFloat(10));
 			el.setConditionCode(rs.getString(11));
-			el.setClass8(rs.getString(12));
-			el.setJesInputPriorityString(rs.getDouble(13));
-			el.setReportClassString(rs.getString(14));
-                        el.setServiceClassString(rs.getString(15));
+                        el.setAbend(rs.getString(12));
+			el.setClass8(rs.getString(13));
+			el.setJesInputPriorityString(rs.getDouble(14));
+			el.setReportClassString(rs.getString(15));
+                        el.setServiceClassString(rs.getString(16));
 			collection.add(el);
 		}
 		disconnect();

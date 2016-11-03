@@ -6,8 +6,8 @@
                url="jdbc:mysql://10.99.252.23:3306/"/>
   <Resource name="epvDB" auth="Container" type="javax.sql.DataSource"
                maxActive="-1" maxIdle="-1" maxWait="-1"
-               username="epv" password="epv" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://localhost"/>
+               username="epv" password="" driverClassName="com.mysql.jdbc.Driver"
+               url="jdbc:mysql://10.99.252.22:3306"/>
   <Resource name="idaaDB" auth="Container" type="javax.sql.DataSource"
                maxActive="-1" maxIdle="-1" maxWait="-1"
                driverClassName="com.ibm.db2.jcc.DB2Driver"

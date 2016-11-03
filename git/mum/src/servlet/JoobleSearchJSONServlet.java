@@ -44,10 +44,10 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 	private static final String USER_TOKEN_STRING=" and SMF30RUD=?";
 	private static final String MONTH_TOKEN_STRING=" and substr(INITIALTIME , 6 , 2)=? ";
 	private static final String SELECT_JOB_BY_NAME = "SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME ,"+
-			" ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "+
+			" ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE,ABEND ,SMF30CL8 as class, "+
 			" SMF30PTY AS priority, SMF30RCN AS reportClass, SMF30SCN as serviceClass "+ 
 			" FROM CR00515.EPV30_5_JOBTERM"+
-			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN like ?  and CPUTIME>0";
+			" WHERE SYSTEM = ? AND SMF30WID = 'JES2' AND SMF30JBN like ?  and FLAGXDD<>'Y' ";
 	private static final String SELECT_TOP_CONSUMER="SELECT SMF30JBN,JESNUM, SMF30RUD ,INITIALTIME,ENDTIME , "
                 + "ROUND(CPUTIME, 2) AS CPUTIME,ZIPTM, ELAPSED, DISKIO, DISKIOTM, CONDCODE ,SMF30CL8 as class, "
 			+ "  SMF30PTY AS priority, SMF30RCN AS reportClass, SMF30SCN as serviceClass  from CR00515.EPV30_5_JOBTERM"
@@ -79,18 +79,19 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 			HttpServletResponse response) throws ParseException {
 		try {
 		String finalQuery="";
-	    ArrayList<String> params=new ArrayList<String>();
+	        ArrayList<String> params=new ArrayList<String>();
 		DatabaseManager db=new DatabaseManager();
 		String system=request.getParameter("system");
 		String query=request.getParameter("jobname");
 		finalQuery=createQuery(finalQuery,params,system, query);
-     	PrintWriter out;
+     	       PrintWriter out;
 		response.setContentType("application/json");
 		String jsonString="{\"data\":[";
 		String dataJSON="";
 		
 			out = response.getWriter();
 			Collection<BatchReport> reports=db.getJobByName(finalQuery,params);
+                        System.out.println(finalQuery);
 			int i=0;
 			for(BatchReport report:reports){
 				if(i==0){
@@ -107,6 +108,7 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 						"\"DISKIO\":"+		"\""+report.getDiskio()+"\","+
 						"\"DISKIOTM\":"+		"\""+report.getDiskioTime()+"\","+
 						"\"CONCODE\":"+		"\""+report.getConditionCode()+"\","+
+                                                "\"ABEND\":"+		"\""+report.getAbend()+"\","+
 						"\"CLASS\":"+		"\""+report.getClass8()+"\","+
 						"\"PRIORITY\":"+		"\""+report.getJesInputPriorityString()+"\","+
 						"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\","+
@@ -127,6 +129,7 @@ public class JoobleSearchJSONServlet extends HttpServlet {
 							"\"DISKIO\":"+		"\""+report.getDiskio()+"\","+
 							"\"DISKIOTM\":"+		"\""+report.getDiskioTime()+"\","+
 							"\"CONCODE\":"+		"\""+report.getConditionCode()+"\","+
+                                                        "\"ABEND\":"+		"\""+report.getAbend()+"\","+                                                
 							"\"CLASS\":"+		"\""+report.getClass8()+"\","+
 							"\"PRIORITY\":"+		"\""+report.getJesInputPriorityString()+"\","+
 							"\"REPORT_CLASS\":"+		"\""+report.getReportClassString()+"\","+

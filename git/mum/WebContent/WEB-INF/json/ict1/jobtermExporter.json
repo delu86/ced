@@ -1,0 +1,12 @@
+{
+  "database":{
+  "query":"SELECT * FROM mdeta13.epv030_5_jobterm where system='ICT1' and date(termtime)=? order by SMF30JBN",
+  "resource_name": "epvDB" ,
+  "parameters":["date"]
+  },
+  "admitted_users":["CED","MEDIOLANUM"]
+}
+
+
+
+

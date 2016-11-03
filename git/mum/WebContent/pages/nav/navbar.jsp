@@ -184,7 +184,7 @@ String profile=request.getParameter("profile");
                              <a href="http://10.99.252.22/work1/EPVROOT/USERPROFILE/REALE/COMMON/HTM/START.HTML"><i class="fa fa-table fa-fw"></i>EPV</a>
                              </li>
                              <li> 
-                              <a href="realeCharts"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
+                              <a href="realeCharts.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Workload</a>
                               </li>
                               <li> 
                               <a href="volumeTimesReale.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>CICS eff.</a>
@@ -201,9 +201,11 @@ String profile=request.getParameter("profile");
  
                              <a href="dailyDetailReale.jsp"><i class="fa fa-file-excel-o fa-fw"></i>JES (giorno/10min)</a>
                               </li>
-                              <li>
- 
-                             <a href="dailyDetailRealeCics.jsp"><i class="fa fa-file-excel-o fa-fw"></i>CICS (giorno/10min)</a>
+                             <li>
+                             <a href="doc.jsp?dir=reale/sige110"><i class="fa fa-file-excel-o fa-fw"></i>CICS SIGE(giorno/10min)</a>
+                              </li>
+<li>
+                             <a href="doc.jsp?dir=reale/sies110"><i class="fa fa-file-excel-o fa-fw"></i>CICS SIES(giorno/10min)</a>
                               </li>
                               <li>
                               <a href="doc.jsp?dir=reale/data"><i class="fa fa-file-excel-o fa-fw"></i>SMF data by hour</a>
@@ -253,7 +255,17 @@ String profile=request.getParameter("profile");
                                 <li>
                                     <a href="joobleCredem.jsp"><i class="fa fa-search fa-fw"></i>Job search</a>
                                 </li>
-                                <li>
+                                
+                             <li>
+                                <a href="#"><i class="fa  fa-scissors fa-fw"></i>Cutoff<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                    <a href="cutoffCredemTable.jsp"><i class="fa fa-table fa-fw"></i>Report mensile</a>
+                                    <a href="cutoffCredemChart.jsp"><i class="fa fa-bar-chart-o fa-fw"></i>Grafici</a>
+                                   </li>
+                                </ul>
+                             </li>
+                             <li>        
                             <a href="atmCredem.jsp"><i class="fa fa-money fa-fw"></i> ATM </a>
                         </li>
                             </ul>
@@ -308,6 +320,19 @@ String profile=request.getParameter("profile");
                             </ul>
                         </li>
                             <%} %>
+                    <%if(profile.equals("CED")||profile.equals("MEDIOLANUM")){ %>
+                        <li>
+                            <a href="#"><i class="fa fa-institution fa-fw"></i>Mediolanum<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="joobleMediolanum.jsp"><i class="fa fa-search fa-fw"></i>Jobs search</a>
+                              </li>
+                                <li>
+                                    <a href="exportMediolanum.jsp"><i class="fa fa-file-excel-o fa-fw"></i>Estrazione JOBTERM</a>
+                                </li>
+                            </ul>
+                        </li>
+                            <%} %>
                      <%if(profile.equals("CED")||profile.equals("BDP")){ %>
                         <li>
                             <a href="#"><i class="fa fa-institution fa-fw"></i>Banca del Piemonte<span class="fa arrow"></span></a>
@@ -355,7 +380,6 @@ String profile=request.getParameter("profile");
                             <a href="#"><i class="fa fa-wrench fa-fw"></i>Utility<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                              <li> 
-                              <a href="admin"><i class="fa fa-wrench fa-fw"></i>Admin server & UI</a>
                               <a href="searchForColumn.jsp"><i class="fa fa-search fa-fw"></i>Find columns</a>
                                <a href="Browser.jsp"><i class="fa fa-code fa-fw"></i>File Explorer</a>
                               </li>

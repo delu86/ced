@@ -135,15 +135,16 @@ response.setDateHeader ("Expires", 0);
                 </div>
                 
                     <!-- /.col-lg-2 -->
-                    <div class="col-lg-5">
+                    <div class="col-lg-6">
                     Cerca in: 
                  <label class="radio-inline"><input type="radio" name="optradio" value="GSY7" checked="checked">GSY7</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="BSY2">BSY2</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="CSY3">CSY3</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="ZSY5">ZSY5</label>
                  <label class="radio-inline"><input type="radio" name="optradio" value="ESYA">ESYA</label>
+                 <label class="radio-inline"><input type="radio" name="optradio" value="ICT1">ICT1</label>
                     </div>
-                    <!-- /.col-lg-8 -->
+                    <!-- /.col-lg-6 -->
                     <div class="col-lg-3">
                     <a href="#" id="open-info"><i class="fa fa-question fa fw"></i></a>
                     </div>
@@ -170,6 +171,7 @@ response.setDateHeader ("Expires", 0);
                                             <th class="desktop ">ZIPTIME</th>
                                             <th class="desktop ">Elapsed</th>
                                             <th class="desktop ">CONCODE</th>
+                                            <th class="desktop ">ABEND</th>
                                             <th>CLASS</th>
                                             <th>PRIORITY</th>
                                             <th>REPORT_CLASS</th>

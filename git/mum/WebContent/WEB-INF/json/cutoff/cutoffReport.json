@@ -1,0 +1,11 @@
+{
+  "database":{
+  "query":"select nome,substr(termtime,1,7)as mese,procedura,cutoff, sum(if(minute_diff BETWEEN -31 and 0,1,0)) as eventi_a_meno_30_min_cutoff,sum(if(minute_diff>0,1,0)) as eventi_oltre_cutoff,round(sum(if(minute_diff>0,1,0))*100/count(*),2) as perc_eventi_oltre_cutoff,round(sum(if(minute_diff <-120, 1, 0))*100/count(*),2) as perc_eventi_2ore_prima_cutoff,count(*) as total_eventi from support.cutoff_view where substr(termtime,1,7)=? group by nome;",
+  "resource_name": "epvDB" ,
+  "parameters":["period"]
+  },
+  "admitted_users":["CED","CREDEM"]
+}
+
+
+
