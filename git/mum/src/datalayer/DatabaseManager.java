@@ -30,11 +30,11 @@ public class DatabaseManager {
 	private final static String SELECT_DISTINCT_SYSTEM="SELECT DISTINCT SYSTEM FROM smfacc.r113_2_hour";
 	private final static String SELECT_DISTINCT_SYSTEM_MQ="SELECT DISTINCT(SYSTEM) FROM  mtrnd13.mqmdayh where system<>'FSYC' and system<>'CSY3'";
        
-        private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1102.4/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
+        private final static String SELECT_WKL_LAST_30_DAY="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1026.5/3600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and"+
             "  datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
         private final static String SELECT_WKL_LAST_30_DAY_CARIGE="SELECT substring(DATA_INT10,1,13) ,SYSTEM,WKLOADNAME, sum(CPUTIME) from smfacc.workload_view_carige where SYSTEM=?"+
             " and datediff(?,date(DATA_INT10))<=(?-2) and datediff(?,date(DATA_INT10))>-2  group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC";
-	private final static String SELECT_WKL_BY_DAY="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1102.4/600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
+	private final static String SELECT_WKL_BY_DAY="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1026.5/600 from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
             " and date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME order by WKLOADNAME,DATA_INT10 ASC ";   
         private final static String SELECT_WKL_BY_DAY_CARIGE="SELECT CONCAT(substring(DATA_INT10,1,13),\":00\") ,SYSTEM,WKLOADNAME, sum(CPUTIME) from "+TABLE_PARAMETER_STRING+" where SYSTEM=?"+
             " and date(DATA_INT10)=? group by substring(DATA_INT10,1,13),WKLOADNAME order by WKLOADNAME,substring(DATA_INT10,1,13) ASC ";

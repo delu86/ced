@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ public class WorkloadByDayExporterServlet extends HttpServlet {
 	private final static String TABLE_PARAMETER_STRING="$table_name";
 	private static final String SYSTEM_PARAMETER = "system";
 	private static final String DATE_PARAMETER = "date";
-    private static final String SELECT="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1102.4/600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and" +
+    private static final String SELECT="SELECT DATA_INT10 ,SYSTEM,WKLOADNAME, sum(CPUTIME)*1026.5/600 as MIPS from "+TABLE_PARAMETER_STRING+" where SYSTEM=? and" +
             "  date(DATA_INT10)=? group by DATA_INT10,WKLOADNAME,SYSTEM order by DATA_INT10 ASC,WKLOADNAME ";
 	private static final String SUFFIX_FILE_NAME = "workload";
 	private static final String EXCEL_EXTENSION = ".xls";
