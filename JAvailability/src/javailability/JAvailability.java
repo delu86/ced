@@ -28,47 +28,70 @@ import java.util.logging.Logger;
 public class JAvailability {
 
     
-    public static int matrix [][]=new int[144][31];
+   
     public static final String SELECT="SELECT substr(SMF30ISS, 9 , 2) as giorno, substr(SMF30ISS, 12 , 2) as ora, \n" +
-                                      "substr(SMF30ISS, 15 , 1) as minute_slot,round(SUM(EXECTM)/600 , 0)\n" +
+                                      "substr(SMF30ISS, 15 , 1) as minute_slot,SUM(EXECTM)\n" +
                                       "from CR00515.EPV30_23_INTRVL a where SMF30JBN=? and "
                                     + "substr(SMF30ISS, 1 , 7)=? \n" +
                                       "group by substr(SMF30ISS, 9 , 2),substr(SMF30ISS, 12 , 2),"
                                     + "substr(SMF30ISS, 15 , 1)  order  by 1 , 2 , 3;";
-    public static final String SELECT_WITH_SYSTEM_FILTER="SELECT substr(SMF30ISS, 9 , 2) as giorno, substr(SMF30ISS, 12 , 2) as ora, \n" +
-                                      "substr(SMF30ISS, 15 , 1) as minute_slot,round(SUM(EXECTM) , 0)\n" +
-                                      "from CR00515.EPV30_23_INTRVL a where SMF30JBN=? and "
-                                    + "substr(SMF30ISS, 1 , 7)=? and system=?\n" +
-                                      "group by substr(SMF30ISS, 9 , 2),substr(SMF30ISS, 12 , 2),"
-                                    + "substr(SMF30ISS, 15 , 1)  order  by 1 , 2 , 3;";
+    public static final String SELECT_WITH_SYSTEM_FILTER="SELECT giorno , ora , minute_slot , SUM(EXECTM) \n" +
+                            "FROM (select substr(SMF30ISS, 9 , 2) as giorno, substr(SMF30ISS, 12 , 2) as ora, \n" +
+                            "       case WHEN CAST(substr(SMF30ISS, 15 , 1) AS integer)<3 THEN 0 ELSE 1 END as minute_slot,  exectm\n" +
+                            "       from CR00515.EPV30_23_INTRVL a where SMF30JBN=? and \n" +
+                            "       substr(SMF30ISS, 1 , 7)=? and system=? \n" +
+                            "      )AS DERIVED\n" +
+                            "       group by GIORNO,ORA,MINUTE_SLOT  order  by 1 , 2 , 3";
+    public static final String SELECT_30_MIN="SELECT giorno , ora , minute_slot , SUM(EXECTM) \n" +
+                            "FROM (select substr(SMF30ISS, 9 , 2) as giorno, substr(SMF30ISS, 12 , 2) as ora, \n" +
+                            "       case WHEN CAST(substr(SMF30ISS, 15 , 1) AS integer)<3 THEN 0 ELSE 1 END as minute_slot,  exectm\n" +
+                            "       from CR00515.EPV30_23_INTRVL a where SMF30JBN=? and \n" +
+                            "       substr(SMF30ISS, 1 , 7)=? \n" +
+                            "      )AS DERIVED\n" +
+                            "       group by GIORNO,ORA,MINUTE_SLOT  order  by 1 , 2 , 3";
+    public static final String SELECT_30_MIN_WITH_SYSTEM_FILTER="SELECT giorno , ora , minute_slot , SUM(EXECTM) \n" +
+                            "FROM (select substr(SMF30ISS, 9 , 2) as giorno, substr(SMF30ISS, 12 , 2) as ora, \n" +
+                            "       case WHEN CAST(substr(SMF30ISS, 15 , 1) AS integer)<3 THEN 0 ELSE 1 END as minute_slot,  exectm\n" +
+                            "       from CR00515.EPV30_23_INTRVL a where SMF30JBN=? and \n" +
+                            "       substr(SMF30ISS, 1 , 7)=? and system=? \n" +
+                            "      )AS DERIVED\n" +
+                            "       group by GIORNO,ORA,MINUTE_SLOT  order  by 1 , 2 , 3";
     
-    public static void writeCSV(String applid,String date,String system){
+    
+    public static void writeCSV(int intervalInHour,String applid,String date,String system){
+        int matrix [][]=new int[24*intervalInHour][31];
         PropertyResourceBundle res;
         Connection connection=null;
         PreparedStatement ps=null;
         ResultSet rs=null;
         try (FileInputStream fis = new FileInputStream("db.properties")) {
-            File csv=new File(applid+"_"+date+".txt");
             res= new PropertyResourceBundle(fis);
+            File csv=new File(res.getString("output_path")+applid+"_"+date+".csv");
             Class.forName(res.getString("driver"));
             connection=DriverManager.getConnection(res.getString("url"));
             if(system==null){
-                ps=connection.prepareStatement(SELECT);
+                if(intervalInHour==2)
+                    ps=connection.prepareStatement(SELECT_30_MIN);
+                else
+                    ps=connection.prepareStatement(SELECT);
                 ps.setString(1, applid);
                 ps.setString(2, date);}
             else{
-                ps=connection.prepareStatement(SELECT_WITH_SYSTEM_FILTER);
+                if(intervalInHour==2)
+                    ps=connection.prepareStatement(SELECT_30_MIN_WITH_SYSTEM_FILTER);
+                else    
+                    ps=connection.prepareStatement(SELECT_WITH_SYSTEM_FILTER);
                 ps.setString(1, applid);
                 ps.setString(2, date);
                 ps.setString(3, system);
             }
             rs=ps.executeQuery();
             while(rs.next()){
-                matrix[rs.getInt(2)*6+rs.getInt(3)][rs.getInt(1)-1]=rs.getInt(4);
+                matrix[rs.getInt(2)*intervalInHour+rs.getInt(3)][rs.getInt(1)-1]=rs.getInt(4);
             }
             String line = null;
             try (FileWriter writer = new FileWriter(csv)) {
-                for(int i=0;i<144;i++){
+                for(int i=0;i<24*intervalInHour;i++){
                     //int ora=i/6;
                     //int minuto=i%6;
                     //System.out.print(ora+":"+minuto+" ");
@@ -101,15 +124,16 @@ public class JAvailability {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String listFile=args[0];
-        String dateFilter=args[1];
+        int intervalInHour=Integer.parseInt(args[0]);
+        String listFile=args[1];
+        String dateFilter=args[2];
         String systemFilter=null;
-        if(args.length==3)
-            systemFilter=args[2];
+        if(args.length==4)
+            systemFilter=args[3];
         try (BufferedReader br = new BufferedReader(new FileReader(listFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                writeCSV(line, dateFilter, systemFilter);
+                writeCSV(intervalInHour,line, dateFilter, systemFilter);
     }
     }   catch (FileNotFoundException ex) {
             Logger.getLogger(JAvailability.class.getName()).log(Level.SEVERE, null, ex);
