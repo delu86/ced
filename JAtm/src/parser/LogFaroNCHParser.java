@@ -20,7 +20,7 @@ public class LogFaroNCHParser extends AbstractATMParser{
     
     private static final String INSERT_RECORD_OK_TABLE="REPLACE into atm_stat.log_faro_nch_temp VALUES"
             + "(?,?,?,?,?,?,?,?,?,?)";
-    private static final String INSERT_RECORD_SCARTI="INSERT into atm_stat.atm_faro_log_scarti VALUES (?,?,?)";
+    private static final String INSERT_RECORD_SCARTI="REPLACE into atm_stat.atm_faro_log_scarti VALUES (?,?,?)";
     /*
     Lunghezza dei campi che si trovano all'interno del log
     */
@@ -32,7 +32,7 @@ public class LogFaroNCHParser extends AbstractATMParser{
     private static final int LENGTH_MINUTE=2;
     private static final int LENGTH_SECOND=2;
     private static final int LENGTH_PR=1;
-    private static final int LENGHT_BLANK_SPACES=22;
+    private static final int LENGHT_BLANK_SPACES=22;    
     private static final int LENGTH_ST=2;
     private static final int LENGTH_COD_ATM=4;
     private static final int LENGTH_CAB_ATM=5;
@@ -58,7 +58,6 @@ public class LogFaroNCHParser extends AbstractATMParser{
                     date=line.substring(index,index+=4)
                             +"-"+line.substring(index,index+=2)+"-"+line.substring(index,index+=2);                 
                     hour=line.substring(index,index+=LENGTH_HOUR);
-                   
                     minute=line.substring(index,index+=LENGTH_MINUTE);
                     second=line.substring(index,index+=LENGTH_SECOND);
                     date=date+" "+hour+":"+minute+":"+second;
@@ -75,16 +74,13 @@ public class LogFaroNCHParser extends AbstractATMParser{
                         if(dayLog.after(dateFormat.parse(MIN_DATE))){
                             A94=A94.replaceAll("\\x00", "");
                             if(A94.substring(0, 3).equals(A94_STRING)){
-                                
                                 if(A94.substring(7,12).matches(COD_ABI_PATTERN))
                                     numMSG=Integer.parseInt(A94.substring(7,12));
                                 dataOraMSG="20"+A94.substring(16,18)+"-"+A94.substring(14,16)+"-"+A94.substring(12,14)+" "+A94.substring(18,20)+
                                       ":"+  A94.substring(20,22)+":"+A94.substring(22,24);
                             }
-                            
                             saveRecord(INSERT_RECORD_OK_TABLE, String.valueOf(indexOk),date,dataOraMSG,codAbi,codAtm,msg,pr,st,String.valueOf(numMSG),A94);
                             indexOk++;
-                            
                         }
                         else{//data inferiore al 02 Gennaio 2004
                             error=3;
@@ -103,5 +99,5 @@ public class LogFaroNCHParser extends AbstractATMParser{
                              indexKo++;
                              saveRecord(INSERT_RECORD_SCARTI,filename, line, String.valueOf(error));
                 }
-    }
+    }   
 }

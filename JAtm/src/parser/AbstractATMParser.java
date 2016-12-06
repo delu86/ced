@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,13 +6,16 @@
 package parser;
 import static jatm.JAtm.logger;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ResourceBundle;
+import java.util.PropertyResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +28,7 @@ import java.util.logging.Logger;
 public abstract class AbstractATMParser implements AtmParser{
 
     
-    private final static String DB_RESOURCES="parser.database";
+    private final static String DB_RESOURCES="database.properties";
     protected Connection connection;
     private PreparedStatement statement;
     
@@ -36,6 +39,7 @@ public abstract class AbstractATMParser implements AtmParser{
     
     protected int indexOk=0; //numero di record coerenti con i requisiti 
     protected int indexKo=0; //numero di record non coerenti con i requisiti 
+    private final static String FATTO_STRING=".FATTO";
    
     
     @Override
@@ -61,24 +65,32 @@ public abstract class AbstractATMParser implements AtmParser{
               logger.log(Level.INFO, "Record ko: {0}",indexKo);
               indexOk=0;
               indexKo=0;
-            
-        } catch (FileNotFoundException ex) {//file non trovato
-            Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
-              System.out.println(ex.getMessage());
-        } catch (ParseException ex) {
-            Logger.getLogger(AbstractATMParser.class.getName()).log(Level.ALL, null, ex);
-            System.out.println(ex.getMessage());
+              
+        } catch (FileNotFoundException | ParseException ex) {//file non trovato
+                try ( //Stored procedure per la creazione del file di backup
+               CallableStatement callresetTempDatabases=connection.prepareCall("resetTempDatabases")){
+               logger.log(Level.INFO,"Reset db temporanei: {0}",callresetTempDatabases.executeQuery());
+               callresetTempDatabases.close();
+            } catch (SQLException ex1) {
+                logger.log(Level.WARNING, "Error:{0}", ex.getMessage());
+            }
+            logger.log(Level.WARNING, "Error:{0} ; parserizzazione annullata", ex.getMessage());
+              
         }
-          catch (ClassNotFoundException | SQLException ex) {
-             Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
-             System.out.println(ex.getMessage());
+          catch (ClassNotFoundException | SQLException | OutOfMemoryError ex) {
+                  try ( //Stored procedure per la creazione del file di backup
+               CallableStatement callresetTempDatabases=connection.prepareCall("resetTempDatabases")){
+               logger.log(Level.INFO,"Reset db temporanei: {0}",callresetTempDatabases.executeQuery());
+               callresetTempDatabases.close();
+            } catch (SQLException ex1) {
+                Logger.getLogger(AbstractATMParser.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+             logger.log(Level.WARNING, "Error:{0} ; parserizzazione annullata", ex.getMessage());
+             
         }
-          catch(OutOfMemoryError error){
-              logger.log(Level.WARNING, "Error:{0}", error.getMessage());
-          }
         finally{//disconnessione dal database
             disconnectDB();
-            
+            fileLog.renameTo(new File(filename+FATTO_STRING));
         }
     }
 
@@ -94,21 +106,28 @@ public abstract class AbstractATMParser implements AtmParser{
             statement.executeUpdate();
             statement.close();
             }
-    
     protected void connectToDB() throws ClassNotFoundException, SQLException{
-        ResourceBundle resourceBundle=ResourceBundle.getBundle(DB_RESOURCES);
-        Class.forName(resourceBundle.getString("driver"));
-        connection=DriverManager.getConnection(resourceBundle.getString("url"),resourceBundle.getString("user"),resourceBundle.getString("password"));
+                PropertyResourceBundle resourceBundle;
+                try (FileInputStream fis = new FileInputStream(DB_RESOURCES)) {
+                    resourceBundle=new PropertyResourceBundle(fis);
+                    Class.forName(resourceBundle.getString("driver"));
+                   connection=DriverManager.getConnection(resourceBundle.getString("url"),resourceBundle.getString("user"),resourceBundle.getString("password"));
+                }
+                catch (FileNotFoundException ex) {
+            logger.log(Level.WARNING, "FileNotFoundException:Error:{0}", ex.getMessage());
+        } catch (IOException ex) {
+            logger.log(Level.WARNING, "IOException: Error:{0}", ex.getMessage());
+        }
+        
     }
     protected void disconnectDB(){
         if(connection!=null){
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(LogFaroNCHParser.class.getName()).log(Level.ALL, null, ex);
-                System.out.println(ex.getMessage());
+                logger.log(Level.WARNING, "SQLException: Error:{0}", ex.getMessage());
+                
             }
         }
     }
-    
 }

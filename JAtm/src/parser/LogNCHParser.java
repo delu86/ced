@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -21,8 +21,8 @@ import java.util.logging.Level;
 public class LogNCHParser extends AbstractATMParser{
     //codice di uscita del programma di parsing nel caso che il line abbia una lunghezza errata;
     private final static int WRONG_ERROR_LENGTH_EXIT_CODE=1234;
-    private static final String INSERT_RECORD="INSERT into atm_stat.logAtm_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String INSERT_A93_A94_RECORD="INSERT into atm_stat.logAtm_temp_a93_a94 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_RECORD="REPLACE into atm_stat.logAtm_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_A93_A94_RECORD="REPLACE into atm_stat.logAtm_temp_a93_a94 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private final   HashMap<String,Integer> mapOpCodeAnomalie=initializeMapOpCodeAnomalie(); //la map restituisce 1 se il codice operazione indica una anomalia;
     private final   HashMap<String,Integer> mapOpCodeSbloccanti=initializeMapOpCodeSbloccanti();//la map restituisce 1 se il codice operazione può sbloccare uno stato di indisponibiltià dell'ATM
     private final   HashMap<String,Integer> mapAnomaliaIndisponibilità=initializeMapAnomaliaIndisponibilità();//la map restituisce 1 se il codice anomalia indica una anomalia che rende indisponibile l'ATM
@@ -52,7 +52,7 @@ public class LogNCHParser extends AbstractATMParser{
             DateFormat dateFormat=new SimpleDateFormat(LOGDATEFORMAT);
             Date dayLog=dateFormat.parse(logdate);
             Date minDay=dateFormat.parse(MIN_DATE);
-         //   if(codAbi.equals("03032")){
+         //   if(codAbi.equals("03032")||codAbi.equals("05385")){
             if(!codAbi.equals(WRONG_CODABI)&&dayLog.after(minDay)){
                 //System.out.println(codAbi+" -->"+logdate+" "+ora+":"+minuti+":"+secondi);
                 String opeCode=line.substring(index,index+=3);//index=99; codice operazione
@@ -126,39 +126,30 @@ public class LogNCHParser extends AbstractATMParser{
                     }//fine verifica anomalia
                     String disponibilità="=";
                     
-                    //verifica la disponiblità dell'atm(in servizio o fuori servizio
-                    //'='=indifferente
-          //        '1'=disponibile (in servizio)
-         //*      altro=non disponibile (fuori servizio)
-         //*        di cui '2'=problemi sistema
-         //*               '3'=problemi gestore
-         //*               '4'=problemi hardware
-         //*               '0'=cause diverse non codificate;
                     if(codiceAnomalia.equals("")){
                         if(mapOpCodeSbloccanti.containsKey(opeCode))
-                            disponibilità="1";
+                            disponibilità="0";
                         if(opeCode.equals("A94")){
                             String stato_a94;
                             stato_a94=lineRest.substring(7,8);
                             if(!stato_a94.equals("0")){
                                 disponibilità="0";
                                  if (stato_a94.equals("1"))  disponibilità = "2";
-                                 if (stato_a94.equals("2"))  disponibilità = "3";
-                                 if (stato_a94.equals("3"))  disponibilità = "3";
-                                 if (stato_a94.equals("4"))  disponibilità = "4";
+                                 if (stato_a94.equals("2"))  disponibilità = "2";
+                                 if (stato_a94.equals("3"))  disponibilità = "2";
+                                     if (stato_a94.equals("4"))  disponibilità = "1";
                           } 
                            int stato_tastiera=Integer.parseInt(lineRest.substring(9,10));
                            int stato_lettore_badge=Integer.parseInt(lineRest.substring(10,11));
                            int stato_dispensatore=Integer.parseInt(lineRest.substring(11,12));
                            int stato_modulo_cifratura=Integer.parseInt(lineRest.substring(16,17));
-                           if(stato_tastiera>=2||stato_lettore_badge>=2||stato_dispensatore>=2||stato_modulo_cifratura>=2)
-                               disponibilità="4";
+                           if(disponibilità.equals("0")&&(
+                                   stato_tastiera>=2||stato_lettore_badge>=2||stato_dispensatore>=2||stato_modulo_cifratura>=2))
+                               disponibilità="1";
                         } }else{
                         if(mapAnomaliaIndisponibilità.containsKey(codiceAnomalia)){
                             disponibilità=String.valueOf(mapAnomaliaIndisponibilità.get(codiceAnomalia));
-                            if(disponibilità.equals("3")) disponibilità="4";
-                            if(disponibilità.equals("2")) disponibilità="3";
-                            if(disponibilità.equals("1")) disponibilità="2";
+                            
                         }}
                     if(!disponibilità.equals("=")&&
                             !disponibilità.equals("1")&&
@@ -182,11 +173,19 @@ public class LogNCHParser extends AbstractATMParser{
                         stato_periferiche     = lineRest.substring(9,27);
                     }
                     
-                    if(!(opeCode.equals("A94")||opeCode.equals("A93")))
+                    if(!(opeCode.equals("A94")||opeCode.equals("A93"))){
+                        if(!opeCode.equals("A98"))
                             saveRecord(INSERT_RECORD,null,opeDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
                             codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
                             null,null);
+                        else
+                            saveRecord(INSERT_RECORD,null,logDateTime,opeDateTime,logDateTime,codAbi,
+                            opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
+                            codiceAnomalia, codiceRepl, logProgr ,causale,stato_sa,esito,stato_periferiche,
+                            null,null);
+                    }
+                    
                     else
                             saveRecord(INSERT_A93_A94_RECORD,null,logDateTime,opeDateTime,logDateTime,codAbi,
                             opeCode, opeNum,codAbi+"-"+codAtm, disponibilità,
@@ -204,7 +203,7 @@ public class LogNCHParser extends AbstractATMParser{
                 indexKo++;
                 logger.log(Level.SEVERE, "data inferiore a mindate o codice abi errato--> {0}",line);
             }
-        //}
+    //    }
         }else{//check line errato
             indexKo++;
             logger.log(Level.SEVERE, "check line errato--> {0}",line);
@@ -225,44 +224,38 @@ public class LogNCHParser extends AbstractATMParser{
 
     private HashMap<String,Integer> initializeMapOpCodeSbloccanti() {
         HashMap<String,Integer> map=new HashMap<>();
-        map.put("A34", 1);
-        map.put("A50", 1);
-        map.put("A52", 1);
-        map.put("A60", 1);
         map.put("A72", 1);
-        map.put("A74", 1);
-        map.put("A76", 1);
-        map.put("A84", 1);
-        map.put("A94", 1);
         map.put("A98", 1);
+        map.put("A94", 1);
         map.put("E72", 1);
         map.put("F72", 1);
         map.put("G72", 1);
         map.put("I72", 1);
-        map.put("I74", 1);
-        map.put("I76", 1);
-        map.put("S74", 1);
-        map.put("P78", 1);
         map.put("W72", 1);
         return map;
     }
 
     private HashMap<String,Integer> initializeMapAnomaliaIndisponibilità() {
         HashMap<String,Integer> map=new HashMap<>();
-        map.put("19", 3);
-        map.put("35", 3);
-        map.put("40", 3);
-        map.put("44", 3);
-        map.put("45", 3);
-        map.put("46", 3);
-        map.put("47", 3);
-        map.put("48", 2);
-        map.put("49", 2);
-        map.put("51", 3);
-        map.put("54", 3);
-        map.put("55", 3);
-        map.put("53", 3);
-        map.put("56", 3);
+        // 1 indisponibilità HW
+        // 2 indisponibilità Gestore(banca)
+        // 3 indisponibilità altra causa
+        // 4 indisponibilità Cedacri
+        map.put("19", 1);
+        map.put("35", 2);
+        map.put("40", 2);
+        map.put("44", 1);
+        map.put("45", 1);
+        map.put("46", 1);
+        map.put("47", 1);
+        map.put("48", 1);
+        map.put("49", 1);
+        map.put("51", 1);
+        map.put("54", 2);
+        map.put("55", 1);
+        map.put("53", 1);
+        map.put("56", 1);
+        map.put("A0", 2);
         return map;
     }
         /*
@@ -274,4 +267,7 @@ public class LogNCHParser extends AbstractATMParser{
             System.out.println("Dispatcher ");
             calllogAtmRecordDispatcher.executeQuery();
         */
+
+
 }
+        
